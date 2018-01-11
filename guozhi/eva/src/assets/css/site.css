@@ -1,0 +1,22 @@
+.el-input {
+    display: inline-block;
+    width: 70%;
+}
+.el-form-item{
+    margin-bottom: 10px;
+}
+.el-form-item__label{
+    color:#fff;
+}
+.el-radio{
+    color:#fff;
+}
+.el-input__inner{
+    height:35px;
+}
+.el-table{
+    text-align: center;
+}
+.el-table thead th{
+    text-align: center;
+}

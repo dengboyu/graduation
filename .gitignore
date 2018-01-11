@@ -1,0 +1,6 @@
+.DS_Store
+.evaluation.iml
+/target/
+/.idea/
+/node_modules/
+.gitattributes
