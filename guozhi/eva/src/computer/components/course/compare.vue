@@ -3,6 +3,9 @@
     <div class="tmpl">
         <div class="table">
             <table>
+                <caption>
+                    任课教师: <span>黄换然</span>  课程名称: <span>市场营销</span>
+                </caption>
                 <thead>
                     <tr>
                         <th>序号</th>
@@ -72,6 +75,15 @@
     border: 1px solid RGBA(223, 223, 223, 1);
     font-size: 15px;
     color: #666666;
+}
+.table table caption{
+    text-align: left;
+    height: 30px;
+    line-height: 30px;
+    font-size: 16px;
+}
+caption span{
+    margin-right:65px;
 }
 .table table tr{
     height:40px;
