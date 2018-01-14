@@ -1,0 +1,46 @@
+.el-input__inner{
+    border-radius: 0px;
+    height:30px;
+    background: #fbf3f3;
+}
+.el-button{
+    border-radius: 0px;
+    height: 35px;
+    line-height: 35px;
+    padding-top: 0px;
+}
+.el-menu--horizontal .el-submenu>.el-menu{
+    top:60px;
+    border-radius: 0px;
+}
+.el-menu--horizontal .el-submenu .el-submenu__title{
+    font-size: 16px;
+}
+.el-form-item{
+    margin-bottom:0px;
+}
+.el-pagination{
+    display: inline-block;
+    margin-left: 50%;
+    margin-top: 20px;
+}
+.el-table thead tr th,table tr td{
+    text-align: center;
+}
+.el-table td, .el-table th{
+    padding:5px 0;
+}
+.el-textarea textarea{
+    border-radius: 0px;
+    background: #fbf3f3;
+}
+.moban .el-input__inner{
+    border: none;
+    border-bottom: 1px solid #666;
+}
+
+
+
+
+
+

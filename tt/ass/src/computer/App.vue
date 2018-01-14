@@ -1,7 +1,5 @@
 <template>
     <div id="app">
-        pc端已经就位
-        <router-link to="/components/example">跳转example</router-link>
         <router-view/>
     </div>
 </template>
@@ -17,5 +15,13 @@
 </script>
 
 <style>
-
+    #app{
+        background:#EEF0EF;
+        position: absolute;
+        top:0px;
+        bottom: 0px;
+        width:100%;
+        color:#4f564f;
+        overflow: overlay;
+    }
 </style>

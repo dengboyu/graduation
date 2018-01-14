@@ -8,7 +8,6 @@ export default{
     state(){
         return {
             userInfo: {     //用户信息
-                phone: 15833333333,
                 name: '李涛'
             },
             isLogin: false, //是否登录
