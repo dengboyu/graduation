@@ -38,6 +38,9 @@
     border: none;
     border-bottom: 1px solid #666;
 }
+.main-foot .el-dialog{
+    height:100%;
+}
 
 
 

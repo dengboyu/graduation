@@ -202,15 +202,21 @@
             </tfoot>
         </table>
         <div class="main-foot" style="margin-left:40%;">
-            <el-button type="primary" @click="goDetail">预览报价单</el-button>
+            <el-button type="primary" @click="handleClick">预览报价单</el-button>
             <el-button type="primary" @click="">确定</el-button>
+
+            <el-dialog :visible.sync="detail" width="70%">
+                <detail-quotation></detail-quotation>
+            </el-dialog>
         </div>
+
     </div>
 </template>
 
 <!-- 组件导出 -->
 <script>
     import {mapState,mapActions} from 'vuex'
+    import detailQuotation from '@/computer/components/quotation/detailQuotation'
     export default{
         data(){
             return {
@@ -269,6 +275,7 @@
                       value: '摩拜科技有限公司',label: '摩拜科技有限公司'}
                     ],
                 conpanyValue:null,
+                detail:false,
                 options: [{
                       value: '元',label: '元'}, {
                       value: '美元',label: '美元'}, {
@@ -309,10 +316,13 @@
             },
             goDetail(){
                 this.$router.push({path:"/index/detailQuotation"})
+            },
+            handleClick(){
+                this.detail=true;
             }
         },
         components:{
-
+            detailQuotation,
         },
         computed:{
             ...mapState('userModule',['userInfo'])

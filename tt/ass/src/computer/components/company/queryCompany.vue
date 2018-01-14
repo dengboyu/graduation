@@ -12,11 +12,11 @@
             <el-table-column prop="name" label="传真号码" ></el-table-column>
             <el-table-column prop="name" label="企业邮箱" ></el-table-column>
             <el-table-column prop="name" label="联系地址"></el-table-column>
-            <el-table-column label="修改" width="60">
+            <!-- <el-table-column label="修改" width="60">
                 <template slot-scope="scope">
                     <el-button @click="handleClick(scope.row)" type="text" size="small" width="60">修改</el-button>
                 </template>
-            </el-table-column>
+            </el-table-column> -->
           </el-table>
     </div>
 </template>
