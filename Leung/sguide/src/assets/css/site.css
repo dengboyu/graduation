@@ -1,0 +1,21 @@
+body{
+    font-size: 14px;
+}
+.el-dialog__body{
+    color:red;
+    text-align: center;
+}
+.el-table table tr td,.el-table table tr th{
+    text-align: center;
+}
+.tmpl .inputLen  .el-input__inner{
+    border-radius: 0px;
+    width: 70%;
+    height:34px;
+}
+.tmpl .inputLen .productType  .el-input__inner{
+    width: 100%;
+}
+.el-button{
+    border-radius: 0px;
+}
