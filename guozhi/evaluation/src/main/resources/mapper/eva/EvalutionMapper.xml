@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gz.evalution.module.eva.dao.EvalutionDao">
+
+    <!-- 以下代码片段中,evalution表的别名为RA -->
+
+    <!-- evalution表的字段 -->
+    <sql id ="evalution_columns">
+        RA.id,RA.answer,RA.totalCore,RA.studentId,RA.teacherId,RA.couseId,RA.statu,RA.createTime,RA.updateTime
+    </sql>
+
+    
+    <!-- evalution表的resultMap映射 -->
+    <resultMap id="entityResultMap" type="com.gz.evalution.module.eva.entity.EvalutionEntity">
+        <id  property="id"  column="id"/>
+        <result  property="answer"  column="answer"/>
+        <result  property="totalCore"  column="totalCore"/>
+        <result  property="studentId"  column="studentId"/>
+        <result  property="teacherId"  column="teacherId"/>
+        <result  property="couseId"  column="couseId"/>
+        <result  property="statu"  column="statu"/>
+        <result  property="createTime"  column="createTime"/>
+        <result  property="updateTime"  column="updateTime"/>
+    </resultMap>
+
+
+    <!-- 添加一条记录 -->
+    <insert id="insertEntity" parameterType="com.gz.evalution.module.eva.entity.EvalutionEntity">
+        INSERT INTO evalution
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            id,
+            answer,
+            totalCore,
+            studentId,
+            teacherId,
+            couseId,
+            statu,
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            #{id},
+            #{answer},
+            #{totalCore},
+            #{studentId},
+            #{teacherId},
+            #{couseId},
+            #{statu},
+        </trim>
+    </insert>
+
+
+    <!-- 批量添加 -->
+    <insert id="insertEntityByBatch" parameterType="list">
+        INSERT INTO evalution
+        <trim prefix="(" suffix=") VALUES" suffixOverrides=",">
+            id,
+            answer,
+            totalCore,
+            studentId,
+            teacherId,
+            couseId,
+            statu,
+        </trim>
+        <foreach collection="list" index="index" item="item" separator=",">
+        (
+            #{item.id},
+            #{item.answer},
+            #{item.totalCore},
+            #{item.studentId},
+            #{item.teacherId},
+            #{item.couseId},
+            #{item.statu}
+        )
+        </foreach>
+    </insert>
+
+
+    <!-- 更新一条记录 -->
+    <update id="updateEntity" parameterType="com.gz.evalution.module.eva.entity.EvalutionEntity">
+        UPDATE evalution
+        <trim prefix="set" suffixOverrides=",">
+            <if test="answer != null">
+                answer = #{answer},
+            </if>
+            <if test="totalCore != null">
+                totalCore = #{totalCore},
+            </if>
+            <if test="studentId != null">
+                studentId = #{studentId},
+            </if>
+            <if test="teacherId != null">
+                teacherId = #{teacherId},
+            </if>
+            <if test="couseId != null">
+                couseId = #{couseId},
+            </if>
+            <if test="statu != null">
+                statu = #{statu},
+            </if>
+        </trim>
+        WHERE id = #{id}
+    </update>
+
+
+    <!-- 根据主键删除一条记录 -->
+    <delete id="deleteEntity">
+        DELETE FROM evalution WHERE id = #{0}
+    </delete>
+
+
+    <!-- 根据列条件查询实体类信息 -->
+    <sql id="whereColumns">
+        <trim suffixOverrides=",">
+            <if test="id != null">
+                RA.id = #{id},
+            </if>
+            <if test="answer != null">
+                RA.answer = #{answer},
+            </if>
+            <if test="totalCore != null">
+                RA.totalCore = #{totalCore},
+            </if>
+            <if test="studentId != null">
+                RA.studentId = #{studentId},
+            </if>
+            <if test="teacherId != null">
+                RA.teacherId = #{teacherId},
+            </if>
+            <if test="couseId != null">
+                RA.couseId = #{couseId},
+            </if>
+            <if test="statu != null">
+                RA.statu = #{statu},
+            </if>
+            <if test="createTime != null">
+                RA.createTime = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                RA.updateTime = #{updateTime},
+            </if>
+        </trim>
+    </sql>
+
+
+    <!-- 根据主键查找对应实体类 -->
+    <select id="findEntityByMainId" resultType="com.gz.evalution.module.eva.entity.EvalutionEntity">
+        SELECT
+            <include refid="evalution_columns"></include>
+        FROM evalution RA
+        WHERE id = #{0}
+    </select>
+
+
+    <!-- 根据条件查出来是单条实体类 -->
+    <select id="findEntityByOne" parameterType="com.gz.evalution.module.eva.entity.EvalutionEntity" resultType="com.gz.evalution.module.eva.entity.EvalutionEntity">
+        SELECT
+            <include refid="evalution_columns"></include>
+        FROM
+            evalution RA
+        <where>
+            <include refid="whereColumns"></include>
+        </where>
+    </select>
+
+
+    <!-- 根据列条件查找实体类集合 -->
+    <select id="findEntityList" parameterType="com.gz.evalution.module.eva.entity.EvalutionEntity" resultType="com.gz.evalution.module.eva.entity.EvalutionEntity">
+        SELECT
+            <include refid="evalution_columns"></include>
+        FROM
+            evalution RA
+        <where>
+            <include refid="whereColumns"></include>
+        </where>
+    </select>
+
+
+    <!-- 查询记录数 -->
+    <select id="findEntityCount" parameterType="com.gz.evalution.module.eva.entity.EvalutionEntity" resultType="long">
+        SELECT
+            count(1)
+        FROM
+            evalution RA
+        <where>
+            <include refid="whereColumns"></include>
+        </where>
+    </select>
+
+
+    <!-- 单表分页查询 -->
+    <select id="findPageEntityList" parameterType="map" resultType="com.gz.evalution.module.eva.entity.EvalutionEntity">
+        SELECT
+            <include refid="evalution_columns"></include>
+        FROM
+            evalution RA
+        <if test="start!=null and pageSize !=null">
+            LIMIT #{start},#{pageSize}
+        </if>
+    </select>
+
+
+	<select id="getCourseStudentList" resultType="java.util.Map" parameterType="string">
+        SELECT
+            username ,
+            number ,
+            totalCore,
+            E.id
+        FROM
+            evalution E
+        JOIN user_info UI ON E.studentId = UI.id
+        WHERE
+            E.couseId = #{courseId} and E.statu='1'
+    </select>
+
+
+    <select id="getCourseStudentAvg" resultType="java.lang.String" parameterType="string">
+        SELECT
+            cast(AVG(totalCore)as DECIMAL(10,2))
+        FROM
+            evalution E
+        WHERE
+            E.couseId = #{courseId} and E.statu='1'
+    </select>
+
+
+
+    <select id="getCourseTeacher" resultType="java.util.Map" parameterType="string">
+        SELECT
+            courseNum ,
+            courseName ,
+            (select cast(avg(totalCore) as DECIMAL(10,2)) from evalution where teacherId=#{id} AND couseId = C.id) totalCore
+        FROM
+            course C
+        WHERE
+            teacher = #{id} and statu='1'
+    </select>
+
+
+
+</mapper>

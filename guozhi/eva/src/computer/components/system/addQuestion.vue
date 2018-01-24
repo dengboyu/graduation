@@ -1,22 +1,22 @@
 <!-- 组件 -->
 <template>
     <div class="tmpl">
-        <el-table :data="tableData" stripe style="width: 100%">
+        <el-table :data="tableData" stripe style="width: 100%" empty-text="请添加问题">
             <el-table-column label="序号" width="90">
                 <template slot-scope="scope">
                     <span v-text="scope.$index+1"></span>
                 </template>
             </el-table-column>
-            <el-table-column prop="snumber" label="标签" width="200">
+            <el-table-column label="标签" width="200">
                 <template slot-scope="scope">
-                    <el-select v-model="value" placeholder="请选择">
-                        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                    <el-select v-model="scope.row.tag" placeholder="请选择">
+                        <el-option v-for="item in scope.row.options" :key="item.value" :label="item.label" :value="item.value"></el-option>
                     </el-select>
                 </template>
             </el-table-column>
             <el-table-column label="问题"  width="400">
                 <template slot-scope="scope">
-                    <el-input type="text" v-model="scope.row.sname"  width="240"></el-input>
+                    <el-input type="text" v-model="scope.row.question"  width="240"></el-input>
                 </template>
             </el-table-column>
             <el-table-column  label="操作">
@@ -24,61 +24,51 @@
                 </template>
             </el-table-column>
         </el-table>
-        <el-button type="primary" style="width:10%;margin-top:40px;margin-left:350px;" @click="addQuetion">添加</el-button>
-        <el-button type="primary" style="width:10%;" @click="">提交</el-button>
+        <el-button type="primary" style="width:10%;margin-top:40px;margin-left:350px;" @click="addQuestion">添加</el-button>
+        <el-button type="primary" style="width:10%;" @click="addQuestionEntity">提交</el-button>
     </div>
 </template>
 
 <!-- 组件导出 -->
 <script>
+    import { Message } from 'element-ui' //消息提示
 
     export default{
         data(){
             return {
-                options: [{
-                    value: '选项1',
-                  label: '教学态度'
-                }, {
-                  value: '选项2',
-                  label: '教学内容'
-                }, {
-                  value: '选项3',
-                  label: '教学方法'
-                }, {
-                  value: '选项4',
-                  label: '教学效果'
-                }, {
-                  value: '选项5',
-                  label: '教学素养'
-                }],
-                value: '',
-                tableData: [
-                    {
-                      snumber: '教学态度',
-                      sname: '上课认真，耐心辅导答疑，认真批改作业',
-                      scollege: '经济管理学院',
-                      sprofession:'信息管理与信息系统',
-                      address:'byfdsa@163.com',
-                      sphone:18423234321,
-                      flag:true,
-                      updateInfo:'修改',
-                    },
-                    {
-                      snumber: '教学内容',
-                      sname: '注意与学生的沟通和交流，关心学生学习',
-                      scollege: '外国语学院',
-                      sprofession:'英语专业',
-                      address:'teafdaa@163.com',
-                      sphone:18734234223,
-                      flag:true,
-                      updateInfo:'修改',
-                    }
-                ]
+                tableData: []
             }
         },
         methods: {
-            addQuetion() {
-                this.tableData.push(new Object());
+            addQuestion() {
+                let obj={
+                    tag:null,
+                    question:null,
+                    statu:"1",
+                    options: [
+                        {
+                            value: '教学态度',
+                            label: '教学态度'
+                        },
+                        {
+                          value: '教学内容',
+                          label: '教学内容'
+                        },
+                        {
+                          value: '教学方法',
+                          label: '教学方法'
+                        },
+                        {
+                          value: '教学效果',
+                          label: '教学效果'
+                        },
+                        {
+                          value: '教学素养',
+                          label: '教学素养'
+                        }
+                    ],
+                };
+                this.tableData.push(obj);
             },
             deleteClick(scope){
                 this.$confirm('是否将该问题删除?', '提示', {
@@ -92,6 +82,25 @@
                         message: '删除成功!'
                     });
                 }).catch(()=>{});
+            },
+            addQuestionEntity(){
+                let sendData = this.tableData;
+
+                this.$http.axios({
+                    url:'/question/insertQuestionBatch',
+                    method:'post',
+                    data:sendData,
+                    json:true,
+                }).then(resolve=>{
+                    Message({
+                        showClose: true,
+                        message: '添加成功',
+                        type: 'success'
+                    });
+                    this.tableData=[];
+                }).catch(err=>{
+                    console.log("失败了"+err)
+                })
             }
         },
         components:{

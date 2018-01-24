@@ -8,17 +8,17 @@
                     <td>
                         <p>
                             <span>学院编号</span>
-                            <el-input placeholder="请输入学院编号" v-model.trim="account.user"  :maxlength='20'></el-input>
+                            <el-input placeholder="请输入学院编号" v-model.trim="college.collegeNum"  :maxlength='20'></el-input>
                         </p>
                         <p>
                             <span>学院名称</span>
-                            <el-input placeholder="请输入学院名称" v-model.trim="account.user"  :maxlength='20'></el-input>
+                            <el-input placeholder="请输入学院名称" v-model.trim="college.collegeName"  :maxlength='20'></el-input>
                         </p>
                         <p>
                             <span>成立时间</span>
-                            <el-date-picker v-model="value4" type="month" placeholder="学院成立时间"></el-date-picker>
+                            <el-date-picker v-model="college.startTime" type="date" placeholder="学院成立时间"></el-date-picker>
                         </p>
-                        <el-button type="primary" style="width:20%;margin: 40px 24%;" @click="">提交</el-button>
+                        <el-button type="primary" style="width:20%;margin: 40px 24%;" @click="addCollege">提交</el-button>
                     </td>
                 </tr>
             </table>
@@ -28,70 +28,49 @@
 
 <!-- 组件导出 -->
 <script>
+    import { Message } from 'element-ui' //消息提示
+    import Bus from '../public/bus'
 
     export default{
         data(){
             return {
-                value4: '',
-                options: [{
-                    value: '选项1',
-                    label: '黄金糕'
-                }, {
-                  value: '选项2',
-                  label: '双皮奶'
-                }, {
-                  value: '选项3',
-                  label: '蚵仔煎'
-                }, {
-                  value: '选项4',
-                  label: '龙须面'
-                }, {
-                  value: '选项5',
-                  label: '北京烤鸭'
-                }],
-                value: '',
-                account: {
-                    // 用户名
-                    user: '',
-                    region: '',
-                    // 用户名报错信息
-                    userMsg: false,
-                    // 用户名报错信息内容
-                    userMsgInfo: '',
-                    password: '',
-                    pwdMsg: false,
-                    mail: '',
-                    mailMsg: false,
-                    mailMsgInfo: '',
-                    pho: '',
-                    phoMsg: false,
-                    phoMsgInfo: '此手机号一经绑定，不得更改',
-                    companyName: '',
-                    code: '',
-                    address: '',
-                    contactPho: '',
-                    contactName: ''
+                college:{
+                    collegeNum:null,
+                    collegeName:null,
+                    startTime:null
                 },
-                // 点击提交做的相关判断依据
-                submitAccord: {
-                    user: false,
-                    mail: false,
-                    password: false,
-                    tel: false
-                },
-                eye: false,
-                eyeClose: true,
-                pwdType: 'password'
             }
         },
         components:{
 
         },
         methods:{
-            changeEye() {
-                this.pwdType = this.pwdType === 'password' ? 'text' : 'password';
-                this.eyeClose = !this.eyeClose;
-                this.eye = !this.eye;
+            addCollege(){
+                let sendData = this.college;
+                if(this.$fn.hasObjectNull(sendData)){
+                    Message({
+                        showClose: true,
+                        message: '请把信息填全',
+                        type: 'warning'
+                    });
+                    return;
+                }
+
+                this.$http.axios({
+                    url:'/college/addCollegeEntity',
+                    method:'post',
+                    data:sendData,
+                    json:true,
+                }).then(resolve=>{
+                    Message({
+                        showClose: true,
+                        message: '添加成功',
+                        type: 'success'
+                    });
+                    this.$fn.resetObject(this.college);
+                }).catch(err=>{
+                    console.log("失败了")
+                })
             }
         }
     }

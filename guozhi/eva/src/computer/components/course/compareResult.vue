@@ -14,9 +14,9 @@
                 <tbody>
                     <tr v-for="(item,index) in tableList" :key="index">
                         <td v-text="index+1"></td>
-                        <td v-text="item.snumber"></td>
-                        <td v-text="item.sname"></td>
-                        <td v-text="item.score"></td>
+                        <td v-text="item.courseNum"></td>
+                        <td v-text="item.courseName"></td>
+                        <td v-text="item.totalCore==null?'未评价':item.totalCore"></td>
                     </tr>
                 </tbody>
             </table>
@@ -30,25 +30,26 @@
     export default{
         data(){
             return {
-                tableList:[
-                    {
-                        "snumber":1230322,
-                        "sname":"市场营销",
-                        "score":90,
-                    },
-                    {
-                        "snumber":1230321,
-                        "sname":"经济与管理",
-                        "score":70,
-                    },
-                ]
+                tableList:[]
             }
         },
         components:{
 
         },
+        created(){
+            this.getCourseTeacher();
+        },
         methods:{
-
+            getCourseTeacher(){
+                this.$http.axios({
+                    url:'/evalution/getCourseTeacher',
+                    method:'get',
+                }).then(resolve=>{
+                    this.tableList = resolve;
+                }).catch(err=>{
+                    console.log("失败了")
+                })
+            }
         }
     }
 </script>

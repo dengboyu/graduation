@@ -11,25 +11,33 @@
                         <th>序号</th>
                         <th>学号</th>
                         <th>姓名</th>
+                        <th>详情</th>
                         <th>最终评分</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="(item,index) in tableList" :key="index">
                         <td v-text="index+1"></td>
-                        <td v-text="item.snumber"></td>
-                        <td v-text="item.sname"></td>
-                        <td v-text="item.score"></td>
+                        <td v-text="item.number"></td>
+                        <td v-text="item.username"></td>
+                        <td>
+                            <el-button type="text" size="small" @click="getDetail(item.id)">查 看</el-button>
+                        </td>
+                        <td v-text="item.totalCore"></td>
                     </tr>
                 </tbody>
                 <tfoot>
                     <tr>
                         <td colspan="2">平均分</td>
-                        <td colspan="2">80</td>
+                        <td colspan="3" v-text="avgScore"></td>
                     </tr>
                 </tfoot>
             </table>
         </div>
+
+        <el-dialog title="评教详情" :visible.sync="dialogVisible" width="50%">
+            <p v-for="(item,index) in answerList">{{index+1}}. {{item.question}}<span style="margin-left:40px;">{{item.score}}</span>分</p>
+        </el-dialog>
     </div>
 </template>
 
@@ -39,25 +47,41 @@
     export default{
         data(){
             return {
-                tableList:[
-                    {
-                        "snumber":1230322,
-                        "sname":"张作霖",
-                        "score":90,
-                    },
-                    {
-                        "snumber":1230321,
-                        "sname":"吴佩孚",
-                        "score":70,
-                    },
-                ]
+                tableList:[],
+                avgScore:0,
+                dialogVisible:false,
+                answerList:[],
             }
         },
         components:{
 
         },
+        created(){
+            this.getCourseStudentList(this.$route.params.courseId);
+        },
         methods:{
-
+            getCourseStudentList(courseId){
+                this.$http.axios({
+                    url:'/evalution/getEvalutionList?courseId='+courseId,
+                    method:'get',
+                }).then(resolve=>{
+                    this.tableList = resolve.studentCourse;
+                    this.avgScore = resolve.avg;
+                }).catch(err=>{
+                    console.log("失败了")
+                })
+            },
+            getDetail(courseId){
+                this.dialogVisible=true;
+                this.$http.axios({
+                    url:'/evalution/getCourseListByStudent?evalutionId='+courseId,
+                    method:'get',
+                }).then(resolve=>{
+                    this.answerList=resolve;
+                }).catch(err=>{
+                    console.log("失败了"+err)
+                })
+            }
         }
     }
 </script>

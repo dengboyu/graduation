@@ -1,6 +1,9 @@
 package com.gz.evalution.module.authentication;
 
 
+import com.gz.evalution.common.exception.ByException;
+import com.gz.evalution.module.eva.entity.UserInfoEntity;
+import com.gz.evalution.module.eva.service.UserInfoService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -10,6 +13,7 @@ import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +23,8 @@ import java.util.List;
  */
 public class MyRealm extends AuthorizingRealm {
 
+    @Resource
+    private UserInfoService userInfoService;
 
     /**
      * 用户登陆认证
@@ -35,20 +41,21 @@ public class MyRealm extends AuthorizingRealm {
         //实际上这个authcToken是从LoginController里面currentUser.login(token)传过来的
         UsernamePasswordToken token = (UsernamePasswordToken) authcToken;
         System.out.println("验证当前Subject获取到的用户名为:" + token.getUsername());
-/*
 
-        SysUserEntity sysUserEntity = new SysUserEntity();
-        sysUserEntity.setUsername("邓波宇");
-        sysUserEntity.setPassword("18322695263");
-*/
-
-        if(true){
-            AuthenticationInfo authcInfo = new SimpleAuthenticationInfo("","", this.getName());
-            this.setSession("currentUser", null);
-            return authcInfo;
-        }else{
-            return null;
+        UserInfoEntity userInfoEntity = new UserInfoEntity();
+        userInfoEntity.setNumber(token.getUsername());
+        try {
+            List<UserInfoEntity> userInfoEntityList = userInfoService.findEntityList(userInfoEntity);
+            if(userInfoEntityList.size()<1)throw new ByException("登录或密码错误");
+            userInfoEntity = userInfoEntityList.get(0);
+        } catch (Exception e) {
+            throw new ByException("登录或密码错误");
         }
+
+        AuthenticationInfo authcInfo = new SimpleAuthenticationInfo(userInfoEntity.getNumber(),userInfoEntity.getPassword(), this.getName());
+        this.setSession("currentUser", userInfoEntity);
+        return authcInfo;
+
     }
 
     /**

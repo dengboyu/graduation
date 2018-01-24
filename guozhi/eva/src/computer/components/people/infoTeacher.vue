@@ -8,27 +8,27 @@
                     <td>
                         <p>
                             <span>&nbsp;&nbsp;&nbsp;工&nbsp;&nbsp;&nbsp;号</span>
-                            <span v-text="account.contactName"></span>
+                            <span v-text="userInfo.number"></span>
                         </p>
                         <p>
                             <span>&nbsp;&nbsp;&nbsp;姓&nbsp;&nbsp;&nbsp;名</span>
-                            <span v-text="account.user"></span>
+                            <span v-text="userInfo.username"></span>
                         </p>
                         <p>
                             <span>&nbsp;&nbsp;&nbsp;学&nbsp;&nbsp;&nbsp;院</span>
-                            <span v-text="account.userMsgInfo"></span>
+                            <span v-text="userInfo.collegeName"></span>
                         </p>
                         <p>
                             <span>&nbsp;&nbsp;&nbsp;专&nbsp;&nbsp;&nbsp;业</span>
-                            <span v-text="account.mailMsgInfo"></span>
+                            <span v-text="userInfo.proName"></span>
                         </p>
                         <p>
                             <span>&nbsp;&nbsp;&nbsp;邮&nbsp;&nbsp;&nbsp;箱</span>
-                            <span v-text="account.mail"></span>
+                            <span v-text="userInfo.email"></span>
                         </p>
                         <p>
                             <span>&nbsp;&nbsp;&nbsp;手机号</span>
-                            <span v-text="account.pho"></span>
+                            <span v-text="userInfo.phone"></span>
                         </p>
                     </td>
                 </tr>
@@ -43,64 +43,25 @@
     export default{
         data(){
             return {
-                options: [{
-                    value: '选项1',
-                    label: '黄金糕'
-                }, {
-                  value: '选项2',
-                  label: '双皮奶'
-                }, {
-                  value: '选项3',
-                  label: '蚵仔煎'
-                }, {
-                  value: '选项4',
-                  label: '龙须面'
-                }, {
-                  value: '选项5',
-                  label: '北京烤鸭'
-                }],
-                value: '',
-                account: {
-                    // 用户名
-                    user: '黄老师',
-                    region: '',
-                    // 用户名报错信息
-                    userMsg: false,
-                    // 用户名报错信息内容
-                    userMsgInfo: '经济与管理学院',
-                    password: '',
-                    pwdMsg: false,
-                    mail: 'fdafdsafd@163.com',
-                    mailMsg: false,
-                    mailMsgInfo: '信息管理与信息系统专业',
-                    pho: '1832342342',
-                    phoMsg: false,
-                    companyName: '',
-                    code: '',
-                    address: '',
-                    contactPho: '',
-                    contactName: '12323'
-                },
-                // 点击提交做的相关判断依据
-                submitAccord: {
-                    user: false,
-                    mail: false,
-                    password: false,
-                    tel: false
-                },
-                eye: false,
-                eyeClose: true,
-                pwdType: 'password'
+                userInfo:{},
             }
         },
         components:{
 
         },
+        created(){
+            this.getMainInfo();
+        },
         methods:{
-            changeEye() {
-                this.pwdType = this.pwdType === 'password' ? 'text' : 'password';
-                this.eyeClose = !this.eyeClose;
-                this.eye = !this.eye;
+            getMainInfo(){
+                this.$http.axios({
+                    url:'/userInfo/getUserInfoById',
+                    method:'get',
+                }).then(resolve=>{
+                    this.userInfo=resolve;
+                }).catch(err=>{
+                    console.log("失败了")
+                })
             }
         }
     }

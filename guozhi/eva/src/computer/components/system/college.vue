@@ -12,31 +12,39 @@
     export default{
         data(){
             return {
-                data: [{
-                  label: '经济与管理学院',
-                  children: [{
-                    label: '信心管理与信息系统专业',
-                  },{
-                    label: '物流管理专业'
-                  }]
-                }, {
-                  label: '外国语学院',
-                  children: [{
-                    label: '日语专业'
-                  }, {
-                    label: '英语专业'
-                  }]
-                }],
+                data: [],
                 defaultProps: {
-                  children: 'children',
-                  label: 'label'
+                    children: 'children',
+                    label: 'label'
                 }
             }
         },
         methods:{
             handleNodeClick(data) {
-                console.log(data);
+                //console.log(data);
+            },
+            getCollegeAndPro(){
+                this.$http.axios({
+                    url:'/college/getCollegeVoList',
+                    method:'get'
+                }).then(resolve=>{
+                    if(resolve.length>0){
+                        for(let i in resolve){
+                            resolve[i].label = resolve[i].collegeName;
+                            resolve[i].children = resolve[i].professionEntityList;
+                            for(let m in resolve[i].children){
+                                resolve[i].children[m].label = resolve[i].children[m].proName;
+                            }
+                        }
+                        this.data = resolve;
+                    }
+                }).catch(err=>{
+                    console.log("失败了")
+                })
             }
+        },
+        created(){
+            this.getCollegeAndPro();
         },
         components:{
 

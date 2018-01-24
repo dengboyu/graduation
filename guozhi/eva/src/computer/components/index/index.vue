@@ -2,8 +2,8 @@
 <template>
     <div class="tmpl">
         <div class="sidebar">
-            <side-bar-admin v-if="identity===1"></side-bar-admin>
-            <side-bar-student v-else-if="identity===2"></side-bar-student>
+            <side-bar-admin v-if="identity==='2'"></side-bar-admin>
+            <side-bar-student v-else-if="identity==='0'"></side-bar-student>
             <side-bar-teacher v-else></side-bar-teacher>
         </div>
         <div class="main">
@@ -30,10 +30,20 @@
             }
         },
         created(){
-            console.log(this.$store.state.userModule.identity)
+            this.getMainInfo();
         },
         methods:{
-
+            getMainInfo(){
+                this.$http.axios({
+                    url:'/userInfo/getCurrentUserInfo',
+                    method:'get',
+                }).then(resolve=>{
+                    this.$store.dispatch('userModule/changeIdentity',resolve.identity);
+                    this.$store.dispatch('userModule/changeUserName',resolve.username);
+                }).catch(err=>{
+                    console.log("失败了")
+                })
+            }
         },
         computed:{
             ...mapState('userModule',['identity']),

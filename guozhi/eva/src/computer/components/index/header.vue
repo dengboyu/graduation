@@ -2,7 +2,7 @@
 <template>
     <div class="tmpl">
         <p class="header-pj">评教系统</p>
-        <p class="header-identity">身份: <span v-text="identity===1?'管理员':(identity===2?'学生':'教师')"></span>&nbsp;&nbsp; | &nbsp;&nbsp;用户名: <span v-text="userName"></span> &nbsp;&nbsp;|&nbsp;&nbsp; <span @click="logout">退出</span></p>
+        <p class="header-identity">身份: <span v-text="identity==='2'?'管理员':(identity==='0'?'学生':'教师')"></span>&nbsp;&nbsp; | &nbsp;&nbsp;用户名: <span v-text="userName"></span> &nbsp;&nbsp;|&nbsp;&nbsp; <span @click="logout">退出</span></p>
     </div>
 </template>
 

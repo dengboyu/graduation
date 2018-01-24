@@ -2,17 +2,17 @@
 <template>
     <div class="tmpl">
         <el-table :data="tableData" stripe style="width: 100%">
-            <el-table-column prop="snumber" label="课程编号" width="180"></el-table-column>
+            <el-table-column prop="courseNum" label="课程编号" width="180"></el-table-column>
             <el-table-column label="课程名称"  width="180">
                 <template slot-scope="scope">
-                    <span v-if="scope.row.flag" v-text="scope.row.sname"></span>
-                    <el-input v-else type="text" v-model="scope.row.sname"  width="180"></el-input>
+                    <span v-if="scope.row.flag" v-text="scope.row.courseName"></span>
+                    <el-input v-else type="text" v-model="scope.row.courseName"  width="180"></el-input>
                 </template>
             </el-table-column>
-            <el-table-column prop="scollege" label="学院"></el-table-column>
-            <el-table-column prop="sprofession" label="专业"></el-table-column>
-            <el-table-column prop="address" label="任课教师" width="180"></el-table-column>
-            <el-table-column prop="snumber" label="教师工号" width="180"></el-table-column>
+            <el-table-column prop="collegeName" label="学院"></el-table-column>
+            <el-table-column prop="proName" label="专业"></el-table-column>
+            <el-table-column prop="username" label="任课教师" width="180"></el-table-column>
+            <el-table-column prop="number" label="教师工号" width="180"></el-table-column>
             <el-table-column  label="操作">
                 <template slot-scope="scope">
                     <el-button @click="handleClick(scope.row)" type="text" size="small">{{scope.row.updateInfo}}</el-button>
@@ -29,58 +29,80 @@
     export default{
         data(){
             return {
-                tableData: [
-                    {
-                      snumber: '1102012',
-                      sname: '市场营销',
-                      scollege: '经济管理学院',
-                      sprofession:'信息管理与信息系统',
-                      address:'李丽',
-                      sphone:18423234321,
-                      flag:true,
-                      updateInfo:'修改',
-                    },
-                    {
-                      snumber: '1102013',
-                      sname: '物流管理',
-                      scollege: '外国语学院',
-                      sprofession:'英语专业',
-                      address:'李强',
-                      sphone:18734234223,
-                      flag:true,
-                      updateInfo:'修改',
-                    }
-                ]
+                tableData: []
             }
         },
         methods: {
             handleClick(row) {
-                // console.log(row);
-                console.log(row.flag);
 
                 if(row.flag){
                     row.updateInfo = '确定';
                     row.flag = !row.flag;
                 }else{
-                    //确定修改，提交
-                    console.log("提交信息");
+                    this.$http.axios({
+                        url:'/course/updateCourseEntity',
+                        method:'post',
+                        data:row,
+                        json:true,
+                    }).then(resolve=>{
+                        this.$message({
+                            type: 'success',
+                            message: '修改成功!'
+                        });
+                        row.updateInfo = '修改';
+                        row.flag = !row.flag;
+
+                    }).catch(err=>{
+                        console.log("失败了"+err)
+                    })
                 }
             },
-            deleteClick(){
+            deleteClick(row){
                 this.$confirm('是否将该课程删除?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    this.$message({
-                        type: 'success',
-                        message: '删除成功!'
-                    });
+
+                    this.$http.axios({
+                        url:'/course/deleteCourseEntity',
+                        method:'post',
+                        data:{id:row.id},
+                    }).then(resolve=>{
+                        this.$message({
+                            type: 'success',
+                            message: '删除成功!'
+                        });
+                        this.tableData.splice(row.$index,1);
+
+                    }).catch(err=>{
+                        console.log("失败了"+err)
+                    })
                 }).catch(()=>{});
+            },
+            getCourseList(){
+                this.$http.axios({
+                    url:'/course/getCourseEntityList',
+                    method:'get',
+                }).then(resolve=>{
+                    if(resolve.length>0){
+                        for(let i in resolve){
+                            resolve[i].flag=true;
+                            resolve[i].updateInfo='修改';
+                        }
+                    }
+                    this.tableData = resolve;
+
+                }).catch(err=>{
+                    console.log("失败了"+err)
+                })
             }
         },
         components:{
 
+        },
+        created(){
+            this.getCourseList();
         }
     }
 </script>

@@ -7,11 +7,11 @@
                     <span v-text="scope.$index+1"></span>
                 </template>
             </el-table-column>
-            <el-table-column prop="snumber" label="标签" width="180"></el-table-column>
-            <el-table-column label="问题"  width="300">
+            <el-table-column prop="tag" label="标签" width="180"></el-table-column>
+            <el-table-column label="问题"  width="600">
                 <template slot-scope="scope">
-                    <span v-if="scope.row.flag" v-text="scope.row.sname"></span>
-                    <el-input v-else type="text" v-model="scope.row.sname"  width="240"></el-input>
+                    <span v-if="scope.row.flag" v-text="scope.row.question"></span>
+                    <el-input v-else type="text" v-model="scope.row.question"  width="240"></el-input>
                 </template>
             </el-table-column>
             <el-table-column  label="操作">
@@ -26,59 +26,89 @@
 
 <!-- 组件导出 -->
 <script>
+    import { Message } from 'element-ui' //消息提示
 
     export default{
         data(){
             return {
                 tableData: [
-                    {
-                      snumber: '教学态度',
-                      sname: '上课认真，耐心辅导答疑，认真批改作业',
-                      scollege: '经济管理学院',
-                      sprofession:'信息管理与信息系统',
-                      address:'byfdsa@163.com',
-                      sphone:18423234321,
-                      flag:true,
-                      updateInfo:'修改',
-                    },
-                    {
-                      snumber: '教学内容',
-                      sname: '注意与学生的沟通和交流，关心学生学习',
-                      scollege: '外国语学院',
-                      sprofession:'英语专业',
-                      address:'teafdaa@163.com',
-                      sphone:18734234223,
-                      flag:true,
-                      updateInfo:'修改',
-                    }
+
                 ]
             }
         },
         methods: {
             handleClick(row) {
-                console.log(row);
-                console.log(row.flag);
-
                 if(row.flag){
                     row.updateInfo = '确定';
                     row.flag = !row.flag;
                 }else{
                     //确定修改，提交
-                    console.log("提交信息");
+                    this.$http.axios({
+                        url:'/question/updateQuestionById',
+                        method:'post',
+                        json:true,
+                        data:row,
+                    }).then(resolve=>{
+                        Message({
+                            showClose: true,
+                            message: '修改成功',
+                            type: 'success'
+                        });
+
+                        row.updateInfo = '修改';
+                        row.flag = !row.flag;
+                    }).catch(err=>{
+                        console.log("失败了"+err)
+                    })
                 }
             },
-            deleteClick(){
+            deleteClick(row){
                 this.$confirm('是否将该学生删除?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    this.$message({
-                        type: 'success',
-                        message: '删除成功!'
-                    });
+
+                    console.log(row);
+
+                    this.$http.axios({
+                        url:'/question/deleteQuestion',
+                        method:'post',
+                        data:{id:row.id},
+                    }).then(resolve=>{
+
+                        this.tableData.splice(row.$index,1);
+
+                        this.$message({
+                            type: 'success',
+                            message: '删除成功!'
+                        });
+                    }).catch(err=>{
+                        console.log("失败了"+err)
+                    })
+
                 }).catch(()=>{});
+            },
+            getQuestionList(){
+
+                this.$http.axios({
+                    url:'/question/getQuestionList',
+                    method:'get',
+                }).then(resolve=>{
+                    if(resolve!=null){
+                        for(let i in resolve){
+                            resolve[i].flag=true;
+                            resolve[i].updateInfo='修改';
+                        }
+                    }
+                    this.tableData=resolve;
+                }).catch(err=>{
+                    console.log("失败了"+err)
+                })
             }
+        },
+        created(){
+           this.getQuestionList();
         },
         components:{
 
@@ -90,6 +120,8 @@
 <style scoped>
     .tmpl{
         margin: 20px 10%;
+        height: 90%;
+        overflow: scroll;
     }
     .el-table .cell .el-input{
         width:323px!important;

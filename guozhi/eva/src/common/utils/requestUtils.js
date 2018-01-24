@@ -50,7 +50,7 @@ export default {
 
             //创建axios实例
             let instance = axios.create({
-                // baseURL: baseURL,
+                baseURL: baseURL,
                 url: options.url,
                 method: options.method,
                 timeout: TIMEOUT, //请求超时
@@ -109,7 +109,6 @@ export default {
                     return;
                 }
 
-
                 //响应成功,继续走回调
                 if(res.data.code === 0){
                     //后台返回正确
@@ -131,7 +130,6 @@ export default {
                 //响应失败
 
                 let res_data = JSON.parse(JSON.stringify(error));
-                console.log(res_data);
 
                 //超时
                 if (error.toString().startsWith(`Error: timeout of ${TIMEOUT}ms exceeded`)) {

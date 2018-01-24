@@ -100,7 +100,7 @@ export default new Router({
                 },
                 {
                     name:'compare',
-                    path:'compare',
+                    path:'compare/:courseId',
                     component:compare
                 },
                 {
@@ -120,7 +120,7 @@ export default new Router({
                 },
                 {
                     name:'evalution',
-                    path:'evalution',
+                    path:'evalution/:id/:username/:courseName',
                     component:evalution
                 },
                 {

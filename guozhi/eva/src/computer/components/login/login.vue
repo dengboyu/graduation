@@ -7,10 +7,10 @@
                     <p class="pingjiao">评教系统</p>
                     <el-form class="login" label-position="right" label-width="80px" :model="formLabelAlign">
                         <el-form-item label="用户名">
-                            <el-input v-model="formLabelAlign.name" placeholder="请输入用户名"></el-input>
+                            <el-input v-model="formLabelAlign.number" placeholder="请输入用户名"></el-input>
                         </el-form-item>
                         <el-form-item label="密码">
-                            <el-input type="password" v-model="formLabelAlign.region" placeholder="请输入密码"></el-input>
+                            <el-input type="password" v-model="formLabelAlign.password" placeholder="请输入密码"></el-input>
                         </el-form-item>
                         <el-form-item label="选择身份">
                             <el-radio-group v-model="formLabelAlign.resource">
@@ -36,9 +36,9 @@
         data(){
             return {
                 formLabelAlign: {
-                    name: '',
-                    region: '',
-                    type: '',
+                    number: '',
+                    password: '',
+                    identity: '',
                     resource: '学生',
                 }
             }
@@ -55,14 +55,33 @@
 
                 //跳转到首页
                 if(this.formLabelAlign.resource==='教师'){
-                    this.$store.dispatch('userModule/changeIdentity',3);
+                    this.formLabelAlign.identity='1';
                 }else if(this.formLabelAlign.resource==='学生'){
-                    this.$store.dispatch('userModule/changeIdentity',2);
+                    this.formLabelAlign.identity='0';
                 }else if(this.formLabelAlign.resource==='管理员'){
-                    this.$store.dispatch('userModule/changeIdentity',1);
+                    this.formLabelAlign.identity='2';
                 }
-                this.$store.dispatch('userModule/changeUserName',this.formLabelAlign.name);
-                this.$router.push({ path: '/index' });
+
+                if(this.formLabelAlign.number=='' || this.formLabelAlign.password==''){
+                    return this.$message({
+                        type:'warning',
+                        message:'请输入用户名或密码'
+                    });
+                }
+
+                this.$http.axios({
+                    url:'/user/userLogin',
+                    method:'post',
+                    data:this.formLabelAlign,
+                    json:true,
+                }).then(resolve=>{
+                    this.$router.push({ path: '/index' });
+                }).catch(err=>{
+                    console.log("失败了")
+                })
+
+
+
             }
         }
     }

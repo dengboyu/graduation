@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gz.evalution.module.eva.dao.ProfessionDao">
+
+    <!-- 以下代码片段中,profession表的别名为RA -->
+
+    <!-- profession表的字段 -->
+    <sql id ="profession_columns">
+        RA.id,RA.proNum,RA.proName,RA.startTime,RA.collegeId,RA.statu,RA.createTime,RA.updateTime
+    </sql>
+
+    
+    <!-- profession表的resultMap映射 -->
+    <resultMap id="entityResultMap" type="com.gz.evalution.module.eva.entity.ProfessionEntity">
+        <id  property="id"  column="id"/>
+        <result  property="proNum"  column="proNum"/>
+        <result  property="proName"  column="proName"/>
+        <result  property="startTime"  column="startTime"/>
+        <result  property="collegeId"  column="collegeId"/>
+        <result  property="statu"  column="statu"/>
+        <result  property="createTime"  column="createTime"/>
+        <result  property="updateTime"  column="updateTime"/>
+    </resultMap>
+
+
+    <!-- 添加一条记录 -->
+    <insert id="insertEntity" parameterType="com.gz.evalution.module.eva.entity.ProfessionEntity">
+        INSERT INTO profession
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            id,
+            proNum,
+            proName,
+            startTime,
+            collegeId,
+            statu,
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            #{id},
+            #{proNum},
+            #{proName},
+            #{startTime},
+            #{collegeId},
+            #{statu},
+        </trim>
+    </insert>
+
+
+    <!-- 批量添加 -->
+    <insert id="insertEntityByBatch" parameterType="list">
+        INSERT INTO profession
+        <trim prefix="(" suffix=") VALUES" suffixOverrides=",">
+            id,
+            proNum,
+            proName,
+            startTime,
+            collegeId,
+            statu,
+        </trim>
+        <foreach collection="list" index="index" item="item" separator=",">
+        (
+            #{item.id},
+            #{item.proNum},
+            #{item.proName},
+            #{item.startTime},
+            #{item.collegeId},
+            #{item.statu}
+        )
+        </foreach>
+    </insert>
+
+
+    <!-- 更新一条记录 -->
+    <update id="updateEntity" parameterType="com.gz.evalution.module.eva.entity.ProfessionEntity">
+        UPDATE profession
+        <trim prefix="set" suffixOverrides=",">
+            <if test="proNum != null">
+                proNum = #{proNum},
+            </if>
+            <if test="proName != null">
+                proName = #{proName},
+            </if>
+            <if test="startTime != null">
+                startTime = #{startTime},
+            </if>
+            <if test="collegeId != null">
+                collegeId = #{collegeId},
+            </if>
+            <if test="statu != null">
+                statu = #{statu},
+            </if>
+        </trim>
+        WHERE id = #{id}
+    </update>
+
+
+    <!-- 根据主键删除一条记录 -->
+    <delete id="deleteEntity">
+        DELETE FROM profession WHERE id = #{0}
+    </delete>
+
+
+    <!-- 根据列条件查询实体类信息 -->
+    <sql id="whereColumns">
+        <trim suffixOverrides=",">
+            <if test="id != null">
+                RA.id = #{id},
+            </if>
+            <if test="proNum != null">
+                RA.proNum = #{proNum},
+            </if>
+            <if test="proName != null">
+                RA.proName = #{proName},
+            </if>
+            <if test="startTime != null">
+                RA.startTime = #{startTime},
+            </if>
+            <if test="collegeId != null">
+                RA.collegeId = #{collegeId},
+            </if>
+            <if test="statu != null">
+                RA.statu = #{statu},
+            </if>
+            <if test="createTime != null">
+                RA.createTime = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                RA.updateTime = #{updateTime},
+            </if>
+        </trim>
+    </sql>
+
+
+    <!-- 根据主键查找对应实体类 -->
+    <select id="findEntityByMainId" resultType="com.gz.evalution.module.eva.entity.ProfessionEntity">
+        SELECT
+            <include refid="profession_columns"></include>
+        FROM profession RA
+        WHERE id = #{0}
+    </select>
+
+
+    <!-- 根据条件查出来是单条实体类 -->
+    <select id="findEntityByOne" parameterType="com.gz.evalution.module.eva.entity.ProfessionEntity" resultType="com.gz.evalution.module.eva.entity.ProfessionEntity">
+        SELECT
+            <include refid="profession_columns"></include>
+        FROM
+            profession RA
+        <where>
+            <include refid="whereColumns"></include>
+        </where>
+    </select>
+
+
+    <!-- 根据列条件查找实体类集合 -->
+    <select id="findEntityList" parameterType="com.gz.evalution.module.eva.entity.ProfessionEntity" resultType="com.gz.evalution.module.eva.entity.ProfessionEntity">
+        SELECT
+            <include refid="profession_columns"></include>
+        FROM
+            profession RA
+        <where>
+            <include refid="whereColumns"></include>
+        </where>
+    </select>
+
+
+    <!-- 查询记录数 -->
+    <select id="findEntityCount" parameterType="com.gz.evalution.module.eva.entity.ProfessionEntity" resultType="long">
+        SELECT
+            count(1)
+        FROM
+            profession RA
+        <where>
+            <include refid="whereColumns"></include>
+        </where>
+    </select>
+
+
+    <!-- 单表分页查询 -->
+    <select id="findPageEntityList" parameterType="map" resultType="com.gz.evalution.module.eva.entity.ProfessionEntity">
+        SELECT
+            <include refid="profession_columns"></include>
+        FROM
+            profession RA
+        <if test="start!=null and pageSize !=null">
+            LIMIT #{start},#{pageSize}
+        </if>
+    </select>
+
+
+</mapper>

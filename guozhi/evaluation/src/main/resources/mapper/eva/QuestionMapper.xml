@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gz.evalution.module.eva.dao.QuestionDao">
+
+    <!-- 以下代码片段中,question表的别名为RA -->
+
+    <!-- question表的字段 -->
+    <sql id ="question_columns">
+        RA.id,RA.tag,RA.question,RA.statu,RA.createTime,RA.updateTime
+    </sql>
+
+    
+    <!-- question表的resultMap映射 -->
+    <resultMap id="entityResultMap" type="com.gz.evalution.module.eva.entity.QuestionEntity">
+        <id  property="id"  column="id"/>
+        <result  property="tag"  column="tag"/>
+        <result  property="question"  column="question"/>
+        <result  property="statu"  column="statu"/>
+        <result  property="createTime"  column="createTime"/>
+        <result  property="updateTime"  column="updateTime"/>
+    </resultMap>
+
+
+    <!-- 添加一条记录 -->
+    <insert id="insertEntity" parameterType="com.gz.evalution.module.eva.entity.QuestionEntity">
+        INSERT INTO question
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            id,
+            tag,
+            question,
+            statu,
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            #{id},
+            #{tag},
+            #{question},
+            #{statu},
+        </trim>
+    </insert>
+
+
+    <!-- 批量添加 -->
+    <insert id="insertEntityByBatch" parameterType="list">
+        INSERT INTO question
+        <trim prefix="(" suffix=") VALUES" suffixOverrides=",">
+            id,
+            tag,
+            question,
+            statu,
+        </trim>
+        <foreach collection="list" index="index" item="item" separator=",">
+        (
+            #{item.id},
+            #{item.tag},
+            #{item.question},
+            #{item.statu}
+        )
+        </foreach>
+    </insert>
+
+
+    <!-- 更新一条记录 -->
+    <update id="updateEntity" parameterType="com.gz.evalution.module.eva.entity.QuestionEntity">
+        UPDATE question
+        <trim prefix="set" suffixOverrides=",">
+            <if test="tag != null">
+                tag = #{tag},
+            </if>
+            <if test="question != null">
+                question = #{question},
+            </if>
+            <if test="statu != null">
+                statu = #{statu},
+            </if>
+        </trim>
+        WHERE id = #{id}
+    </update>
+
+
+    <!-- 根据主键删除一条记录 -->
+    <delete id="deleteEntity">
+        DELETE FROM question WHERE id = #{0}
+    </delete>
+
+
+    <!-- 根据列条件查询实体类信息 -->
+    <sql id="whereColumns">
+        <trim suffixOverrides=",">
+            <if test="id != null">
+                RA.id = #{id},
+            </if>
+            <if test="tag != null">
+                RA.tag = #{tag},
+            </if>
+            <if test="question != null">
+                RA.question = #{question},
+            </if>
+            <if test="statu != null">
+                RA.statu = #{statu},
+            </if>
+            <if test="createTime != null">
+                RA.createTime = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                RA.updateTime = #{updateTime},
+            </if>
+        </trim>
+    </sql>
+
+
+    <!-- 根据主键查找对应实体类 -->
+    <select id="findEntityByMainId" resultType="com.gz.evalution.module.eva.entity.QuestionEntity">
+        SELECT
+            <include refid="question_columns"></include>
+        FROM question RA
+        WHERE id = #{0}
+    </select>
+
+
+    <!-- 根据条件查出来是单条实体类 -->
+    <select id="findEntityByOne" parameterType="com.gz.evalution.module.eva.entity.QuestionEntity" resultType="com.gz.evalution.module.eva.entity.QuestionEntity">
+        SELECT
+            <include refid="question_columns"></include>
+        FROM
+            question RA
+        <where>
+            <include refid="whereColumns"></include>
+        </where>
+    </select>
+
+
+    <!-- 根据列条件查找实体类集合 -->
+    <select id="findEntityList" parameterType="com.gz.evalution.module.eva.entity.QuestionEntity" resultType="com.gz.evalution.module.eva.entity.QuestionEntity">
+        SELECT
+            <include refid="question_columns"></include>
+        FROM
+            question RA
+        <where>
+            <include refid="whereColumns"></include>
+        </where>
+    </select>
+
+
+    <!-- 查询记录数 -->
+    <select id="findEntityCount" parameterType="com.gz.evalution.module.eva.entity.QuestionEntity" resultType="long">
+        SELECT
+            count(1)
+        FROM
+            question RA
+        <where>
+            <include refid="whereColumns"></include>
+        </where>
+    </select>
+
+
+    <!-- 单表分页查询 -->
+    <select id="findPageEntityList" parameterType="map" resultType="com.gz.evalution.module.eva.entity.QuestionEntity">
+        SELECT
+            <include refid="question_columns"></include>
+        FROM
+            question RA
+        <if test="start!=null and pageSize !=null">
+            LIMIT #{start},#{pageSize}
+        </if>
+    </select>
+
+
+</mapper>

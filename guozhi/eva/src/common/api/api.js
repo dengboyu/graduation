@@ -7,7 +7,7 @@
 
 export default{
     // orderDetail:'/orderBase/getOrderDetailById1',    //订单详情具体信息
-    orderDetail:'/evalution/getTest',    //订单详情具体信息
+    addCollegeEntity:'/addCollegeEntity',    //订单详情具体信息
 
 
 

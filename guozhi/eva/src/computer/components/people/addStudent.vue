@@ -8,51 +8,37 @@
                     <td>
                         <p>
                             <span>&nbsp;&nbsp;&nbsp;学&nbsp;&nbsp;&nbsp;号</span>
-                            <el-input placeholder="请输入学生学号" v-model.trim="account.user"  :maxlength='20'></el-input>
+                            <el-input placeholder="请输入学生学号" v-model.trim="userInfo.number"  :maxlength='20'></el-input>
                         </p>
                         <p>
                             <span>&nbsp;&nbsp;&nbsp;姓&nbsp;&nbsp;&nbsp;名</span>
-                            <el-input placeholder="请输入学生姓名" v-model.trim="account.user"  :maxlength='20'></el-input>
+                            <el-input placeholder="请输入学生姓名" v-model.trim="userInfo.username"  :maxlength='20'></el-input>
                         </p>
-                        <p>
-                            <span>&nbsp;&nbsp;&nbsp;学&nbsp;&nbsp;&nbsp;院</span>
-                            <el-select v-model="value" placeholder="请选择学院">
-                                <el-option
-                                    v-for="item in options"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
-                                </el-option>
-                            </el-select>
+                        <p class="college-select">
+                            <span style="margin-right:10px">&nbsp;&nbsp;&nbsp;学&nbsp;&nbsp;&nbsp;院</span>
+                            <college-select @retValue="changeCollegeId"></college-select>
                         </p>
-                        <p>
-                            <span>&nbsp;&nbsp;&nbsp;专&nbsp;&nbsp;&nbsp;业</span>
-                            <el-select v-model="value" placeholder="请选择专业">
-                                <el-option
-                                    v-for="item in options"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
-                                </el-option>
-                            </el-select>
+                        <p class="profession-select">
+                            <span style="margin-right:10px">&nbsp;&nbsp;&nbsp;专&nbsp;&nbsp;&nbsp;业</span>
+                            <profession-select @retProfessionValue="changeProfessionId"></profession-select>
                         </p>
                         <p>
                             <span>邮箱账号</span>
-                            <el-input placeholder="请输入学生邮箱账号" v-model.trim="account.mail" >
+                            <el-input placeholder="请输入学生邮箱账号" v-model.trim="userInfo.email" >
                             </el-input>
                         </p>
                         <p>
                             <span>创建密码</span>
-                            <el-input placeholder="格式为6-16位数字+字母" v-model.trim="account.password" :type="pwdType" :maxlength='16'>
+                            <el-input placeholder="格式为6-16位数字+字母" v-model.trim="userInfo.password" :type="pwdType" :maxlength='16'>
                                 <i slot="suffix" class="el-input__icon el-icon-date" :class='{eye:eye,eyeClose:eyeClose}' @click="changeEye"></i>
                             </el-input>
                         </p>
                         <p>
                             <span>绑定手机</span>
-                            <el-input placeholder="请输入手机号" v-model.trim="account.pho" :maxlength='11'>
+                            <el-input placeholder="请输入手机号" v-model.trim="userInfo.phone" :maxlength='11'>
                             </el-input>
                         </p>
-                        <el-button type="primary" style="width:20%;margin: 40px 24%;" @click="">提交</el-button>
+                        <el-button type="primary" style="width:20%;margin: 40px 24%;" @click="addStudent">提交</el-button>
                     </td>
                 </tr>
             </table>
@@ -62,55 +48,24 @@
 
 <!-- 组件导出 -->
 <script>
+    import { mapState,mapGetters,mapMutations,mapActions } from 'vuex'
+    import collegeSelect from '../system/collegeSelect'
+    import professionSelect from '../system/professionSelect'
+    import { Message } from 'element-ui' //消息提示
+    import Bus from '../public/bus'
 
     export default{
         data(){
             return {
-                options: [{
-                    value: '选项1',
-                    label: '黄金糕'
-                }, {
-                  value: '选项2',
-                  label: '双皮奶'
-                }, {
-                  value: '选项3',
-                  label: '蚵仔煎'
-                }, {
-                  value: '选项4',
-                  label: '龙须面'
-                }, {
-                  value: '选项5',
-                  label: '北京烤鸭'
-                }],
-                value: '',
-                account: {
-                    // 用户名
-                    user: '',
-                    region: '',
-                    // 用户名报错信息
-                    userMsg: false,
-                    // 用户名报错信息内容
-                    userMsgInfo: '',
-                    password: '',
-                    pwdMsg: false,
-                    mail: '',
-                    mailMsg: false,
-                    mailMsgInfo: '',
-                    pho: '',
-                    phoMsg: false,
-                    phoMsgInfo: '此手机号一经绑定，不得更改',
-                    companyName: '',
-                    code: '',
-                    address: '',
-                    contactPho: '',
-                    contactName: ''
-                },
-                // 点击提交做的相关判断依据
-                submitAccord: {
-                    user: false,
-                    mail: false,
-                    password: false,
-                    tel: false
+                userInfo:{
+                    username:null,
+                    password:null,
+                    email:null,
+                    identity:"0",
+                    number:null,
+                    college:null,
+                    profession:null,
+                    phone:null
                 },
                 eye: false,
                 eyeClose: true,
@@ -118,13 +73,51 @@
             }
         },
         components:{
-
+            collegeSelect,
+            professionSelect,
         },
         methods:{
             changeEye() {
                 this.pwdType = this.pwdType === 'password' ? 'text' : 'password';
                 this.eyeClose = !this.eyeClose;
                 this.eye = !this.eye;
+            },
+            changeCollegeId(param){
+                //选择学院
+                this.userInfo.college = param;
+            },
+            changeProfessionId(param){
+                this.userInfo.profession = param;
+            },
+            addStudent(){
+                let sendData = this.userInfo;
+                if(this.$fn.hasObjectNull(sendData)){
+                    Message({
+                        showClose: true,
+                        message: '请把信息填全',
+                        type: 'warning'
+                    });
+                    return;
+                }
+
+                this.$http.axios({
+                    url:'/userInfo/addUserInfoEntity',
+                    method:'post',
+                    data:sendData,
+                    json:true,
+                }).then(resolve=>{
+                    Message({
+                        showClose: true,
+                        message: '添加成功',
+                        type: 'success'
+                    });
+                    Bus.$emit('resetProfessionSelect');
+                    Bus.$emit('resetCollegeSelect');
+                    this.$fn.resetObject(this.userInfo);
+                    this.userInfo.identity="0";
+                }).catch(err=>{
+                    console.log("失败了")
+                })
             }
         }
     }

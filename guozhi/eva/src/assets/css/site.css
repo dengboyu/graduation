@@ -20,3 +20,18 @@
 .el-table thead th{
     text-align: center;
 }
+.college-select .collegeSelect .el-select,
+.profession-select .professionSelect .el-select,
+.teacher-select .el-select{
+    width:305px;
+}
+.el-tree-node__label{
+    font-size: 15px;
+}
+.el-tree-node__content{
+    height: 30px;
+    margin-bottom: 5px;
+}
+.el-dialog__body{
+    padding-top:10px;
+}

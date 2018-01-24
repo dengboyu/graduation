@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gz.evalution.module.eva.dao.UserInfoDao">
+
+    <!-- 以下代码片段中,user_info表的别名为RA -->
+
+    <!-- user_info表的字段 -->
+    <sql id ="user_info_columns">
+        RA.id,RA.username,RA.password,RA.email,RA.identity,RA.number,RA.college,RA.profession,RA.phone,RA.statu,RA.createTime,RA.updateTime
+    </sql>
+
+    
+    <!-- user_info表的resultMap映射 -->
+    <resultMap id="entityResultMap" type="com.gz.evalution.module.eva.entity.UserInfoEntity">
+        <id  property="id"  column="id"/>
+        <result  property="username"  column="username"/>
+        <result  property="password"  column="password"/>
+        <result  property="email"  column="email"/>
+        <result  property="identity"  column="identity"/>
+        <result  property="number"  column="number"/>
+        <result  property="college"  column="college"/>
+        <result  property="profession"  column="profession"/>
+        <result  property="phone"  column="phone"/>
+        <result  property="statu"  column="statu"/>
+        <result  property="createTime"  column="createTime"/>
+        <result  property="updateTime"  column="updateTime"/>
+    </resultMap>
+
+
+    <!-- 添加一条记录 -->
+    <insert id="insertEntity" parameterType="com.gz.evalution.module.eva.entity.UserInfoEntity">
+        INSERT INTO user_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            id,
+            username,
+            password,
+            email,
+            identity,
+            number,
+            college,
+            profession,
+            phone,
+            statu,
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            #{id},
+            #{username},
+            #{password},
+            #{email},
+            #{identity},
+            #{number},
+            #{college},
+            #{profession},
+            #{phone},
+            #{statu},
+        </trim>
+    </insert>
+
+
+    <!-- 批量添加 -->
+    <insert id="insertEntityByBatch" parameterType="list">
+        INSERT INTO user_info
+        <trim prefix="(" suffix=") VALUES" suffixOverrides=",">
+            id,
+            username,
+            password,
+            email,
+            identity,
+            number,
+            college,
+            profession,
+            phone,
+            statu,
+        </trim>
+        <foreach collection="list" index="index" item="item" separator=",">
+        (
+            #{item.id},
+            #{item.username},
+            #{item.password},
+            #{item.email},
+            #{item.identity},
+            #{item.number},
+            #{item.college},
+            #{item.profession},
+            #{item.phone},
+            #{item.statu}
+        )
+        </foreach>
+    </insert>
+
+
+    <!-- 更新一条记录 -->
+    <update id="updateEntity" parameterType="com.gz.evalution.module.eva.entity.UserInfoEntity">
+        UPDATE user_info
+        <trim prefix="set" suffixOverrides=",">
+            <if test="username != null">
+                username = #{username},
+            </if>
+            <if test="password != null">
+                password = #{password},
+            </if>
+            <if test="email != null">
+                email = #{email},
+            </if>
+            <if test="identity != null">
+                identity = #{identity},
+            </if>
+            <if test="number != null">
+                number = #{number},
+            </if>
+            <if test="college != null">
+                college = #{college},
+            </if>
+            <if test="profession != null">
+                profession = #{profession},
+            </if>
+            <if test="phone != null">
+                phone = #{phone},
+            </if>
+            <if test="statu != null">
+                statu = #{statu},
+            </if>
+        </trim>
+        WHERE id = #{id}
+    </update>
+
+
+    <!-- 根据主键删除一条记录 -->
+    <delete id="deleteEntity">
+        DELETE FROM user_info WHERE id = #{0}
+    </delete>
+
+
+    <!-- 根据列条件查询实体类信息 -->
+    <sql id="whereColumns">
+        <trim suffixOverrides=",">
+            <if test="id != null">
+                RA.id = #{id},
+            </if>
+            <if test="username != null">
+                RA.username = #{username},
+            </if>
+            <if test="password != null">
+                RA.password = #{password},
+            </if>
+            <if test="email != null">
+                RA.email = #{email},
+            </if>
+            <if test="identity != null">
+                RA.identity = #{identity},
+            </if>
+            <if test="number != null">
+                RA.number = #{number},
+            </if>
+            <if test="college != null">
+                RA.college = #{college},
+            </if>
+            <if test="profession != null">
+                RA.profession = #{profession},
+            </if>
+            <if test="phone != null">
+                RA.phone = #{phone},
+            </if>
+            <if test="statu != null">
+                RA.statu = #{statu},
+            </if>
+            <if test="createTime != null">
+                RA.createTime = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                RA.updateTime = #{updateTime},
+            </if>
+        </trim>
+    </sql>
+
+
+    <!-- 根据主键查找对应实体类 -->
+    <select id="findEntityByMainId" resultType="com.gz.evalution.module.eva.entity.UserInfoEntity">
+        SELECT
+            <include refid="user_info_columns"></include>
+        FROM user_info RA
+        WHERE id = #{0}
+    </select>
+
+
+    <!-- 根据条件查出来是单条实体类 -->
+    <select id="findEntityByOne" parameterType="com.gz.evalution.module.eva.entity.UserInfoEntity" resultType="com.gz.evalution.module.eva.entity.UserInfoEntity">
+        SELECT
+            <include refid="user_info_columns"></include>
+        FROM
+            user_info RA
+        <where>
+            <include refid="whereColumns"></include>
+        </where>
+    </select>
+
+
+    <!-- 根据列条件查找实体类集合 -->
+    <select id="findEntityList" parameterType="com.gz.evalution.module.eva.entity.UserInfoEntity" resultType="com.gz.evalution.module.eva.entity.UserInfoEntity">
+        SELECT
+            <include refid="user_info_columns"></include>
+        FROM
+            user_info RA
+        <where>
+            <include refid="whereColumns"></include>
+        </where>
+    </select>
+
+
+    <!-- 查询记录数 -->
+    <select id="findEntityCount" parameterType="com.gz.evalution.module.eva.entity.UserInfoEntity" resultType="long">
+        SELECT
+            count(1)
+        FROM
+            user_info RA
+        <where>
+            <include refid="whereColumns"></include>
+        </where>
+    </select>
+
+
+    <!-- 单表分页查询 -->
+    <select id="findPageEntityList" parameterType="map" resultType="com.gz.evalution.module.eva.entity.UserInfoEntity">
+        SELECT
+            <include refid="user_info_columns"></include>
+        FROM
+            user_info RA
+        <if test="start!=null and pageSize !=null">
+            LIMIT #{start},#{pageSize}
+        </if>
+    </select>
+
+
+	<select id="getUserInfoList" resultType="java.util.Map" parameterType="string">
+        SELECT
+            username ,
+            email ,
+            number ,
+            collegeName ,
+            proName,
+            phone,
+            U.id
+        FROM
+            user_info U
+        JOIN college C ON college = C.id
+        JOIN profession P ON profession = P.id
+        WHERE identity = #{0}
+    </select>
+
+
+    <select id="getUserInfoById" resultType="java.util.Map" parameterType="string">
+        SELECT
+            username ,
+            email ,
+            number ,
+            collegeName ,
+            proName,
+            phone,
+            U.id
+        FROM
+            user_info U
+        JOIN college C ON college = C.id
+        JOIN profession P ON profession = P.id
+        WHERE U.id = #{0}
+    </select>
+
+
+</mapper>

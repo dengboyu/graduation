@@ -24,18 +24,18 @@
                     <el-submenu index="3">
                         <template slot="title">
                             <i class="el-icon-menu"></i>
-                            <span slot="title">课程评比管理</span>
+                            <span slot="title">院系管理</span>
                         </template>
-                        <el-menu-item index="3-1" :route='{"path":"/index/comparePro"}'>评比结果</el-menu-item>
+                        <el-menu-item index="3-1" :route='{"path":"/index/college"}'>院系查询</el-menu-item>
+                        <el-menu-item index="3-2" :route='{"path":"/index/addCollege"}'>添加学院信息</el-menu-item>
+                        <el-menu-item index="3-3" :route='{"path":"/index/addPro"}'>添加专业信息</el-menu-item>
                     </el-submenu>
                     <el-submenu index="4">
                         <template slot="title">
                             <i class="el-icon-menu"></i>
-                            <span slot="title">院系管理</span>
+                            <span slot="title">课程评比管理</span>
                         </template>
-                        <el-menu-item index="4-1" :route='{"path":"/index/college"}'>院系查询</el-menu-item>
-                        <el-menu-item index="4-2" :route='{"path":"/index/addCollege"}'>添加学院信息</el-menu-item>
-                        <el-menu-item index="4-3" :route='{"path":"/index/addPro"}'>添加专业信息</el-menu-item>
+                        <el-menu-item index="4-1" :route='{"path":"/index/comparePro"}'>评比结果</el-menu-item>
                     </el-submenu>
                     <el-submenu index="5">
                         <template slot="title">
