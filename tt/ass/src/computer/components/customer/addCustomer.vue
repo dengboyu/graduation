@@ -4,21 +4,19 @@
         <p class="result">已添加客户</p>
         <el-table ref="multipleTable" border :data="tableData3" tooltip-effect="dark" style="margin-left:5%;width: 90%" @selection-change="handleSelectionChange">
             <el-table-column type="selection" width="55"></el-table-column>
-            <el-table-column label="公司名称" width="120">
-                <template slot-scope="scope">{{ scope.row.date }}</template>
-            </el-table-column>
-            <el-table-column prop="name" label="联系人"></el-table-column>
-            <el-table-column prop="name" label="性别" ></el-table-column>
-            <el-table-column prop="name" label="职位" ></el-table-column>
-            <el-table-column prop="name" label="手机号码" ></el-table-column>
-            <el-table-column prop="name" label="联系电话"></el-table-column>
-            <el-table-column prop="name" label="传真号码"></el-table-column>
-            <el-table-column prop="name" label="电子邮箱"></el-table-column>
-            <el-table-column prop="name" label="联系地址"></el-table-column>
+            <el-table-column prop="comName" label="公司名称" width="120"></el-table-column>
+            <el-table-column prop="linkName" label="联系人" width="100"></el-table-column>
+            <el-table-column prop="sex" label="性别" width="60"></el-table-column>
+            <el-table-column prop="post" label="职位" ></el-table-column>
+            <el-table-column prop="phone" label="手机号码" ></el-table-column>
+            <el-table-column prop="tel" label="联系电话"></el-table-column>
+            <el-table-column prop="fax" label="传真号码"></el-table-column>
+            <el-table-column prop="email" label="电子邮箱"></el-table-column>
+            <el-table-column prop="address" label="联系地址"></el-table-column>
             <el-table-column label="修改" width="120">
                 <template slot-scope="scope">
                     <el-button @click="handleClick(scope.row)" type="text" size="small" width="60">修改</el-button>
-                    <el-button @click="handleClick(scope.row)" type="text" size="small" width="60">删除</el-button>
+                    <!-- <el-button @click="handleClick(scope.row)" type="text" size="small" width="60">删除</el-button> -->
                 </template>
             </el-table-column>
           </el-table>
@@ -31,36 +29,8 @@
     export default{
         data(){
             return {
-                tableData3: [{
-                      date: '阿里巴巴集团有限公司',
-                      name: '王小虎',
-                      address: '上海市普陀区金沙江路 1518 弄'
-                    }, {
-                      date: '2016-05-02',
-                      name: '王小虎',
-                      address: '上海市普陀区金沙江路 1518 弄'
-                    }, {
-                      date: '2016-05-04',
-                      name: '王小虎',
-                      address: '上海市普陀区金沙江路 1518 弄'
-                    }, {
-                      date: '2016-05-01',
-                      name: '王小虎',
-                      address: '上海市普陀区金沙江路 1518 弄'
-                    }, {
-                      date: '2016-05-08',
-                      name: '王小虎',
-                      address: '上海市普陀区金沙江路 1518 弄'
-                    }, {
-                      date: '2016-05-06',
-                      name: '王小虎',
-                      address: '上海市普陀区金沙江路 1518 弄'
-                    }, {
-                      date: '2016-05-07',
-                      name: '王小虎',
-                      address: '上海市普陀区金沙江路 1518 弄'
-                    }],
-                    multipleSelection: []
+                tableData3: [],
+                multipleSelection: []
             }
         },
         methods:{
@@ -76,15 +46,29 @@
             handleSelectionChange(val) {
                 this.multipleSelection = val;
             },
-            handleClick(){
-
+            handleClick(row){
+                this.$router.push({name:'updateCustomer',params:{id:row.id}});
             },
-            addLinkName(){
-                this.$router.push({path:'/index/linkName'})
+            getCustomerList(){
+
+                this.$http.axios({
+                    url:'/customer/getCustomerList',
+                    method:'get',
+                }).then(resolve=>{
+
+                    this.tableData3=resolve;
+
+                }).catch(err=>{
+                    console.log("失败了")
+                })
+
             }
         },
         components:{
 
+        },
+        created(){
+            this.getCustomerList();
         }
     }
 </script>

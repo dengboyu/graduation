@@ -6,6 +6,7 @@ import com.gz.evalution.module.eva.entity.CollegeEntity;
 import com.gz.evalution.module.eva.service.CollegeService;
 import com.gz.evalution.module.eva.dao.CollegeDao;
 import com.gz.evalution.common.structure.serviceAbstract.BaseServiceAbstract;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,7 @@ import java.util.Map;
 * @create 2018-01-19 11:26:46
 */
 @Service
+@Transactional
 public class CollegeServiceImpl extends BaseServiceAbstract<CollegeDao,CollegeEntity> implements CollegeService {
 
 

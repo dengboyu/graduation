@@ -41,7 +41,10 @@
 .main-foot .el-dialog{
     height:100%;
 }
-
+.sex .el-form-item__content{
+    display: inline-block;
+    width: 162px;
+}
 
 
 

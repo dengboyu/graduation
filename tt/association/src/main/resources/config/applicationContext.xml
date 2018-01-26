@@ -16,7 +16,7 @@
 	   >
 
 	<!-- 对除了Controller包其他包进行注解扫描 -->
-	<context:component-scan base-package="com.gz.evalution">
+	<context:component-scan base-package="com.tt.association">
 		<!--去掉controller,防止影响事务管理-->
 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 	</context:component-scan>
@@ -61,7 +61,7 @@
 
 	<!-- 扫描dao层 -->
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="basePackage" value="com.gz.evalution.module.*.dao"/>
+		<property name="basePackage" value="com.tt.association.module.*.dao"/>
 		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
 	</bean>
 
@@ -94,7 +94,7 @@
 	<aop:config proxy-target-class="true"></aop:config>
 	<!--realm-->
 	<!-- 继承自AuthorizingRealm的自定义Realm,即指定Shiro验证用户登录的类为自定义的ShiroDbRealm.java -->
-	<bean id="myRealm" class="com.gz.evalution.module.authentication.MyRealm"/>
+	<bean id="myRealm" class="com.tt.association.module.authentication.MyRealm"/>
 
 	<!-- 保证实现了Shiro内部lifecycle函数的bean执行 -->
 	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>

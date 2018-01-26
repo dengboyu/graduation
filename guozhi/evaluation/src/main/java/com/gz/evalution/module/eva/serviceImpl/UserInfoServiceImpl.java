@@ -5,6 +5,7 @@ import com.gz.evalution.module.eva.entity.UserInfoEntity;
 import com.gz.evalution.module.eva.service.UserInfoService;
 import com.gz.evalution.module.eva.dao.UserInfoDao;
 import com.gz.evalution.common.structure.serviceAbstract.BaseServiceAbstract;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -17,6 +18,7 @@ import java.util.Map;
 * @create 2018-01-19 11:16:52
 */
 @Service
+@Transactional
 public class UserInfoServiceImpl extends BaseServiceAbstract<UserInfoDao,UserInfoEntity> implements UserInfoService {
 
 

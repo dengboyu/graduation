@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tt.association.module.ass.dao.CompanyDao">
+
+    <!-- 以下代码片段中,company表的别名为RA -->
+
+    <!-- company表的字段 -->
+    <sql id ="company_columns">
+        RA.id,RA.comName,RA.linkPhone,RA.linkName,RA.fax,RA.email,RA.address,RA.createTime,RA.updateTime
+    </sql>
+
+    
+    <!-- company表的resultMap映射 -->
+    <resultMap id="entityResultMap" type="com.tt.association.module.ass.entity.CompanyEntity">
+        <id  property="id"  column="id"/>
+        <result  property="comName"  column="comName"/>
+        <result  property="linkPhone"  column="linkPhone"/>
+        <result  property="linkName"  column="linkName"/>
+        <result  property="fax"  column="fax"/>
+        <result  property="email"  column="email"/>
+        <result  property="address"  column="address"/>
+        <result  property="createTime"  column="createTime"/>
+        <result  property="updateTime"  column="updateTime"/>
+    </resultMap>
+
+
+    <!-- 添加一条记录 -->
+    <insert id="insertEntity" parameterType="com.tt.association.module.ass.entity.CompanyEntity" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO company
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            id,
+            comName,
+            linkPhone,
+            linkName,
+            fax,
+            email,
+            address,
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            #{id},
+            #{comName},
+            #{linkPhone},
+            #{linkName},
+            #{fax},
+            #{email},
+            #{address},
+        </trim>
+    </insert>
+
+
+    <!-- 批量添加 -->
+    <insert id="insertEntityByBatch" parameterType="list" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO company
+        <trim prefix="(" suffix=") VALUES" suffixOverrides=",">
+            id,
+            comName,
+            linkPhone,
+            linkName,
+            fax,
+            email,
+            address,
+        </trim>
+        <foreach collection="list" index="index" item="item" separator=",">
+        (
+            #{item.id},
+            #{item.comName},
+            #{item.linkPhone},
+            #{item.linkName},
+            #{item.fax},
+            #{item.email},
+            #{item.address}
+        )
+        </foreach>
+    </insert>
+
+
+    <!-- 更新一条记录 -->
+    <update id="updateEntity" parameterType="com.tt.association.module.ass.entity.CompanyEntity">
+        UPDATE company
+        <trim prefix="set" suffixOverrides=",">
+            <if test="comName != null">
+                comName = #{comName},
+            </if>
+            <if test="linkPhone != null">
+                linkPhone = #{linkPhone},
+            </if>
+            <if test="linkName != null">
+                linkName = #{linkName},
+            </if>
+            <if test="fax != null">
+                fax = #{fax},
+            </if>
+            <if test="email != null">
+                email = #{email},
+            </if>
+            <if test="address != null">
+                address = #{address},
+            </if>
+        </trim>
+        WHERE id = #{id}
+    </update>
+
+
+    <!-- 根据主键删除一条记录 -->
+    <delete id="deleteEntity">
+        DELETE FROM company WHERE id = #{0}
+    </delete>
+
+
+    <!-- 根据列条件查询实体类信息 -->
+    <sql id="whereColumns">
+        <trim suffixOverrides=",">
+            <if test="id != null">
+                RA.id = #{id},
+            </if>
+            <if test="comName != null">
+                RA.comName = #{comName},
+            </if>
+            <if test="linkPhone != null">
+                RA.linkPhone = #{linkPhone},
+            </if>
+            <if test="linkName != null">
+                RA.linkName = #{linkName},
+            </if>
+            <if test="fax != null">
+                RA.fax = #{fax},
+            </if>
+            <if test="email != null">
+                RA.email = #{email},
+            </if>
+            <if test="address != null">
+                RA.address = #{address},
+            </if>
+            <if test="createTime != null">
+                RA.createTime = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                RA.updateTime = #{updateTime},
+            </if>
+        </trim>
+    </sql>
+
+
+    <!-- 根据主键查找对应实体类 -->
+    <select id="findEntityByMainId" resultType="com.tt.association.module.ass.entity.CompanyEntity">
+        SELECT
+            <include refid="company_columns"></include>
+        FROM company RA
+        WHERE id = #{0}
+    </select>
+
+
+    <!-- 根据条件查出来是单条实体类 -->
+    <select id="findEntityByOne" parameterType="com.tt.association.module.ass.entity.CompanyEntity" resultType="com.tt.association.module.ass.entity.CompanyEntity">
+        SELECT
+            <include refid="company_columns"></include>
+        FROM
+            company RA
+        <where>
+            <include refid="whereColumns"></include>
+        </where>
+    </select>
+
+
+    <!-- 根据列条件查找实体类集合 -->
+    <select id="findEntityList" parameterType="com.tt.association.module.ass.entity.CompanyEntity" resultType="com.tt.association.module.ass.entity.CompanyEntity">
+        SELECT
+            <include refid="company_columns"></include>
+        FROM
+            company RA
+        <where>
+            <include refid="whereColumns"></include>
+        </where>
+    </select>
+
+
+    <!-- 查询记录数 -->
+    <select id="findEntityCount" parameterType="com.tt.association.module.ass.entity.CompanyEntity" resultType="long">
+        SELECT
+            count(1)
+        FROM
+            company RA
+        <where>
+            <include refid="whereColumns"></include>
+        </where>
+    </select>
+
+
+    <!-- 单表分页查询 -->
+    <select id="findPageEntityList" parameterType="map" resultType="com.tt.association.module.ass.entity.CompanyEntity">
+        SELECT
+            <include refid="company_columns"></include>
+        FROM
+            company RA
+        <if test="start!=null and pageSize !=null">
+            LIMIT #{start},#{pageSize}
+        </if>
+    </select>
+
+
+</mapper>

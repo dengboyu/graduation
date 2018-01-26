@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tt.association.module.ass.dao.ProductDao">
+
+    <!-- 以下代码片段中,product表的别名为RA -->
+
+    <!-- product表的字段 -->
+    <sql id ="product_columns">
+        RA.id,RA.proName,RA.sortId,RA.norm,RA.proNum,RA.cent,RA.costPrice,RA.centPrice,RA.remark,RA.createTime,RA.updateTime
+    </sql>
+
+    
+    <!-- product表的resultMap映射 -->
+    <resultMap id="entityResultMap" type="com.tt.association.module.ass.entity.ProductEntity">
+        <id  property="id"  column="id"/>
+        <result  property="proName"  column="proName"/>
+        <result  property="sortId"  column="sortId"/>
+        <result  property="norm"  column="norm"/>
+        <result  property="proNum"  column="proNum"/>
+        <result  property="cent"  column="cent"/>
+        <result  property="costPrice"  column="costPrice"/>
+        <result  property="centPrice"  column="centPrice"/>
+        <result  property="remark"  column="remark"/>
+        <result  property="createTime"  column="createTime"/>
+        <result  property="updateTime"  column="updateTime"/>
+    </resultMap>
+
+
+    <!-- 添加一条记录 -->
+    <insert id="insertEntity" parameterType="com.tt.association.module.ass.entity.ProductEntity" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO product
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            id,
+            proName,
+            sortId,
+            norm,
+            proNum,
+            cent,
+            costPrice,
+            centPrice,
+            remark,
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            #{id},
+            #{proName},
+            #{sortId},
+            #{norm},
+            #{proNum},
+            #{cent},
+            #{costPrice},
+            #{centPrice},
+            #{remark},
+        </trim>
+    </insert>
+
+
+    <!-- 批量添加 -->
+    <insert id="insertEntityByBatch" parameterType="list" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO product
+        <trim prefix="(" suffix=") VALUES" suffixOverrides=",">
+            id,
+            proName,
+            sortId,
+            norm,
+            proNum,
+            cent,
+            costPrice,
+            centPrice,
+            remark,
+        </trim>
+        <foreach collection="list" index="index" item="item" separator=",">
+        (
+            #{item.id},
+            #{item.proName},
+            #{item.sortId},
+            #{item.norm},
+            #{item.proNum},
+            #{item.cent},
+            #{item.costPrice},
+            #{item.centPrice},
+            #{item.remark}
+        )
+        </foreach>
+    </insert>
+
+
+    <!-- 更新一条记录 -->
+    <update id="updateEntity" parameterType="com.tt.association.module.ass.entity.ProductEntity">
+        UPDATE product
+        <trim prefix="set" suffixOverrides=",">
+            <if test="proName != null">
+                proName = #{proName},
+            </if>
+            <if test="sortId != null">
+                sortId = #{sortId},
+            </if>
+            <if test="norm != null">
+                norm = #{norm},
+            </if>
+            <if test="proNum != null">
+                proNum = #{proNum},
+            </if>
+            <if test="cent != null">
+                cent = #{cent},
+            </if>
+            <if test="costPrice != null">
+                costPrice = #{costPrice},
+            </if>
+            <if test="centPrice != null">
+                centPrice = #{centPrice},
+            </if>
+            <if test="remark != null">
+                remark = #{remark},
+            </if>
+        </trim>
+        WHERE id = #{id}
+    </update>
+
+
+    <!-- 根据主键删除一条记录 -->
+    <delete id="deleteEntity">
+        DELETE FROM product WHERE id = #{0}
+    </delete>
+
+
+    <!-- 根据列条件查询实体类信息 -->
+    <sql id="whereColumns">
+        <trim suffixOverrides=",">
+            <if test="id != null">
+                RA.id = #{id},
+            </if>
+            <if test="proName != null">
+                RA.proName = #{proName},
+            </if>
+            <if test="sortId != null">
+                RA.sortId = #{sortId},
+            </if>
+            <if test="norm != null">
+                RA.norm = #{norm},
+            </if>
+            <if test="proNum != null">
+                RA.proNum = #{proNum},
+            </if>
+            <if test="cent != null">
+                RA.cent = #{cent},
+            </if>
+            <if test="costPrice != null">
+                RA.costPrice = #{costPrice},
+            </if>
+            <if test="centPrice != null">
+                RA.centPrice = #{centPrice},
+            </if>
+            <if test="remark != null">
+                RA.remark = #{remark},
+            </if>
+            <if test="createTime != null">
+                RA.createTime = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                RA.updateTime = #{updateTime},
+            </if>
+        </trim>
+    </sql>
+
+
+    <!-- 根据主键查找对应实体类 -->
+    <select id="findEntityByMainId" resultType="com.tt.association.module.ass.entity.ProductEntity">
+        SELECT
+            <include refid="product_columns"></include>
+        FROM product RA
+        WHERE id = #{0}
+    </select>
+
+
+    <!-- 根据条件查出来是单条实体类 -->
+    <select id="findEntityByOne" parameterType="com.tt.association.module.ass.entity.ProductEntity" resultType="com.tt.association.module.ass.entity.ProductEntity">
+        SELECT
+            <include refid="product_columns"></include>
+        FROM
+            product RA
+        <where>
+            <include refid="whereColumns"></include>
+        </where>
+    </select>
+
+
+    <!-- 根据列条件查找实体类集合 -->
+    <select id="findEntityList" parameterType="com.tt.association.module.ass.entity.ProductEntity" resultType="com.tt.association.module.ass.entity.ProductEntity">
+        SELECT
+            <include refid="product_columns"></include>
+        FROM
+            product RA
+        <where>
+            <include refid="whereColumns"></include>
+        </where>
+    </select>
+
+
+    <!-- 查询记录数 -->
+    <select id="findEntityCount" parameterType="com.tt.association.module.ass.entity.ProductEntity" resultType="long">
+        SELECT
+            count(1)
+        FROM
+            product RA
+        <where>
+            <include refid="whereColumns"></include>
+        </where>
+    </select>
+
+
+    <!-- 单表分页查询 -->
+    <select id="findPageEntityList" parameterType="map" resultType="com.tt.association.module.ass.entity.ProductEntity">
+        SELECT
+            <include refid="product_columns"></include>
+        FROM
+            product RA
+        <if test="start!=null and pageSize !=null">
+            LIMIT #{start},#{pageSize}
+        </if>
+    </select>
+
+
+</mapper>

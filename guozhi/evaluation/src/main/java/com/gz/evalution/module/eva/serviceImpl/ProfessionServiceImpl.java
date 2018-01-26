@@ -5,6 +5,7 @@ import com.gz.evalution.module.eva.entity.ProfessionEntity;
 import com.gz.evalution.module.eva.service.ProfessionService;
 import com.gz.evalution.module.eva.dao.ProfessionDao;
 import com.gz.evalution.common.structure.serviceAbstract.BaseServiceAbstract;
+import org.springframework.transaction.annotation.Transactional;
 
 
 /**
@@ -14,6 +15,7 @@ import com.gz.evalution.common.structure.serviceAbstract.BaseServiceAbstract;
 * @create 2018-01-19 11:27:01
 */
 @Service
+@Transactional
 public class ProfessionServiceImpl extends BaseServiceAbstract<ProfessionDao,ProfessionEntity> implements ProfessionService {
 
 

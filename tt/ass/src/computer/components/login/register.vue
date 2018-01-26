@@ -5,13 +5,13 @@
         <p class="englishName">Outsourcing Business Intelligence Quotation System</p>
         <div class="main">
             <div class="mian-form">
-                &nbsp;&nbsp;&nbsp;用户名:<el-input v-model="user.name" placeholder="请输入用户名" class="username"></el-input><br>
+                &nbsp;&nbsp;&nbsp;用户名:<el-input v-model="user.username" placeholder="请输入用户名" class="username"></el-input><br>
                 &nbsp;&nbsp;&nbsp;密&nbsp;&nbsp; 码: <el-input v-model="user.password" placeholder="请输入密码" type="password" style="margin-left:16px;"></el-input><br>
                 确认密码: <el-input v-model="user.passwordAgin" type="password" placeholder="再次输入密码" style="margin-left:16px;"></el-input><br>
                 真实姓名: <el-input v-model="user.realName" placeholder="请输入真实姓名" style="margin-left:16px;"></el-input><br>
                 &nbsp;&nbsp;&nbsp;&nbsp;Email:&nbsp;<el-input v-model="user.email" placeholder="请输入Email" style="margin-left:18px;"></el-input><br>
-                手机号码: <el-input v-model="user.phone" placeholder="请输入手机号码" style="margin-left:16px;"></el-input><br>
-                <el-button type="primary" >注册</el-button>
+                手机号码: <el-input v-model="user.phone" placeholder="请输入手机号码" :maxlength='11' style="margin-left:16px;"></el-input><br>
+                <el-button type="primary" @click="register">注册</el-button>
                 <el-button type="primary" @click="reset">清空</el-button>
             </div>
         </div>
@@ -26,7 +26,7 @@
         data(){
             return {
                 user:{
-                    name:null,
+                    username:null,
                     password:null,
                     passwordAgin:null,
                     realName:null,
@@ -40,6 +40,37 @@
                 for(let i in this.user){
                     this.user[i]=null;
                 }
+            },
+            register(){
+
+                if(this.$fn.hasObjectNull(this.user)){
+                    this.$message({
+                        message: '请将信息填完整',
+                        type: 'warning'
+                    });
+                    return;
+                }
+
+                if(this.user.password!=this.user.passwordAgin){
+                    this.$message({
+                        message: '密码不一致',
+                        type: 'warning'
+                    });
+                    return;
+                }
+
+
+                this.$http.axios({
+                    url:'userInfo/insertUserInfoEntity',
+                    method:'post',
+                    data:this.user,
+                    json:true,
+                }).then(resolve=>{
+                    this.$router.push({path:'/login'});
+                }).catch(err=>{
+                    console.log("失败了")
+                })
+
             }
         },
         created(){

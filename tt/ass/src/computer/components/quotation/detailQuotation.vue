@@ -3,29 +3,29 @@
     <div class="tmpl">
         <div class="main_top">
             <p>
-                <span>电话:</span>&nbsp;&nbsp;<span class="phone">18432342435</span>
-                <span style="margin-left:20px">传真:</span>&nbsp;&nbsp;<span class="chuanzhen">022-323432</span>
+                <span>电话:</span>&nbsp;&nbsp;<span class="phone" v-text="quotationVo.quotationEntity.quoPhone"></span>
+                <span style="margin-left:20px">传真:</span>&nbsp;&nbsp;<span class="chuanzhen" v-text="quotationVo.quotationEntity.quoFax"></span>
             </p>
             <p class="baojia">报价单</p>
         </div>
-        <p class="orderNum">单号:&nbsp;&nbsp;201801141234</p>
+        <p class="orderNum">单号:&nbsp;&nbsp;<span v-text="quotationVo.quotationEntity.quoNum"></span></p>
         <div class="main">
             <div class="company">
                 <p>
-                    公&nbsp;&nbsp;&nbsp;司:<span class="fontContent">阿里巴巴科技有限公司</span>
-                    <span style="margin-left:100px">联系人:</span><span class="fontContent">黄先生</span>
+                    公&nbsp;&nbsp;&nbsp;司:<span class="fontContent" v-text="quotationVo.comName"></span>
+                    <span style="margin-left:100px">联系人:</span><span class="fontContent" v-text="quotationVo.quotationEntity.linkName"></span>
                 </p>
                 <p>
-                    电&nbsp;&nbsp;&nbsp;话:<span class="fontContent">阿里巴巴科技有限公司</span>
-                    <span style="margin-left:100px">传&nbsp;&nbsp;&nbsp;真:</span><span class="fontContent">黄先生</span>
+                    电&nbsp;&nbsp;&nbsp;话:<span class="fontContent" v-text="quotationVo.quotationEntity.phone"></span>
+                    <span style="margin-left:100px">传&nbsp;&nbsp;&nbsp;真:</span><span class="fontContent" v-text="quotationVo.quotationEntity.fax"></span>
                 </p>
                 <p>
-                    邮&nbsp;&nbsp;&nbsp;箱:<span class="fontContent">阿里巴巴科技有限公司</span>
-                    <span style="margin-left:100px">地&nbsp;&nbsp;&nbsp;址:</span><span class="fontContent">黄先生</span>
+                    邮&nbsp;&nbsp;&nbsp;箱:<span class="fontContent" v-text="quotationVo.quotationEntity.email"></span>
+                    <span style="margin-left:100px">地&nbsp;&nbsp;&nbsp;址:</span><span class="fontContent" v-text="quotationVo.quotationEntity.address"></span>
                 </p>
                 <p>
-                    报价人:<span class="fontContent">阿里巴巴科技有限公司</span>
-                    <span style="margin-left:100px">日&nbsp;&nbsp;&nbsp;期:</span><span class="fontContent">黄先生</span>
+                    报价人:<span class="fontContent" v-text="quotationVo.quotationEntity.quoName"></span>
+                    <span style="margin-left:100px">日&nbsp;&nbsp;&nbsp;期:</span><span class="fontContent" v-text="quotationVo.quotationEntity.quoTime"></span>
                 </p>
                 <table>
                     <thead>
@@ -41,13 +41,13 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(item,index) in tableData3" :key="index">
+                        <tr v-for="(item,index) in quotationVo.quoProductEntityList" :key="index">
                             <td v-text="index+1"></td>
                             <td v-text="item.proName"></td>
-                            <td v-text="item.guige"></td>
+                            <td v-text="item.norm"></td>
                             <td v-text="item.num"></td>
                             <td v-text="item.cent"></td>
-                            <td v-text="item.price"></td>
+                            <td v-text="item.centPrice"></td>
                             <td v-text="item.totalPrice"></td>
                             <td v-text="item.remark"></td>
                         </tr>
@@ -55,13 +55,14 @@
                     <tfoot>
                         <tr>
                             <td colspan="9" style="text-align:right;padding-right:20px;">
-                                <span>币种:</span>&nbsp;&nbsp;&nbsp;<span>人民币</span>
-                                <span style="margin-left:20px">总计:</span>&nbsp;&nbsp;&nbsp;<span>12000</span>
+                                <span>币种:</span>&nbsp;&nbsp;<span v-text="quotationVo.quotationEntity.cent"></span>
+                                <span style="margin-left:20px">运费:</span>&nbsp;&nbsp;<span v-text="quotationVo.quotationEntity.transport"></span>
+                                <span style="margin-left:20px">总计:</span>&nbsp;&nbsp;<span v-text="quotationVo.quotationEntity.totalPrice"></span>
                             </td>
                         </tr>
                         <tr>
                             <td>备<br>注</td>
-                            <td colspan="8" style="height:100px"></td>
+                            <td colspan="8" style="height:100px" v-text="quotationVo.quotationEntity.remark"></td>
                         </tr>
                     </tfoot>
                 </table>
@@ -75,36 +76,15 @@
 
     export default{
         data(){
-            return {
-                tableData3: [
-                    {
-                        proName:"销售苹果",
-                        guige:"v-1.0",
-                        num:23,
-                        cent:'元',
-                        price:1,
-                        totalPrice:23,
-                        remark:null
-                    },
-                    {
-                        proName:"零售专卖店",
-                        guige:"v-2.0",
-                        num:23,
-                        cent:'元',
-                        price:1,
-                        totalPrice:23,
-                        remark:'备注信息'
-                    }
-                ],
-                multipleSelection: []
-            }
+            return {}
         },
+        props:['quotationVo'],
         methods:{
 
         },
         components:{
 
-        }
+        },
     }
 </script>
 

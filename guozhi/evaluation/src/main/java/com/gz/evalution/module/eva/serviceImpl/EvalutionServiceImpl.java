@@ -9,6 +9,7 @@ import com.gz.evalution.module.eva.entity.EvalutionEntity;
 import com.gz.evalution.module.eva.service.EvalutionService;
 import com.gz.evalution.module.eva.dao.EvalutionDao;
 import com.gz.evalution.common.structure.serviceAbstract.BaseServiceAbstract;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ import java.util.Map;
 * @create 2018-01-19 11:26:57
 */
 @Service
+@Transactional
 public class EvalutionServiceImpl extends BaseServiceAbstract<EvalutionDao,EvalutionEntity> implements EvalutionService {
 
 

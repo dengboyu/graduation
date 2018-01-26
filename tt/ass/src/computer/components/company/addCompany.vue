@@ -4,19 +4,19 @@
         <span style="margin-left:160px;margin-bottom:10px;display:inline-block">添加公司</span>
         <el-form ref="form" :model="form" label-width="90px">
             <el-form-item label="公司名称">
-                <el-input v-model="form.name"></el-input>
+                <el-input v-model="form.comName"></el-input>
             </el-form-item>
             <el-form-item label="联系电话">
-                <el-input v-model="form.phone"></el-input>
+                <el-input v-model="form.linkPhone" :maxlength="11"></el-input>
             </el-form-item>
             <el-form-item label="联系人">
-                <el-input v-model="form.linkname"></el-input>
+                <el-input v-model="form.linkName"></el-input>
             </el-form-item>
             <el-form-item label="传真号码">
-                <el-input v-model="form.telPhone"></el-input>
+                <el-input v-model="form.fax" :maxlength="12"></el-input>
             </el-form-item>
              <el-form-item label="企业邮箱">
-                <el-input v-model="form.telPhone"></el-input>
+                <el-input v-model="form.email"></el-input>
             </el-form-item>
             <el-form-item label="联系地址">
                 <el-input v-model="form.address"></el-input>
@@ -37,33 +37,47 @@
             return {
                 fileList: [],
                 form: {
-                  name: '',
+                  comName: '',
                   address: '',
-                  phone: '',
-                  telPhone: '',
-                  delivery: false,
-                  type: [],
-                  linkname: '',
-                  desc: ''
+                  linkPhone: '',
+                  fax: '',
+                  address:'',
+                  email: ''
                 }
             }
         },
         methods:{
             onSubmit() {
-                console.log('submit!');
+
+                if(this.$fn.hasObjectNull(this.form)){
+                    this.$message({
+                        message: '请将信息填完整',
+                        type: 'warning'
+                    });
+                    return;
+                }
+
+
+                this.$http.axios({
+                    url:'/company/insertCompanyEntity',
+                    method:'post',
+                    data:this.form,
+                    json:true,
+                }).then(resolve=>{
+
+                    for(let i in this.form){
+                        this.form[i]=null;
+                    }
+
+                    this.$message({
+                        message: '添加完毕',
+                        type: 'success'
+                    });
+
+                }).catch(err=>{
+                    console.log("失败了")
+                })
             },
-            handleRemove(file, fileList) {
-                console.log(file, fileList);
-              },
-              handlePreview(file) {
-                console.log(file);
-              },
-              handleExceed(files, fileList) {
-                this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
-              },
-              beforeRemove(file, fileList) {
-                return this.$confirm(`确定移除 ${ file.name }？`);
-              },
             reset(){
                 for(let i in this.form){
                     this.form[i]=null;

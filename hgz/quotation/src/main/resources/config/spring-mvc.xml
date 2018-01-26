@@ -12,7 +12,7 @@
 
 
     <!-- 扫描注解 只扫描Controller, use-default-filters表示禁用掉默认规则(默认扫描所有包)-->
-    <context:component-scan base-package="com.gz.evalution" use-default-filters="false">
+    <context:component-scan base-package="com.hgz.quotation" use-default-filters="false">
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
         <context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
     </context:component-scan>

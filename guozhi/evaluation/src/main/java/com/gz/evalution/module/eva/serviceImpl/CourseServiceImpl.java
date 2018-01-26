@@ -5,6 +5,7 @@ import com.gz.evalution.module.eva.entity.CourseEntity;
 import com.gz.evalution.module.eva.service.CourseService;
 import com.gz.evalution.module.eva.dao.CourseDao;
 import com.gz.evalution.common.structure.serviceAbstract.BaseServiceAbstract;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -17,6 +18,7 @@ import java.util.Map;
 * @create 2018-01-19 11:26:52
 */
 @Service
+@Transactional
 public class CourseServiceImpl extends BaseServiceAbstract<CourseDao,CourseEntity> implements CourseService {
 
 

@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tt.association.module.ass.dao.UserInfoDao">
+
+    <!-- 以下代码片段中,user_info表的别名为RA -->
+
+    <!-- user_info表的字段 -->
+    <sql id ="user_info_columns">
+        RA.id,RA.username,RA.password,RA.realName,RA.email,RA.phone,RA.createTime,RA.updateTime
+    </sql>
+
+    
+    <!-- user_info表的resultMap映射 -->
+    <resultMap id="entityResultMap" type="com.tt.association.module.ass.entity.UserInfoEntity">
+        <id  property="id"  column="id"/>
+        <result  property="username"  column="username"/>
+        <result  property="password"  column="password"/>
+        <result  property="realName"  column="realName"/>
+        <result  property="email"  column="email"/>
+        <result  property="phone"  column="phone"/>
+        <result  property="createTime"  column="createTime"/>
+        <result  property="updateTime"  column="updateTime"/>
+    </resultMap>
+
+
+    <!-- 添加一条记录 -->
+    <insert id="insertEntity" parameterType="com.tt.association.module.ass.entity.UserInfoEntity" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO user_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            id,
+            username,
+            password,
+            realName,
+            email,
+            phone,
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            #{id},
+            #{username},
+            #{password},
+            #{realName},
+            #{email},
+            #{phone},
+        </trim>
+    </insert>
+
+
+    <!-- 批量添加 -->
+    <insert id="insertEntityByBatch" parameterType="list" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO user_info
+        <trim prefix="(" suffix=") VALUES" suffixOverrides=",">
+            id,
+            username,
+            password,
+            realName,
+            email,
+            phone,
+        </trim>
+        <foreach collection="list" index="index" item="item" separator=",">
+        (
+            #{item.id},
+            #{item.username},
+            #{item.password},
+            #{item.realName},
+            #{item.email},
+            #{item.phone}
+        )
+        </foreach>
+    </insert>
+
+
+    <!-- 更新一条记录 -->
+    <update id="updateEntity" parameterType="com.tt.association.module.ass.entity.UserInfoEntity">
+        UPDATE user_info
+        <trim prefix="set" suffixOverrides=",">
+            <if test="username != null">
+                username = #{username},
+            </if>
+            <if test="password != null">
+                password = #{password},
+            </if>
+            <if test="realName != null">
+                realName = #{realName},
+            </if>
+            <if test="email != null">
+                email = #{email},
+            </if>
+            <if test="phone != null">
+                phone = #{phone},
+            </if>
+        </trim>
+        WHERE id = #{id}
+    </update>
+
+
+    <!-- 根据主键删除一条记录 -->
+    <delete id="deleteEntity">
+        DELETE FROM user_info WHERE id = #{0}
+    </delete>
+
+
+    <!-- 根据列条件查询实体类信息 -->
+    <sql id="whereColumns">
+        <trim suffixOverrides=",">
+            <if test="id != null">
+                RA.id = #{id},
+            </if>
+            <if test="username != null">
+                RA.username = #{username},
+            </if>
+            <if test="password != null">
+                RA.password = #{password},
+            </if>
+            <if test="realName != null">
+                RA.realName = #{realName},
+            </if>
+            <if test="email != null">
+                RA.email = #{email},
+            </if>
+            <if test="phone != null">
+                RA.phone = #{phone},
+            </if>
+            <if test="createTime != null">
+                RA.createTime = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                RA.updateTime = #{updateTime},
+            </if>
+        </trim>
+    </sql>
+
+
+    <!-- 根据主键查找对应实体类 -->
+    <select id="findEntityByMainId" resultType="com.tt.association.module.ass.entity.UserInfoEntity">
+        SELECT
+            <include refid="user_info_columns"></include>
+        FROM user_info RA
+        WHERE id = #{0}
+    </select>
+
+
+    <!-- 根据条件查出来是单条实体类 -->
+    <select id="findEntityByOne" parameterType="com.tt.association.module.ass.entity.UserInfoEntity" resultType="com.tt.association.module.ass.entity.UserInfoEntity">
+        SELECT
+            <include refid="user_info_columns"></include>
+        FROM
+            user_info RA
+        <where>
+            <include refid="whereColumns"></include>
+        </where>
+    </select>
+
+
+    <!-- 根据列条件查找实体类集合 -->
+    <select id="findEntityList" parameterType="com.tt.association.module.ass.entity.UserInfoEntity" resultType="com.tt.association.module.ass.entity.UserInfoEntity">
+        SELECT
+            <include refid="user_info_columns"></include>
+        FROM
+            user_info RA
+        <where>
+            <include refid="whereColumns"></include>
+        </where>
+    </select>
+
+
+    <!-- 查询记录数 -->
+    <select id="findEntityCount" parameterType="com.tt.association.module.ass.entity.UserInfoEntity" resultType="long">
+        SELECT
+            count(1)
+        FROM
+            user_info RA
+        <where>
+            <include refid="whereColumns"></include>
+        </where>
+    </select>
+
+
+    <!-- 单表分页查询 -->
+    <select id="findPageEntityList" parameterType="map" resultType="com.tt.association.module.ass.entity.UserInfoEntity">
+        SELECT
+            <include refid="user_info_columns"></include>
+        FROM
+            user_info RA
+        <if test="start!=null and pageSize !=null">
+            LIMIT #{start},#{pageSize}
+        </if>
+    </select>
+
+
+</mapper>

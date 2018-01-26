@@ -4,38 +4,34 @@
         <span style="margin-left:290px;margin-bottom:10px;display:inline-block">产品修改</span>
         <el-form ref="form" :model="form" label-width="90px" :inline="true">
             <el-form-item label="产品名称">
-                <el-input v-model="form.name"></el-input>
+                <el-input v-model="form.proName"></el-input>
             </el-form-item>
             <el-form-item label="产品分类">
-                <el-select v-model="form.region" placeholder="请选择产品分类" style="width:95%;">
-                    <el-option label="分类一" value="shanghai"></el-option>
-                    <el-option label="分类二" value="beijing"></el-option>
+                <el-select v-model="form.sortId" placeholder="请选择产品分类" style="width:95%;">
+                    <el-option v-for="item in sortList" :key="item.id" :label="item.sortName" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="产品规格">
-                <el-input v-model="form.phone"></el-input>
+                <el-input v-model="form.norm"></el-input>
             </el-form-item>
             <el-form-item label="产品编号" >
-                <el-input v-model="form.linkname"></el-input>
+                <el-input v-model="form.proNum"></el-input>
             </el-form-item>
             <el-form-item label="单位">
-                <el-input v-model="form.linkname"></el-input>
-            </el-form-item>
-            <el-form-item label="传真号码">
-                <el-input v-model="form.telPhone"></el-input>
+                <el-input v-model="form.cent"></el-input>
             </el-form-item>
             <el-form-item label="成本价">
-                <el-input v-model="form.telPhone"></el-input>
+                <el-input v-model="form.costPrice"></el-input>
             </el-form-item>
             <el-form-item label="单价">
-                <el-input v-model="form.telPhone"></el-input>
+                <el-input v-model="form.centPrice"></el-input>
             </el-form-item>
             <el-form-item label="备注">
-                <el-input type="textarea" v-model="form.desc" style="margin-top: 5px;width: 161px;"></el-input>
+                <el-input type="textarea" v-model="form.remark" style="margin-top: 5px;width: 161px;"></el-input>
             </el-form-item>
             <el-form-item style='width:100%'>
                 <el-button type="primary" @click="onSubmit" style="margin-top: 30px;margin-left: 220px;">保存</el-button>
-                <el-button type="primary" @click="reset">取消</el-button>
+                <!-- <el-button type="primary" @click="reset">取消</el-button> -->
             </el-form-item>
         </el-form>
     </div>
@@ -47,43 +43,69 @@
     export default{
         data(){
             return {
-                fileList: [],
-                form: {
-                  name: '',
-                  address: '',
-                  phone: '',
-                  telPhone: '',
-                  delivery: false,
-                  type: [],
-                  linkname: '',
-                  desc: ''
-                }
+                sortList: [],
+                form: {}
             }
         },
         methods:{
             onSubmit() {
-                console.log('submit!');
-            },
-            handleRemove(file, fileList) {
-                console.log(file, fileList);
-              },
-              handlePreview(file) {
-                console.log(file);
-              },
-              handleExceed(files, fileList) {
-                this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
-              },
-              beforeRemove(file, fileList) {
-                return this.$confirm(`确定移除 ${ file.name }？`);
-              },
-            reset(){
-                for(let i in this.form){
-                    this.form[i]=null;
+
+                if(this.$fn.hasObjectNull(this.form)){
+                    this.$message({
+                        message: '请将信息填完整',
+                        type: 'warning'
+                    });
+                    return;
                 }
+
+
+                this.$http.axios({
+                    url:'/product/updateProductEntity',
+                    method:'post',
+                    data:this.form,
+                    json:true,
+                }).then(resolve=>{
+
+                    this.$message({
+                        message: '更新成功',
+                        type: 'success'
+                    });
+
+                    this.$router.push({path:'/index/product'});
+
+                }).catch(err=>{
+                    console.log("失败了")
+                })
+            },
+            getProductSortList(){
+                this.$http.axios({
+                    url:'/productSort/getProductSortList',
+                    method:'get',
+                }).then(resolve=>{
+                    this.sortList = resolve;
+                }).catch(err=>{
+                    console.log("失败了")
+                })
+            },
+            getProductInfo(){
+                this.$http.axios({
+                    url:'/product/getProductEntityById?id='+this.$route.params.id,
+                    method:'get',
+                }).then(resolve=>{
+
+                    this.form = resolve;
+
+                }).catch(err=>{
+                    console.log("失败了")
+                })
             }
         },
         components:{
 
+        },
+        created(){
+            this.getProductSortList();
+            this.getProductInfo();
         }
     }
 </script>

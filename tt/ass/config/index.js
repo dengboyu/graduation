@@ -12,7 +12,7 @@ module.exports = {
         assetsPublicPath: '/',
         proxyTable: {
             //后台项目路径
-            '/evalution/': {
+            '/association/': {
                 target: 'http://127.0.0.1:8080/',//域名和端口号
                 changeOrigin: true,
                 pathRewrite: {

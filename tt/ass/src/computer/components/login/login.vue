@@ -27,7 +27,26 @@
         },
         methods: {
             login(){
-                this.$router.push({path:'/index'});
+
+
+                if(this.username==null || this.password==null){
+                    this.$message({
+                        message: '请输入用户名或密码',
+                        type: 'warning'
+                    });
+                    return;
+                }
+
+
+                this.$http.axios({
+                    url:'/user/userLogin',
+                    method:'post',
+                    data:{username:this.username,password:this.password},
+                }).then(resolve=>{
+                    this.$router.push({path:'/index'});
+                }).catch(err=>{
+                    console.log("失败了")
+                })
             },
             jumpRegister(){
                 this.$router.push({path:'/register'});

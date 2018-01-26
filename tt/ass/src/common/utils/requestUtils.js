@@ -50,7 +50,7 @@ export default {
 
             //创建axios实例
             let instance = axios.create({
-                // baseURL: baseURL,
+                baseURL: baseURL,
                 url: options.url,
                 method: options.method,
                 timeout: TIMEOUT, //请求超时

@@ -4,14 +4,14 @@
         <div class="main-top">
             <span class="has-sort">已有产品分类</span>
             <el-select v-model="value" placeholder="请选择">
-                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                <el-option v-for="item in sortList" :key="item.id" :label="item.sortName" :value="item.id"></el-option>
             </el-select>
         </div>
         <hr>
         <div class="main-botton">
             <span style="display:inline-block;margin-right:30px;">添加产品分类</span>
             <el-input style="width:29.5%;" v-model="input" placeholder="请输入产品分类名称"></el-input>
-            <el-button type="primary" style="margin-left:40px">添加</el-button>
+            <el-button type="primary" style="margin-left:40px" @click="addProduct">添加</el-button>
         </div>
     </div>
 </template>
@@ -22,28 +22,56 @@
     export default{
         data(){
             return {
-                options: [{
-                  value: '选项1',
-                  label: '黄金糕'
-                }, {
-                  value: '选项2',
-                  label: '双皮奶'
-                }, {
-                  value: '选项3',
-                  label: '蚵仔煎'
-                }, {
-                  value: '选项4',
-                  label: '龙须面'
-                }, {
-                  value: '选项5',
-                  label: '北京烤鸭'
-                }],
+                sortList:[],
                 value: '',
-                input:null,
+                input:null,//产品分类
             }
         },
         components:{
 
+        },
+        methods:{
+            addProduct(){
+                if(this.input==null){
+                    this.$message({
+                        message: '请输入分类名称',
+                        type: 'warning'
+                    });
+                    return;
+                }
+
+
+                this.$http.axios({
+                    url:'/productSort/insertProductSortEntity',
+                    method:'post',
+                    data:{sortName:this.input},
+                    json:true,
+                }).then(resolve=>{
+                    this.getProductSortList();
+
+                    this.$message({
+                        message: '添加成功',
+                        type: 'success'
+                    });
+
+                    this.input='';
+                }).catch(err=>{
+                    console.log("失败了")
+                })
+            },
+            getProductSortList(){
+                this.$http.axios({
+                    url:'/productSort/getProductSortList',
+                    method:'get',
+                }).then(resolve=>{
+                    this.sortList = resolve;
+                }).catch(err=>{
+                    console.log("失败了")
+                })
+            }
+        },
+        created(){
+            this.getProductSortList();
         }
     }
 </script>

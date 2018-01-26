@@ -2,21 +2,16 @@
 <template>
     <div class="tmpl">
         <p class="result">已合作公司</p>
-        <el-table ref="multipleTable" border :data="tableData3" tooltip-effect="dark" style="margin-left:15%;width: 70%" @selection-change="handleSelectionChange">
+        <el-table ref="multipleTable" border :data="companylist" tooltip-effect="dark" style="margin-left:15%;width: 70%" @selection-change="handleSelectionChange">
             <el-table-column type="selection" width="55"></el-table-column>
             <el-table-column label="公司名称" width="120">
-                <template slot-scope="scope">{{ scope.row.date }}</template>
+                <template slot-scope="scope">{{ scope.row.comName }}</template>
             </el-table-column>
-            <el-table-column prop="name" label="联系电话" width="240"></el-table-column>
-            <el-table-column prop="name" label="联系人" ></el-table-column>
-            <el-table-column prop="name" label="传真号码" ></el-table-column>
-            <el-table-column prop="name" label="企业邮箱" ></el-table-column>
-            <el-table-column prop="name" label="联系地址"></el-table-column>
-            <!-- <el-table-column label="修改" width="60">
-                <template slot-scope="scope">
-                    <el-button @click="handleClick(scope.row)" type="text" size="small" width="60">修改</el-button>
-                </template>
-            </el-table-column> -->
+            <el-table-column prop="linkPhone" label="联系电话" width="240"></el-table-column>
+            <el-table-column prop="linkName" label="联系人" ></el-table-column>
+            <el-table-column prop="fax" label="传真号码" ></el-table-column>
+            <el-table-column prop="email" label="企业邮箱" ></el-table-column>
+            <el-table-column prop="address" label="联系地址"></el-table-column>
           </el-table>
     </div>
 </template>
@@ -27,20 +22,8 @@
     export default{
         data(){
             return {
-                tableData3: [{
-                      date: '2016-05-03',
-                      name: '王小虎',
-                      address: '上海市普陀区金沙江路 1518 弄'
-                    }, {
-                      date: '2016-05-02',
-                      name: '王小虎',
-                      address: '上海市普陀区金沙江路 1518 弄'
-                    }, {
-                      date: '2016-05-04',
-                      name: '王小虎',
-                      address: '上海市普陀区金沙江路 1518 弄'
-                    }],
-                    multipleSelection: []
+                companylist: [],
+                multipleSelection: []
             }
         },
         methods:{
@@ -56,15 +39,26 @@
             handleSelectionChange(val) {
                 this.multipleSelection = val;
             },
-            handleClick(){
-                this.$router.push({path:'/index/editProduct'});
-            },
-            addProduct(){
-                this.$router.push({path:'/index/addProduct'});
+            getCompanyList(){
+
+                this.$http.axios({
+                    url:'/company/getCompanyList',
+                    method:'get',
+                }).then(resolve=>{
+
+                    this.companylist = resolve;
+
+                }).catch(err=>{
+
+                })
+
             }
         },
         components:{
 
+        },
+        created(){
+            this.getCompanyList();
         }
     }
 </script>

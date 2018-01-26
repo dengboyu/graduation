@@ -31,7 +31,7 @@
                 外协企业智能报价单系统
             </div>
             <div class="top-right">
-                您好: <span v-text="userInfo.name"></span> <span style="margin-left:40px">[<router-link to="/login">退出</router-link>]&nbsp;&nbsp;&nbsp;[切换]</span>
+                您好: <span v-text="userInfo.username"></span> <span style="margin-left:20px">[<router-link to="/login">退出</router-link>]&nbsp;&nbsp;&nbsp;[切换]</span>
             </div>
         </div>
         <div>
@@ -43,11 +43,13 @@
 <!-- 组件导出 -->
 <script>
     import {mapState,mapActions} from 'vuex'
+    import Bus from '../public/bus'
     export default{
         data(){
             return {
                 activeIndex: '1',
-                activeIndex2: '1'
+                activeIndex2: '1',
+                userInfo:'',
             }
         },
         created(){
@@ -56,12 +58,28 @@
         methods:{
             handleSelect(key, keyPath) {
                 console.log(key, keyPath);
+            },
+            getCurrentUser(){
+                this.$http.axios({
+                    url:'/userInfo/getUserInfoEntity',
+                    method:'get',
+                }).then(resolve=>{
+                    this.userInfo = resolve;
+                }).catch(err=>{
+                    console.log("失败了")
+                })
             }
         },
         computed:{
-            ...mapState('userModule',['userInfo'])
+
         },
         components:{
+
+        },
+        created(){
+            this.getCurrentUser();
+        },
+        mounted(){
 
         }
     }

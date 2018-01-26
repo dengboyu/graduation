@@ -2,22 +2,19 @@
 <template>
     <div class="tmpl">
         <p class="result">报价单统计结果</p>
-        <el-table ref="multipleTable" border :data="tableData3" tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange">
+        <el-table ref="multipleTable" border :data="tableData3" tooltip-effect="dark" style="width: 90%;margin-left:5%" @selection-change="handleSelectionChange">
             <el-table-column type="selection" width="55"></el-table-column>
-            <el-table-column label="报价单编号" width="120">
-                <template slot-scope="scope">{{ scope.row.date }}</template>
+            <el-table-column label="报价单编号" width="140">
+                <template slot-scope="scope">{{ scope.row.quoNum }}</template>
             </el-table-column>
             <!-- <el-table-column prop="name" label="报价单名称" width="240"></el-table-column> -->
-            <el-table-column prop="name" label="报价人" ></el-table-column>
-            <el-table-column prop="name" label="报价日期" ></el-table-column>
-            <el-table-column prop="name" label="总金额" ></el-table-column>
-            <el-table-column prop="name" label="成本价" ></el-table-column>
-            <el-table-column prop="name" label="利润" ></el-table-column>
-            <el-table-column prop="name" label="公司名称" ></el-table-column>
-            <el-table-column prop="name" label="联系人" ></el-table-column>
-            <el-table-column prop="name" label="状态" ></el-table-column>
-            <el-table-column prop="name" label="发送" ></el-table-column>
-            <el-table-column prop="date" label="创建时间"></el-table-column>
+            <el-table-column prop="quoName" label="报价人" width="120"></el-table-column>
+            <el-table-column prop="quoTime" label="报价日期" width="120"></el-table-column>
+            <el-table-column prop="totalPrice" label="总金额" width="80"></el-table-column>
+            <el-table-column prop="cent" label="单位" width="80"></el-table-column>
+            <el-table-column prop="comName" label="公司名称" ></el-table-column>
+            <el-table-column prop="linkName" label="联系人" width="140"></el-table-column>
+            <el-table-column prop="createTime" label="创建时间" width="160"></el-table-column>
             <el-table-column label="查看详情" width="100">
                 <template slot-scope="scope">
                     <el-button @click="handleClick(scope.row)" type="text" size="small" width="60">查看</el-button>
@@ -26,7 +23,7 @@
         </el-table>
 
         <el-dialog :visible.sync="dialogVisible" width="70%">
-            <detail-quotation></detail-quotation>
+            <detail-quotation :quotationVo="quotationVo"></detail-quotation>
         </el-dialog>
 
     </div>
@@ -34,20 +31,14 @@
 
 <!-- 组件导出 -->
 <script>
-    import detailQuotation from './detailQuotation.vue'
+    import detailQuotation from './detailQuotation'
     export default{
         data(){
             return {
-                tableData3: [
-                    {
-                        date: '1093222',
-                        name: 'oracle公司报价单',
-                        address: '上海市普陀区金沙江路 1518 弄',
-                        date:'2017-09-02'
-                    }
-                ],
+                tableData3: [],
                 multipleSelection: [],
-                dialogVisible:false
+                dialogVisible:false,
+                quotationVo:{},
             }
         },
         methods:{
@@ -63,12 +54,35 @@
             handleSelectionChange(val) {
                 this.multipleSelection = val;
             },
-            handleClick(){
-                this.dialogVisible=true;
+            handleClick(row){
+
+                    this.$http.axios({
+                        url:'/quotation/getQuotationDetail?id='+row.id,
+                        method:'get',
+                    }).then(resolve=>{
+                        this.quotationVo = resolve;
+                        this.dialogVisible=true;
+                    }).catch(err=>{
+
+                    })
+            },
+            getQuatationList(){
+
+                this.$http.axios({
+                    url:'/quotation/getQuotationList',
+                    method:'get',
+                }).then(resolve=>{
+                    this.tableData3 = resolve;
+                }).catch(err=>{
+                    console.log("失败了")
+                })
             }
         },
         components:{
             detailQuotation,
+        },
+        created(){
+            this.getQuatationList();
         }
     }
 </script>

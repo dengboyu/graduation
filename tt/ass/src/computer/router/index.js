@@ -14,6 +14,7 @@ import addProduct from '@/computer/components/product/addProduct'         //添�
 import sortProduct from '@/computer/components/product/sortProduct'         //添加公司
 import queryRemark from '@/computer/components/product/queryRemark'         //添加公司
 import addCustomer from '@/computer/components/customer/addCustomer'         //添加公司
+import updateCustomer from '@/computer/components/customer/updateCustomer'         //添加公司
 import linkName from '@/computer/components/customer/linkName'         //添加公司
 import addQuotation from '@/computer/components/quotation/addQuotation'         //添加公司
 import queryQuotation from '@/computer/components/quotation/queryQuotation'         //添加公司
@@ -65,8 +66,13 @@ export default new Router({
                     component:addCustomer,
                 },
                 {
+                    name:'updateCustomer',
+                    path:'updateCustomer/:id',
+                    component:updateCustomer,
+                },
+                {
                     name:'editProduct',
-                    path:'editProduct',
+                    path:'editProduct/:id',
                     component:editProduct,
                 },
                 {
