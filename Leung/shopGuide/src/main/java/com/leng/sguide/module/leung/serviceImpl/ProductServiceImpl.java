@@ -1,6 +1,7 @@
 package com.leng.sguide.module.leung.serviceImpl;
 
 import com.leng.sguide.module.leung.entity.ContentEntity;
+import com.leng.sguide.module.leung.entity.ScanTagEntity;
 import com.leng.sguide.module.leung.entity.ShopEntity;
 import com.leng.sguide.module.leung.service.*;
 import org.apache.commons.lang.StringUtils;
@@ -36,6 +37,8 @@ public class ProductServiceImpl extends BaseServiceAbstract<ProductDao,ProductEn
     private ContentService contentService;
     @Resource
     private ShopService shopService;
+    @Resource
+    private ScanTagService scanTagService;
 
 
 
@@ -44,10 +47,18 @@ public class ProductServiceImpl extends BaseServiceAbstract<ProductDao,ProductEn
      *  影响因素:
      *      购物车产品分类 *   0.3
      *      已浏览的产品分类 *   0.3
+     *          (一个产品同时被购物车和已浏览产品分类，去重)
      *      产品广告竞价 *   0.1
      *      产品销量 *   0.1
      *      产品总浏览量 *   0.1
      *      产品评分 *   0.1
+     *
+     *  (附:同一类产品算法：
+     *      产品广告竞价 *   0.4
+     *      产品销量 *   0.2
+     *      产品总浏览量 *   0.1
+     *      产品评分 *   0.3
+     *  )
      *
      * @author by@Deng
      * @date 2018/1/31 下午3:12
@@ -60,20 +71,29 @@ public class ProductServiceImpl extends BaseServiceAbstract<ProductDao,ProductEn
         map.put("pageStart",pageMap.get("pageStart"));
         map.put("pageSize",pageMap.get("pageSize"));
 
-        if(map.get("saleAmount")==null || StringUtils.isEmpty(map.get("saleAmount").toString())){
-            map.remove("saleAmount");
+        //根据销量查询
+        if(map.get("saleAmount")!=null && StringUtils.isNotEmpty(map.get("saleAmount").toString())){
+            map.put("orderColumn","saleAmount");
         }
+        map.remove("saleAmount");
+
+        //根据产品名称查询
+        if(map.get("productName")!=null && StringUtils.isNotEmpty(map.get("productName").toString())){
+            map.put("productName",new String(map.get("productName").toString().getBytes("iso-8859-1"),"UTF-8"));
+        }
+
+        //根据产品分类搜索
+        String asideSearchData = new String(map.get("asideSearchData").toString().getBytes("iso-8859-1"),"UTF-8");
+        if(!StringUtils.equals(asideSearchData,"全部")){
+            map.put("tag",asideSearchData);
+
+            //根据销量查询
+            map.put("orderColumn","saleAmount");
+        }
+
 
         List<ProductEntity> productEntityList = dao.findPageEntityList(map);
         Long total = dao.findPageEntityCount(map);
-
-
-
-
-
-
-
-
 
         retMap.put("productList",productEntityList);
         retMap.put("total",total);
@@ -83,7 +103,7 @@ public class ProductServiceImpl extends BaseServiceAbstract<ProductDao,ProductEn
 
 
     /**
-     * 查询产品详情
+     * 查询产品详情,增加浏览量
      * @author by@Deng
      * @date 2018/1/31 下午4:24
      */
@@ -107,13 +127,16 @@ public class ProductServiceImpl extends BaseServiceAbstract<ProductDao,ProductEn
 
         //判断是否在购物车中
         retMap.put("isInShop","0");
-        ShopEntity shopEntity = new ShopEntity();
-        shopEntity.setProductId(productEntity.getId());
-        shopEntity.setUserId(userId);
-        shopEntity = shopService.findEntityByOne(shopEntity);
-        if(shopEntity!=null){
-            retMap.put("isInShop","1");
+        if(userId!=null){
+            ShopEntity shopEntity = new ShopEntity();
+            shopEntity.setProductId(productEntity.getId());
+            shopEntity.setUserId(userId);
+            shopEntity = shopService.findEntityByOne(shopEntity);
+            if(shopEntity!=null){
+                retMap.put("isInShop","1");
+            }
         }
+
 
 
         ContentEntity contentEntity = new ContentEntity();
@@ -132,6 +155,37 @@ public class ProductServiceImpl extends BaseServiceAbstract<ProductDao,ProductEn
         }
 
         retMap.put("contentList",contentList);
+
+
+        //把该产品的标签添加到个人浏览记录中，留搜索产品算法用
+        if(userId!=null){
+            ScanTagEntity scanTagEntity = new ScanTagEntity();
+            scanTagEntity.setTag(productEntity.getTag());
+            scanTagEntity.setUserId(userId);
+            scanTagEntity = scanTagService.findEntityByOne(scanTagEntity);
+
+            if(scanTagEntity==null){
+                scanTagEntity = new ScanTagEntity();
+
+                scanTagEntity.setAmount(1);
+                scanTagEntity.setUserId(userId);
+                scanTagEntity.setTag(productEntity.getTag());
+
+                scanTagService.insertEntity(scanTagEntity);
+
+            }else{
+                scanTagEntity.setAmount(scanTagEntity.getAmount()+1);
+
+                scanTagService.updateEntity(scanTagEntity);
+            }
+
+        }
+
+
+        //增加浏览量
+        productEntity.setScanAmount(productEntity.getScanAmount()+1);
+        updateEntity(productEntity);
+
 
         return retMap;
     }

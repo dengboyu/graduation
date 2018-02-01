@@ -2,7 +2,7 @@
 <template>
     <div class="tmpl">
         <p class="search">
-            <input type="text" placeholder="请输入搜索产品" v-model="searchObj.topSearch"><el-button
+            <input type="text" placeholder="请输入搜索产品" v-model="searchObj.productName"><el-button
                 type="primary" icon="el-icon-search" @click="topSearch">搜索</el-button>
         </p>
         <div class="food-main-title">
@@ -27,7 +27,7 @@
             <div v-else>
                 <div  class="food-detail" v-for="(item,index) in foodDetails" @click="goDetail(item.id)">
                     <img :src="item.img">
-                    <p style="padding-left:5px">￥<span v-text="item.activityPrice"></span><span class="bayou" v-if="item.isShip==1?true:false">包邮</span><span class="total-pay"><em v-text="item.saleAccount"></em>人付款</span></p>
+                    <p style="padding-left:5px">￥<span v-text="item.activityPrice"></span><span class="bayou" v-if="item.isShip==1?true:false">包邮</span><span class="total-pay"><em v-text="item.saleAmount"></em>人付款</span></p>
                     <p class="food-title-detail" v-text="item.productName"></p>
                 </div>
                 <p class="pagination">
@@ -49,7 +49,7 @@
                     pageStart:1,
                     pageSize:8,
                     asideSearchData:'全部',
-                    topSearch:'',
+                    productName:'',
                     saleAmount:'',
                     beginPrice:'',
                     endPrice:'',
@@ -65,7 +65,7 @@
             saleSearch(){
                 this.searchObj.saleAmount=1;
                 this.searchObj.asideSearchData='全部';
-                this.searchObj.topSearch='';
+                this.searchObj.productName='';
                 this.searchObj.beginPrice='';
                 this.searchObj.endPrice='';
                 this.searchObj.intelSearch='';
@@ -76,7 +76,7 @@
                 this.searchObj.intelSearch=1;
                 this.searchObj.saleAmount='';
                 this.searchObj.asideSearchData='全部';
-                this.searchObj.topSearch='';
+                this.searchObj.productName='';
                 this.searchObj.beginPrice='';
                 this.searchObj.endPrice='';
 
@@ -118,6 +118,12 @@
         mounted(){
             Bus.$on('search', (e) => {
                 this.searchObj.asideSearchData=e;
+                this.searchObj.intelSearch='';
+                this.searchObj.saleAmount='';
+                this.searchObj.productName='';
+                this.searchObj.beginPrice='';
+                this.searchObj.endPrice='';
+                this.search();
             })
         },
         components:{
@@ -189,7 +195,8 @@
     }
     .total-pay{
         font-size: 13px;
-        margin-left:80px;
+        float: right;
+        margin-right:10px;
     }
     .food-title-detail{
         font-size:13px;

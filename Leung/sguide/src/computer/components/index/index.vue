@@ -8,6 +8,7 @@
             <el-container>
                 <el-header>
                     <p>
+                        <router-link to="/index/queryProduct">首页</router-link>
                         <router-link to="/login/0" v-if="username==''?true:false" class="login">Hi,请 登录</router-link>
                         <span v-else class="login" style="margin-right:10px">Hi,您好: <span class="goPerInfo" @click="goPerInfo" v-text="username"></span></span>
                         <router-link to="/login/1" >注册</router-link>

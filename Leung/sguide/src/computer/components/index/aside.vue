@@ -73,7 +73,6 @@
         },
         methods:{
             findProduct(param){
-                this.$router.push({path:'/index/queryProduct'});
                 Bus.$emit('search',param);
             }
         },

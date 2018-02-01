@@ -220,17 +220,4 @@ public class ProductController{
     }
 
 
-    /**
-     * 添加浏览量
-     * @author by@Deng
-     * @date 2018/1/31 下午10:05
-     */
-    @PostMapping("addScanAccount")
-    public Object addScanAccount(@RequestParam Integer productId) throws Exception{
-
-        ProductEntity productEntity = productService.findEntityByMainId(productId);
-        productEntity.setScanAmount(productEntity.getScanAmount()+1);
-        return productService.updateEntity(productEntity);
-    }
-
 }

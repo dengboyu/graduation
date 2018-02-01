@@ -274,24 +274,60 @@
     </select>
 
 
+
+
+
+    <!-- 根据列条件查询实体类信息 -->
+    <sql id="whereColumnsPage">
+        <if test="productName != null and productName != ''">
+            AND RA.productName LIKE "%"#{productName}"%"
+        </if>
+        <if test="tag != null">
+            AND RA.tag = #{tag}
+        </if>
+        <if test="beginPrice != null and beginPrice != ''">
+            AND RA.centPrice &gt;= #{beginPrice}
+        </if>
+        <if test="endPrice != null and endPrice != ''">
+            AND RA.centPrice &lt;= #{endPrice}
+        </if>
+        <if test="scanAmount != null">
+            AND RA.scanAmount = #{scanAmount}
+        </if>
+        <if test="saleAmount != null">
+            AND RA.saleAmount = #{saleAmount}
+        </if>
+        <if test="originPrice != null">
+            AND RA.originPrice = #{originPrice}
+        </if>
+        <if test="activityPrice != null">
+            AND RA.activityPrice = #{activityPrice}
+        </if>
+        <if test="advPrice != null">
+            AND RA.advPrice = #{advPrice}
+        </if>
+        <if test="productAmount != null">
+            AND RA.productAmount = #{productAmount}
+        </if>
+        <if test="score != null">
+            AND RA.score = #{score}
+        </if>
+    </sql>
+
+
     <!-- 单表分页查询 -->
     <select id="findPageEntityList" parameterType="map" resultType="com.leng.sguide.module.leung.entity.ProductEntity">
         SELECT
             <include refid="product_columns"></include>
+            ,(
+                score * 0.3 + scanAmount * 0.1 + saleAmount * 0.2 + advPrice * 0.4
+            ) finalSort
         FROM
             product RA
         <where>
-            <include refid="whereColumns"></include>
+            <include refid="whereColumnsPage"></include>
         </where>
-        ORDER BY
-        <choose>
-            <when test="orderColumn!=null">
-                RA.${orderColumn}
-            </when>
-            <otherwise>
-                RA.createTime
-            </otherwise>
-        </choose>
+        ORDER BY  finalSort
         <choose>
             <when test="sortColumn!=null">
                 ${sortColumn}
@@ -311,7 +347,7 @@
         FROM
             product RA
         <where>
-            <include refid="whereColumns"></include>
+            <include refid="whereColumnsPage"></include>
         </where>
     </select>
 

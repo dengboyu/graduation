@@ -197,27 +197,12 @@
                     console.log("失败了")
                 })
             },
-            addScanAccount(){
-                //浏览量
-
-                this.$http.axios({
-                    url:'/product/addScanAccount',
-                    method:'post',
-                    data:{productId:this.$route.params.id},
-                }).then(resolve=>{
-
-                }).catch(err=>{
-                    console.log("失败了")
-                })
-
-            }
         },
         components:{
 
         },
         created(){
             this.getProductDetail(this.$route.params.id);
-            this.addScanAccount();
         }
     }
 </script>
