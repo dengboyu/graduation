@@ -27,8 +27,9 @@
 
             <el-main>
                 <div class="main-top">
-                    <span>XXXXX淘宝店信息</span>
-                    <router-link to="/login" class="logout">【退出】</router-link>
+                    <span v-text="nick"></span>---淘宝店信息
+                    <!-- <router-link to="/login/0" class="logout" @click="logout">【退出】</router-link> -->
+                    <span class="logout" @click="logout">【退出】</span>
                 </div>
                 <router-view></router-view>
             </el-main>
@@ -42,7 +43,7 @@
     export default{
         data(){
             return {
-
+                nick:'',
             }
         },
         methods:{
@@ -51,10 +52,37 @@
             },
             handleClose(key, keyPath) {
                 console.log(key, keyPath);
+            },
+            getUserInfo(){
+                this.$http.axios({
+                    url:'/userInfo/getUserInfoEntity',
+                    method:'get',
+                }).then(resolve=>{
+
+                    if(resolve!=null){
+                        this.nick=resolve.nick;
+                    }
+
+                }).catch(err=>{
+                    console.log("失败了")
+                })
+            },
+            logout(){
+                this.$http.axios({
+                    url:'/userInfo/logout',
+                    method:'post',
+                }).then(resolve=>{
+                    this.$router.push({name:'login',params:{loginFlag:0}});
+                }).catch(err=>{
+                    console.log("失败了")
+                })
             }
         },
         components:{
 
+        },
+        created(){
+            this.getUserInfo();
         }
     }
 </script>
@@ -98,6 +126,7 @@
     position: absolute;
     right:25px;
     color:#666;
+    cursor: pointer;
 }
 .main-top a:hover{
     cursor: pointer;

@@ -11,7 +11,7 @@
         RA.id,RA.quotationId,RA.proName,RA.norm,RA.num,RA.cent,RA.centPrice,RA.totalPrice,RA.remark,RA.createTime,RA.updateTime
     </sql>
 
-    
+
     <!-- quoProduct表的resultMap映射 -->
     <resultMap id="entityResultMap" type="com.tt.association.module.ass.entity.QuoProductEntity">
         <id  property="id"  column="id"/>
@@ -71,7 +71,7 @@
             remark,
         </trim>
         <foreach collection="list" index="index" item="item" separator=",">
-        (
+            (
             #{item.id},
             #{item.quotationId},
             #{item.proName},
@@ -81,7 +81,7 @@
             #{item.centPrice},
             #{item.totalPrice},
             #{item.remark}
-        )
+            )
         </foreach>
     </insert>
 
@@ -127,48 +127,46 @@
 
     <!-- 根据列条件查询实体类信息 -->
     <sql id="whereColumns">
-        <trim suffixOverrides=",">
-            <if test="id != null">
-                RA.id = #{id},
-            </if>
-            <if test="quotationId != null">
-                RA.quotationId = #{quotationId},
-            </if>
-            <if test="proName != null">
-                RA.proName = #{proName},
-            </if>
-            <if test="norm != null">
-                RA.norm = #{norm},
-            </if>
-            <if test="num != null">
-                RA.num = #{num},
-            </if>
-            <if test="cent != null">
-                RA.cent = #{cent},
-            </if>
-            <if test="centPrice != null">
-                RA.centPrice = #{centPrice},
-            </if>
-            <if test="totalPrice != null">
-                RA.totalPrice = #{totalPrice},
-            </if>
-            <if test="remark != null">
-                RA.remark = #{remark},
-            </if>
-            <if test="createTime != null">
-                RA.createTime = #{createTime},
-            </if>
-            <if test="updateTime != null">
-                RA.updateTime = #{updateTime},
-            </if>
-        </trim>
+        <if test="id != null">
+            AND RA.id = #{id}
+        </if>
+        <if test="quotationId != null">
+            AND RA.quotationId = #{quotationId}
+        </if>
+        <if test="proName != null">
+            AND RA.proName = #{proName}
+        </if>
+        <if test="norm != null">
+            AND RA.norm = #{norm}
+        </if>
+        <if test="num != null">
+            AND RA.num = #{num}
+        </if>
+        <if test="cent != null">
+            AND RA.cent = #{cent}
+        </if>
+        <if test="centPrice != null">
+            AND RA.centPrice = #{centPrice}
+        </if>
+        <if test="totalPrice != null">
+            AND RA.totalPrice = #{totalPrice}
+        </if>
+        <if test="remark != null">
+            AND RA.remark = #{remark}
+        </if>
+        <if test="createTime != null">
+            AND RA.createTime = #{createTime}
+        </if>
+        <if test="updateTime != null">
+            AND RA.updateTime = #{updateTime}
+        </if>
     </sql>
 
 
     <!-- 根据主键查找对应实体类 -->
     <select id="findEntityByMainId" resultType="com.tt.association.module.ass.entity.QuoProductEntity">
         SELECT
-            <include refid="quoProduct_columns"></include>
+        <include refid="quoProduct_columns"></include>
         FROM quoProduct RA
         WHERE id = #{0}
     </select>
@@ -177,9 +175,9 @@
     <!-- 根据条件查出来是单条实体类 -->
     <select id="findEntityByOne" parameterType="com.tt.association.module.ass.entity.QuoProductEntity" resultType="com.tt.association.module.ass.entity.QuoProductEntity">
         SELECT
-            <include refid="quoProduct_columns"></include>
+        <include refid="quoProduct_columns"></include>
         FROM
-            quoProduct RA
+        quoProduct RA
         <where>
             <include refid="whereColumns"></include>
         </where>
@@ -189,9 +187,9 @@
     <!-- 根据列条件查找实体类集合 -->
     <select id="findEntityList" parameterType="com.tt.association.module.ass.entity.QuoProductEntity" resultType="com.tt.association.module.ass.entity.QuoProductEntity">
         SELECT
-            <include refid="quoProduct_columns"></include>
+        <include refid="quoProduct_columns"></include>
         FROM
-            quoProduct RA
+        quoProduct RA
         <where>
             <include refid="whereColumns"></include>
         </where>
@@ -201,9 +199,9 @@
     <!-- 查询记录数 -->
     <select id="findEntityCount" parameterType="com.tt.association.module.ass.entity.QuoProductEntity" resultType="long">
         SELECT
-            count(1)
+        count(1)
         FROM
-            quoProduct RA
+        quoProduct RA
         <where>
             <include refid="whereColumns"></include>
         </where>
@@ -213,15 +211,43 @@
     <!-- 单表分页查询 -->
     <select id="findPageEntityList" parameterType="map" resultType="com.tt.association.module.ass.entity.QuoProductEntity">
         SELECT
-            <include refid="quoProduct_columns"></include>
+        <include refid="quoProduct_columns"></include>
         FROM
-            quoProduct RA
-        <if test="start!=null and pageSize !=null">
-            LIMIT #{start},#{pageSize}
-        </if>
+        quoProduct RA
+        <where>
+            <include refid="whereColumns"></include>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderColumn!=null">
+                RA.${orderColumn}
+            </when>
+            <otherwise>
+                RA.createTime
+            </otherwise>
+        </choose>
+        <choose>
+            <when test="sortColumn!=null">
+                ${sortColumn}
+            </when>
+            <otherwise>
+                DESC
+            </otherwise>
+        </choose>
+        LIMIT #{pageStart},#{pageSize}
     </select>
 
 
+    <!-- 单表分页查询总计数量 -->
+    <select id="findPageEntityCount" parameterType="map" resultType="long">
+        SELECT
+        count(1)
+        FROM
+        quoProduct RA
+        <where>
+            <include refid="whereColumns"></include>
+        </where>
+    </select>
 
 
 </mapper>

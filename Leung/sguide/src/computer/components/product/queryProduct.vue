@@ -2,37 +2,36 @@
 <template>
     <div class="tmpl">
         <p class="search">
-            <input type="text" placeholder="请输入搜索产品"><el-button
-                type="primary" icon="el-icon-search" @click="search">搜索</el-button>
+            <input type="text" placeholder="请输入搜索产品" v-model="searchObj.topSearch"><el-button
+                type="primary" icon="el-icon-search" @click="topSearch">搜索</el-button>
         </p>
         <div class="food-main-title">
             <p class="condition">
                 <span>筛选条件:</span>
-                <el-button type="text" style="margin-left:20px;color:#666">销 量</el-button>
+                <el-button type="text" @click="saleSearch" style="margin-left:20px;color:#666">销 量</el-button>
                 <span style="margin-left:30px;margin-right:5px;">价格:</span>
-                <input type="number"> -
-                <input type="number">
+                <input type="number" v-model="searchObj.beginPrice"> -
+                <input type="number" v-model="searchObj.endPrice">
             </p>
             <p>
                 <span>智能推荐:</span>
-                <el-button type="text" style="margin-left:20px;color:#e67e37;">购 物</el-button>
+                <el-button type="text" @click="intelSearch" style="margin-left:20px;color:#e67e37;">购 物</el-button>
             </p>
             <p>
                 <span>搜索条件:</span>
-                <span v-text="asideSearchData" style="margin-left: 20px;"></span>
-                <span v-text="topSearchData" style="margin-left: 30px;"></span>
+                <span v-text="searchObj.asideSearchData" style="margin-left: 20px;"></span>
             </p>
         </div>
         <div class="food-main">
             <p class="has-nothing" v-if="foodDetails.length>0?false:true">没有相关的产品</p>
             <div v-else>
-                <div  class="food-detail" v-for="(item,index) in foodDetails" @click="goDetail">
+                <div  class="food-detail" v-for="(item,index) in foodDetails" @click="goDetail(item.id)">
                     <img :src="item.img">
-                    <p style="padding-left:5px">￥<span v-text="item.price"></span><span class="bayou" v-if="item.isPlan==1?true:false">包邮</span><span class="total-pay"><em v-text="item.payAccount"></em>人付款</span></p>
-                    <p class="food-title-detail" v-text="item.title"></p>
+                    <p style="padding-left:5px">￥<span v-text="item.activityPrice"></span><span class="bayou" v-if="item.isShip==1?true:false">包邮</span><span class="total-pay"><em v-text="item.saleAccount"></em>人付款</span></p>
+                    <p class="food-title-detail" v-text="item.productName"></p>
                 </div>
                 <p class="pagination">
-                    <el-pagination background layout="prev, pager, next" :total="100"></el-pagination>
+                    <el-pagination background layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="searchObj.pageSize" :total="total"></el-pagination>
                 </p>
             </div>
         </div>
@@ -45,84 +44,80 @@
     export default{
         data(){
             return {
-                asideSearchData:'食品 / 酒 / 生鲜',
-                topSearchData:'数量',
-                foodDetails:[
-                    {
-                        img:"https://g-search1.alicdn.com/img/bao/uploaded/i4/imgextra/i1/118550965/TB2KBA3dQfb_uJkSne1XXbE4XXa_!!0-saturn_solar.jpg_460x460Q90.jpg_.webp",
-                        price:"9.50",
-                        isPlan:1,
-                        payAccount:0,
-                        title:"产品名称产品名称产品名称产品名称产品名称",
-                    },
-                    {
-                        img:"https://g-search1.alicdn.com/img/bao/uploaded/i4/imgextra/i1/118550965/TB2KBA3dQfb_uJkSne1XXbE4XXa_!!0-saturn_solar.jpg_460x460Q90.jpg_.webp",
-                        price:"9.50",
-                        isPlan:1,
-                        payAccount:0,
-                        title:"产品名称产品名称产品名称产品名称产品名称",
-                    },
-                    {
-                        img:"https://g-search1.alicdn.com/img/bao/uploaded/i4/imgextra/i1/118550965/TB2KBA3dQfb_uJkSne1XXbE4XXa_!!0-saturn_solar.jpg_460x460Q90.jpg_.webp",
-                        price:"9.50",
-                        isPlan:1,
-                        payAccount:0,
-                        title:"产品名称产品名称产品名称产品名称产品名称",
-                    },
-                    {
-                        img:"https://g-search1.alicdn.com/img/bao/uploaded/i4/imgextra/i1/118550965/TB2KBA3dQfb_uJkSne1XXbE4XXa_!!0-saturn_solar.jpg_460x460Q90.jpg_.webp",
-                        price:"9.50",
-                        isPlan:1,
-                        payAccount:0,
-                        title:"产品名称产品名称产品名称产品名称产品名称",
-                    },
-                    {
-                        img:"https://g-search1.alicdn.com/img/bao/uploaded/i4/imgextra/i1/118550965/TB2KBA3dQfb_uJkSne1XXbE4XXa_!!0-saturn_solar.jpg_460x460Q90.jpg_.webp",
-                        price:"9.50",
-                        isPlan:1,
-                        payAccount:0,
-                        title:"产品名称产品名称产品名称产品名称产品名称",
-                    },
-                    {
-                        img:"https://g-search1.alicdn.com/img/bao/uploaded/i4/imgextra/i1/118550965/TB2KBA3dQfb_uJkSne1XXbE4XXa_!!0-saturn_solar.jpg_460x460Q90.jpg_.webp",
-                        price:"9.50",
-                        isPlan:1,
-                        payAccount:0,
-                        title:"产品名称产品名称产品名称产品名称产品名称",
-                    },
-                    {
-                        img:"https://g-search1.alicdn.com/img/bao/uploaded/i4/imgextra/i1/118550965/TB2KBA3dQfb_uJkSne1XXbE4XXa_!!0-saturn_solar.jpg_460x460Q90.jpg_.webp",
-                        price:"9.50",
-                        isPlan:1,
-                        payAccount:0,
-                        title:"产品名称产品名称产品名称产品名称产品名称",
-                    },
-                    {
-                        img:"https://g-search1.alicdn.com/img/bao/uploaded/i4/imgextra/i1/118550965/TB2KBA3dQfb_uJkSne1XXbE4XXa_!!0-saturn_solar.jpg_460x460Q90.jpg_.webp",
-                        price:"9.50",
-                        isPlan:1,
-                        payAccount:0,
-                        title:"产品名称产品名称产品名称产品名称产品名称",
-                    }
-                ]
+                foodDetails:[],
+                searchObj:{
+                    pageStart:1,
+                    pageSize:8,
+                    asideSearchData:'全部',
+                    topSearch:'',
+                    saleAmount:'',
+                    beginPrice:'',
+                    endPrice:'',
+                    intelSearch:'',
+                },
+                total:0,
             }
         },
         methods:{
-            goDetail(){
-                this.$router.push({path:'/index/detail'})
+            goDetail(paramId){
+                this.$router.push({name:'detail',params:{id:paramId}});
+            },
+            saleSearch(){
+                this.searchObj.saleAmount=1;
+                this.searchObj.asideSearchData='全部';
+                this.searchObj.topSearch='';
+                this.searchObj.beginPrice='';
+                this.searchObj.endPrice='';
+                this.searchObj.intelSearch='';
+                this.search();
+            },
+            intelSearch(){
+
+                this.searchObj.intelSearch=1;
+                this.searchObj.saleAmount='';
+                this.searchObj.asideSearchData='全部';
+                this.searchObj.topSearch='';
+                this.searchObj.beginPrice='';
+                this.searchObj.endPrice='';
+
+                this.search();
+            },
+            topSearch(){
+                this.searchObj.saleAmount='';
+                this.searchObj.intelSearch='';
+                this.search();
             },
             search(){
 
+                this.$http.axios({
+                    url:'/product/getProductList',
+                    method:'get',
+                    params:this.searchObj,
+                }).then(resolve=>{
+                    if(resolve.productList.length>0){
+                        for(let i in resolve.productList){
+                            resolve.productList[i].img='/shopGuide/product/downLoadFile?fileName='+resolve.productList[i].img;
+                        }
+                    }
+                    this.foodDetails = resolve.productList;
+                    this.total = resolve.total;
+
+                }).catch(err=>{
+                    console.log("失败了")
+                })
+            },
+            handleCurrentChange(val){
+                this.searchObj.pageStart = val;
+                this.search();
             }
+
         },
         created(){
-
+            this.search();
         },
         mounted(){
             Bus.$on('search', (e) => {
-                console.log(e)
-                this.asideSearchData=e;
-                this.topSearchData=null;
+                this.searchObj.asideSearchData=e;
             })
         },
         components:{

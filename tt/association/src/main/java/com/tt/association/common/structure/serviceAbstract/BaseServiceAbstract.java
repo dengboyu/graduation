@@ -109,4 +109,12 @@ public abstract class BaseServiceAbstract<D extends BaseDao<T> ,T> implements Ba
     }
 
 
+    /**
+     * 单表分页查询总共数量
+     * @author by@Deng
+     * @date 2017/10/23 下午9:12
+     */
+    public Long findPageEntityCount(Map<String, Object> map) throws Exception{
+        return dao.findPageEntityCount(map);
+    }
 }

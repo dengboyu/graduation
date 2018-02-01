@@ -11,7 +11,7 @@
         RA.id,RA.quoNum,RA.companyId,RA.linkName,RA.phone,RA.fax,RA.email,RA.address,RA.quoName,RA.quoTime,RA.totalPrice,RA.cent,RA.transport,RA.remark,RA.quoPhone,RA.quoFax,RA.createTime,RA.updateTime
     </sql>
 
-    
+
     <!-- quotation表的resultMap映射 -->
     <resultMap id="entityResultMap" type="com.tt.association.module.ass.entity.QuotationEntity">
         <id  property="id"  column="id"/>
@@ -99,7 +99,7 @@
             quoFax,
         </trim>
         <foreach collection="list" index="index" item="item" separator=",">
-        (
+            (
             #{item.id},
             #{item.quoNum},
             #{item.companyId},
@@ -116,7 +116,7 @@
             #{item.remark},
             #{item.quoPhone},
             #{item.quoFax}
-        )
+            )
         </foreach>
     </insert>
 
@@ -183,69 +183,67 @@
 
     <!-- 根据列条件查询实体类信息 -->
     <sql id="whereColumns">
-        <trim suffixOverrides=",">
-            <if test="id != null">
-                RA.id = #{id},
-            </if>
-            <if test="quoNum != null">
-                RA.quoNum = #{quoNum},
-            </if>
-            <if test="companyId != null">
-                RA.companyId = #{companyId},
-            </if>
-            <if test="linkName != null">
-                RA.linkName = #{linkName},
-            </if>
-            <if test="phone != null">
-                RA.phone = #{phone},
-            </if>
-            <if test="fax != null">
-                RA.fax = #{fax},
-            </if>
-            <if test="email != null">
-                RA.email = #{email},
-            </if>
-            <if test="address != null">
-                RA.address = #{address},
-            </if>
-            <if test="quoName != null">
-                RA.quoName = #{quoName},
-            </if>
-            <if test="quoTime != null">
-                RA.quoTime = #{quoTime},
-            </if>
-            <if test="totalPrice != null">
-                RA.totalPrice = #{totalPrice},
-            </if>
-            <if test="cent != null">
-                RA.cent = #{cent},
-            </if>
-            <if test="transport != null">
-                RA.transport = #{transport},
-            </if>
-            <if test="remark != null">
-                RA.remark = #{remark},
-            </if>
-            <if test="quoPhone != null">
-                RA.quoPhone = #{quoPhone},
-            </if>
-            <if test="quoFax != null">
-                RA.quoFax = #{quoFax},
-            </if>
-            <if test="createTime != null">
-                RA.createTime = #{createTime},
-            </if>
-            <if test="updateTime != null">
-                RA.updateTime = #{updateTime},
-            </if>
-        </trim>
+        <if test="id != null">
+            AND RA.id = #{id}
+        </if>
+        <if test="quoNum != null">
+            AND RA.quoNum = #{quoNum}
+        </if>
+        <if test="companyId != null">
+            AND RA.companyId = #{companyId}
+        </if>
+        <if test="linkName != null">
+            AND RA.linkName = #{linkName}
+        </if>
+        <if test="phone != null">
+            AND RA.phone = #{phone}
+        </if>
+        <if test="fax != null">
+            AND RA.fax = #{fax}
+        </if>
+        <if test="email != null">
+            AND RA.email = #{email}
+        </if>
+        <if test="address != null">
+            AND RA.address = #{address}
+        </if>
+        <if test="quoName != null">
+            AND RA.quoName = #{quoName}
+        </if>
+        <if test="quoTime != null">
+            AND RA.quoTime = #{quoTime}
+        </if>
+        <if test="totalPrice != null">
+            AND RA.totalPrice = #{totalPrice}
+        </if>
+        <if test="cent != null">
+            AND RA.cent = #{cent}
+        </if>
+        <if test="transport != null">
+            AND RA.transport = #{transport}
+        </if>
+        <if test="remark != null">
+            AND RA.remark = #{remark}
+        </if>
+        <if test="quoPhone != null">
+            AND RA.quoPhone = #{quoPhone}
+        </if>
+        <if test="quoFax != null">
+            AND RA.quoFax = #{quoFax}
+        </if>
+        <if test="createTime != null">
+            AND RA.createTime = #{createTime}
+        </if>
+        <if test="updateTime != null">
+            AND RA.updateTime = #{updateTime}
+        </if>
     </sql>
 
 
     <!-- 根据主键查找对应实体类 -->
     <select id="findEntityByMainId" resultType="com.tt.association.module.ass.entity.QuotationEntity">
         SELECT
-            <include refid="quotation_columns"></include>
+        <include refid="quotation_columns"></include>
         FROM quotation RA
         WHERE id = #{0}
     </select>
@@ -254,9 +252,9 @@
     <!-- 根据条件查出来是单条实体类 -->
     <select id="findEntityByOne" parameterType="com.tt.association.module.ass.entity.QuotationEntity" resultType="com.tt.association.module.ass.entity.QuotationEntity">
         SELECT
-            <include refid="quotation_columns"></include>
+        <include refid="quotation_columns"></include>
         FROM
-            quotation RA
+        quotation RA
         <where>
             <include refid="whereColumns"></include>
         </where>
@@ -266,9 +264,9 @@
     <!-- 根据列条件查找实体类集合 -->
     <select id="findEntityList" parameterType="com.tt.association.module.ass.entity.QuotationEntity" resultType="com.tt.association.module.ass.entity.QuotationEntity">
         SELECT
-            <include refid="quotation_columns"></include>
+        <include refid="quotation_columns"></include>
         FROM
-            quotation RA
+        quotation RA
         <where>
             <include refid="whereColumns"></include>
         </where>
@@ -278,9 +276,9 @@
     <!-- 查询记录数 -->
     <select id="findEntityCount" parameterType="com.tt.association.module.ass.entity.QuotationEntity" resultType="long">
         SELECT
-            count(1)
+        count(1)
         FROM
-            quotation RA
+        quotation RA
         <where>
             <include refid="whereColumns"></include>
         </where>
@@ -290,12 +288,42 @@
     <!-- 单表分页查询 -->
     <select id="findPageEntityList" parameterType="map" resultType="com.tt.association.module.ass.entity.QuotationEntity">
         SELECT
-            <include refid="quotation_columns"></include>
+        <include refid="quotation_columns"></include>
         FROM
-            quotation RA
-        <if test="start!=null and pageSize !=null">
-            LIMIT #{start},#{pageSize}
-        </if>
+        quotation RA
+        <where>
+            <include refid="whereColumns"></include>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderColumn!=null">
+                RA.${orderColumn}
+            </when>
+            <otherwise>
+                RA.createTime
+            </otherwise>
+        </choose>
+        <choose>
+            <when test="sortColumn!=null">
+                ${sortColumn}
+            </when>
+            <otherwise>
+                DESC
+            </otherwise>
+        </choose>
+        LIMIT #{pageStart},#{pageSize}
+    </select>
+
+
+    <!-- 单表分页查询总计数量 -->
+    <select id="findPageEntityCount" parameterType="map" resultType="long">
+        SELECT
+        count(1)
+        FROM
+        quotation RA
+        <where>
+            <include refid="whereColumns"></include>
+        </where>
     </select>
 
 

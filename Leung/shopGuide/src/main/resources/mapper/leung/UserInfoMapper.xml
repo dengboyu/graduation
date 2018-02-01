@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.leng.sguide.module.leung.dao.UserInfoDao">
+
+    <!-- 以下代码片段中,user_info表的别名为RA -->
+
+    <!-- user_info表的字段 -->
+    <sql id ="user_info_columns">
+        RA.id,RA.nick,RA.password,RA.phone,RA.email,RA.type,RA.companyPrice,RA.companyName,RA.companyAddress,RA.linkName,RA.telPhone,RA.harvestPeople,RA.harvestAddress,RA.createTime,RA.updateTime
+    </sql>
+
+    
+    <!-- user_info表的resultMap映射 -->
+    <resultMap id="entityResultMap" type="com.leng.sguide.module.leung.entity.UserInfoEntity">
+        <id  property="id"  column="id"/>
+        <result  property="nick"  column="nick"/>
+        <result  property="password"  column="password"/>
+        <result  property="phone"  column="phone"/>
+        <result  property="email"  column="email"/>
+        <result  property="type"  column="type"/>
+        <result  property="companyPrice"  column="companyPrice"/>
+        <result  property="companyName"  column="companyName"/>
+        <result  property="companyAddress"  column="companyAddress"/>
+        <result  property="linkName"  column="linkName"/>
+        <result  property="telPhone"  column="telPhone"/>
+        <result  property="harvestPeople"  column="harvestPeople"/>
+        <result  property="harvestAddress"  column="harvestAddress"/>
+        <result  property="createTime"  column="createTime"/>
+        <result  property="updateTime"  column="updateTime"/>
+    </resultMap>
+
+
+    <!-- 添加一条记录 -->
+    <insert id="insertEntity" parameterType="com.leng.sguide.module.leung.entity.UserInfoEntity" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO user_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            id,
+            nick,
+            password,
+            phone,
+            email,
+            type,
+            companyPrice,
+            companyName,
+            companyAddress,
+            linkName,
+            telPhone,
+            harvestPeople,
+            harvestAddress,
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            #{id},
+            #{nick},
+            #{password},
+            #{phone},
+            #{email},
+            #{type},
+            #{companyPrice},
+            #{companyName},
+            #{companyAddress},
+            #{linkName},
+            #{telPhone},
+            #{harvestPeople},
+            #{harvestAddress},
+        </trim>
+    </insert>
+
+
+    <!-- 批量添加 -->
+    <insert id="insertEntityByBatch" parameterType="list" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO user_info
+        <trim prefix="(" suffix=") VALUES" suffixOverrides=",">
+            id,
+            nick,
+            password,
+            phone,
+            email,
+            type,
+            companyPrice,
+            companyName,
+            companyAddress,
+            linkName,
+            telPhone,
+            harvestPeople,
+            harvestAddress,
+        </trim>
+        <foreach collection="list" index="index" item="item" separator=",">
+        (
+            #{item.id},
+            #{item.nick},
+            #{item.password},
+            #{item.phone},
+            #{item.email},
+            #{item.type},
+            #{item.companyPrice},
+            #{item.companyName},
+            #{item.companyAddress},
+            #{item.linkName},
+            #{item.telPhone},
+            #{item.harvestPeople},
+            #{item.harvestAddress}
+        )
+        </foreach>
+    </insert>
+
+
+    <!-- 更新一条记录 -->
+    <update id="updateEntity" parameterType="com.leng.sguide.module.leung.entity.UserInfoEntity">
+        UPDATE user_info
+        <trim prefix="set" suffixOverrides=",">
+            <if test="nick != null">
+                nick = #{nick},
+            </if>
+            <if test="password != null">
+                password = #{password},
+            </if>
+            <if test="phone != null">
+                phone = #{phone},
+            </if>
+            <if test="email != null">
+                email = #{email},
+            </if>
+            <if test="type != null">
+                type = #{type},
+            </if>
+            <if test="companyPrice != null">
+                companyPrice = #{companyPrice},
+            </if>
+            <if test="companyName != null">
+                companyName = #{companyName},
+            </if>
+            <if test="companyAddress != null">
+                companyAddress = #{companyAddress},
+            </if>
+            <if test="linkName != null">
+                linkName = #{linkName},
+            </if>
+            <if test="telPhone != null">
+                telPhone = #{telPhone},
+            </if>
+            <if test="harvestPeople != null">
+                harvestPeople = #{harvestPeople},
+            </if>
+            <if test="harvestAddress != null">
+                harvestAddress = #{harvestAddress},
+            </if>
+        </trim>
+        WHERE id = #{id}
+    </update>
+
+
+    <!-- 根据主键删除一条记录 -->
+    <delete id="deleteEntity">
+        DELETE FROM user_info WHERE id = #{0}
+    </delete>
+
+
+    <!-- 根据列条件查询实体类信息 -->
+    <sql id="whereColumns">
+        <if test="id != null">
+            AND RA.id = #{id}
+        </if>
+        <if test="nick != null">
+            AND RA.nick = #{nick}
+        </if>
+        <if test="password != null">
+            AND RA.password = #{password}
+        </if>
+        <if test="phone != null">
+            AND RA.phone = #{phone}
+        </if>
+        <if test="email != null">
+            AND RA.email = #{email}
+        </if>
+        <if test="type != null">
+            AND RA.type = #{type}
+        </if>
+        <if test="companyPrice != null">
+            AND RA.companyPrice = #{companyPrice}
+        </if>
+        <if test="companyName != null">
+            AND RA.companyName = #{companyName}
+        </if>
+        <if test="companyAddress != null">
+            AND RA.companyAddress = #{companyAddress}
+        </if>
+        <if test="linkName != null">
+            AND RA.linkName = #{linkName}
+        </if>
+        <if test="telPhone != null">
+            AND RA.telPhone = #{telPhone}
+        </if>
+        <if test="harvestPeople != null">
+            AND RA.harvestPeople = #{harvestPeople}
+        </if>
+        <if test="harvestAddress != null">
+            AND RA.harvestAddress = #{harvestAddress}
+        </if>
+        <if test="createTime != null">
+            AND RA.createTime = #{createTime}
+        </if>
+        <if test="updateTime != null">
+            AND RA.updateTime = #{updateTime}
+        </if>
+    </sql>
+
+
+    <!-- 根据主键查找对应实体类 -->
+    <select id="findEntityByMainId" resultType="com.leng.sguide.module.leung.entity.UserInfoEntity">
+        SELECT
+            <include refid="user_info_columns"></include>
+        FROM user_info RA
+        WHERE id = #{0}
+    </select>
+
+
+    <!-- 根据条件查出来是单条实体类 -->
+    <select id="findEntityByOne" parameterType="com.leng.sguide.module.leung.entity.UserInfoEntity" resultType="com.leng.sguide.module.leung.entity.UserInfoEntity">
+        SELECT
+            <include refid="user_info_columns"></include>
+        FROM
+            user_info RA
+        <where>
+            <include refid="whereColumns"></include>
+        </where>
+    </select>
+
+
+    <!-- 根据列条件查找实体类集合 -->
+    <select id="findEntityList" parameterType="com.leng.sguide.module.leung.entity.UserInfoEntity" resultType="com.leng.sguide.module.leung.entity.UserInfoEntity">
+        SELECT
+            <include refid="user_info_columns"></include>
+        FROM
+            user_info RA
+        <where>
+            <include refid="whereColumns"></include>
+        </where>
+    </select>
+
+
+    <!-- 查询记录数 -->
+    <select id="findEntityCount" parameterType="com.leng.sguide.module.leung.entity.UserInfoEntity" resultType="long">
+        SELECT
+            count(1)
+        FROM
+            user_info RA
+        <where>
+            <include refid="whereColumns"></include>
+        </where>
+    </select>
+
+
+    <!-- 单表分页查询 -->
+    <select id="findPageEntityList" parameterType="map" resultType="com.leng.sguide.module.leung.entity.UserInfoEntity">
+        SELECT
+            <include refid="user_info_columns"></include>
+        FROM
+            user_info RA
+        <where>
+            <include refid="whereColumns"></include>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderColumn!=null">
+                RA.${orderColumn}
+            </when>
+            <otherwise>
+                RA.createTime
+            </otherwise>
+        </choose>
+        <choose>
+            <when test="sortColumn!=null">
+                ${sortColumn}
+            </when>
+            <otherwise>
+                DESC
+            </otherwise>
+        </choose>
+        LIMIT #{pageStart},#{pageSize}
+    </select>
+
+
+    <!-- 单表分页查询总计数量 -->
+    <select id="findPageEntityCount" parameterType="map" resultType="long">
+        SELECT
+            count(1)
+        FROM
+            user_info RA
+        <where>
+            <include refid="whereColumns"></include>
+        </where>
+    </select>
+
+
+</mapper>

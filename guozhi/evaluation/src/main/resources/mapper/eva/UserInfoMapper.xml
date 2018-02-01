@@ -11,7 +11,7 @@
         RA.id,RA.username,RA.password,RA.email,RA.identity,RA.number,RA.college,RA.profession,RA.phone,RA.statu,RA.createTime,RA.updateTime
     </sql>
 
-    
+
     <!-- user_info表的resultMap映射 -->
     <resultMap id="entityResultMap" type="com.gz.evalution.module.eva.entity.UserInfoEntity">
         <id  property="id"  column="id"/>
@@ -30,7 +30,7 @@
 
 
     <!-- 添加一条记录 -->
-    <insert id="insertEntity" parameterType="com.gz.evalution.module.eva.entity.UserInfoEntity">
+    <insert id="insertEntity" parameterType="com.gz.evalution.module.eva.entity.UserInfoEntity" keyProperty="id" useGeneratedKeys="true">
         INSERT INTO user_info
         <trim prefix="(" suffix=")" suffixOverrides=",">
             id,
@@ -60,7 +60,7 @@
 
 
     <!-- 批量添加 -->
-    <insert id="insertEntityByBatch" parameterType="list">
+    <insert id="insertEntityByBatch" parameterType="list" keyProperty="id" useGeneratedKeys="true">
         INSERT INTO user_info
         <trim prefix="(" suffix=") VALUES" suffixOverrides=",">
             id,
@@ -75,7 +75,7 @@
             statu,
         </trim>
         <foreach collection="list" index="index" item="item" separator=",">
-        (
+            (
             #{item.id},
             #{item.username},
             #{item.password},
@@ -86,7 +86,7 @@
             #{item.profession},
             #{item.phone},
             #{item.statu}
-        )
+            )
         </foreach>
     </insert>
 
@@ -135,51 +135,49 @@
 
     <!-- 根据列条件查询实体类信息 -->
     <sql id="whereColumns">
-        <trim suffixOverrides=",">
-            <if test="id != null">
-                RA.id = #{id},
-            </if>
-            <if test="username != null">
-                RA.username = #{username},
-            </if>
-            <if test="password != null">
-                RA.password = #{password},
-            </if>
-            <if test="email != null">
-                RA.email = #{email},
-            </if>
-            <if test="identity != null">
-                RA.identity = #{identity},
-            </if>
-            <if test="number != null">
-                RA.number = #{number},
-            </if>
-            <if test="college != null">
-                RA.college = #{college},
-            </if>
-            <if test="profession != null">
-                RA.profession = #{profession},
-            </if>
-            <if test="phone != null">
-                RA.phone = #{phone},
-            </if>
-            <if test="statu != null">
-                RA.statu = #{statu},
-            </if>
-            <if test="createTime != null">
-                RA.createTime = #{createTime},
-            </if>
-            <if test="updateTime != null">
-                RA.updateTime = #{updateTime},
-            </if>
-        </trim>
+        <if test="id != null">
+            AND RA.id = #{id}
+        </if>
+        <if test="username != null">
+            AND RA.username = #{username}
+        </if>
+        <if test="password != null">
+            AND RA.password = #{password}
+        </if>
+        <if test="email != null">
+            AND RA.email = #{email}
+        </if>
+        <if test="identity != null">
+            AND RA.identity = #{identity}
+        </if>
+        <if test="number != null">
+            AND RA.number = #{number}
+        </if>
+        <if test="college != null">
+            AND RA.college = #{college}
+        </if>
+        <if test="profession != null">
+            AND RA.profession = #{profession}
+        </if>
+        <if test="phone != null">
+            AND RA.phone = #{phone}
+        </if>
+        <if test="statu != null">
+            AND RA.statu = #{statu}
+        </if>
+        <if test="createTime != null">
+            AND RA.createTime = #{createTime}
+        </if>
+        <if test="updateTime != null">
+            AND RA.updateTime = #{updateTime}
+        </if>
     </sql>
 
 
     <!-- 根据主键查找对应实体类 -->
     <select id="findEntityByMainId" resultType="com.gz.evalution.module.eva.entity.UserInfoEntity">
         SELECT
-            <include refid="user_info_columns"></include>
+        <include refid="user_info_columns"></include>
         FROM user_info RA
         WHERE id = #{0}
     </select>
@@ -188,9 +186,9 @@
     <!-- 根据条件查出来是单条实体类 -->
     <select id="findEntityByOne" parameterType="com.gz.evalution.module.eva.entity.UserInfoEntity" resultType="com.gz.evalution.module.eva.entity.UserInfoEntity">
         SELECT
-            <include refid="user_info_columns"></include>
+        <include refid="user_info_columns"></include>
         FROM
-            user_info RA
+        user_info RA
         <where>
             <include refid="whereColumns"></include>
         </where>
@@ -200,9 +198,9 @@
     <!-- 根据列条件查找实体类集合 -->
     <select id="findEntityList" parameterType="com.gz.evalution.module.eva.entity.UserInfoEntity" resultType="com.gz.evalution.module.eva.entity.UserInfoEntity">
         SELECT
-            <include refid="user_info_columns"></include>
+        <include refid="user_info_columns"></include>
         FROM
-            user_info RA
+        user_info RA
         <where>
             <include refid="whereColumns"></include>
         </where>
@@ -212,9 +210,9 @@
     <!-- 查询记录数 -->
     <select id="findEntityCount" parameterType="com.gz.evalution.module.eva.entity.UserInfoEntity" resultType="long">
         SELECT
-            count(1)
+        count(1)
         FROM
-            user_info RA
+        user_info RA
         <where>
             <include refid="whereColumns"></include>
         </where>
@@ -224,12 +222,42 @@
     <!-- 单表分页查询 -->
     <select id="findPageEntityList" parameterType="map" resultType="com.gz.evalution.module.eva.entity.UserInfoEntity">
         SELECT
-            <include refid="user_info_columns"></include>
+        <include refid="user_info_columns"></include>
         FROM
-            user_info RA
-        <if test="start!=null and pageSize !=null">
-            LIMIT #{start},#{pageSize}
-        </if>
+        user_info RA
+        <where>
+            <include refid="whereColumns"></include>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderColumn!=null">
+                RA.${orderColumn}
+            </when>
+            <otherwise>
+                RA.createTime
+            </otherwise>
+        </choose>
+        <choose>
+            <when test="sortColumn!=null">
+                ${sortColumn}
+            </when>
+            <otherwise>
+                DESC
+            </otherwise>
+        </choose>
+        LIMIT #{pageStart},#{pageSize}
+    </select>
+
+
+    <!-- 单表分页查询总计数量 -->
+    <select id="findPageEntityCount" parameterType="map" resultType="long">
+        SELECT
+        count(1)
+        FROM
+        user_info RA
+        <where>
+            <include refid="whereColumns"></include>
+        </where>
     </select>
 
 

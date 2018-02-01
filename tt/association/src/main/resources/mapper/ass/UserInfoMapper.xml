@@ -11,7 +11,7 @@
         RA.id,RA.username,RA.password,RA.realName,RA.email,RA.phone,RA.createTime,RA.updateTime
     </sql>
 
-    
+
     <!-- user_info表的resultMap映射 -->
     <resultMap id="entityResultMap" type="com.tt.association.module.ass.entity.UserInfoEntity">
         <id  property="id"  column="id"/>
@@ -59,14 +59,14 @@
             phone,
         </trim>
         <foreach collection="list" index="index" item="item" separator=",">
-        (
+            (
             #{item.id},
             #{item.username},
             #{item.password},
             #{item.realName},
             #{item.email},
             #{item.phone}
-        )
+            )
         </foreach>
     </insert>
 
@@ -103,39 +103,37 @@
 
     <!-- 根据列条件查询实体类信息 -->
     <sql id="whereColumns">
-        <trim suffixOverrides=",">
-            <if test="id != null">
-                RA.id = #{id},
-            </if>
-            <if test="username != null">
-                RA.username = #{username},
-            </if>
-            <if test="password != null">
-                RA.password = #{password},
-            </if>
-            <if test="realName != null">
-                RA.realName = #{realName},
-            </if>
-            <if test="email != null">
-                RA.email = #{email},
-            </if>
-            <if test="phone != null">
-                RA.phone = #{phone},
-            </if>
-            <if test="createTime != null">
-                RA.createTime = #{createTime},
-            </if>
-            <if test="updateTime != null">
-                RA.updateTime = #{updateTime},
-            </if>
-        </trim>
+        <if test="id != null">
+            AND RA.id = #{id}
+        </if>
+        <if test="username != null">
+            AND RA.username = #{username}
+        </if>
+        <if test="password != null">
+            AND RA.password = #{password}
+        </if>
+        <if test="realName != null">
+            AND RA.realName = #{realName}
+        </if>
+        <if test="email != null">
+            AND RA.email = #{email}
+        </if>
+        <if test="phone != null">
+            AND RA.phone = #{phone}
+        </if>
+        <if test="createTime != null">
+            AND RA.createTime = #{createTime}
+        </if>
+        <if test="updateTime != null">
+            AND RA.updateTime = #{updateTime}
+        </if>
     </sql>
 
 
     <!-- 根据主键查找对应实体类 -->
     <select id="findEntityByMainId" resultType="com.tt.association.module.ass.entity.UserInfoEntity">
         SELECT
-            <include refid="user_info_columns"></include>
+        <include refid="user_info_columns"></include>
         FROM user_info RA
         WHERE id = #{0}
     </select>
@@ -144,9 +142,9 @@
     <!-- 根据条件查出来是单条实体类 -->
     <select id="findEntityByOne" parameterType="com.tt.association.module.ass.entity.UserInfoEntity" resultType="com.tt.association.module.ass.entity.UserInfoEntity">
         SELECT
-            <include refid="user_info_columns"></include>
+        <include refid="user_info_columns"></include>
         FROM
-            user_info RA
+        user_info RA
         <where>
             <include refid="whereColumns"></include>
         </where>
@@ -156,9 +154,9 @@
     <!-- 根据列条件查找实体类集合 -->
     <select id="findEntityList" parameterType="com.tt.association.module.ass.entity.UserInfoEntity" resultType="com.tt.association.module.ass.entity.UserInfoEntity">
         SELECT
-            <include refid="user_info_columns"></include>
+        <include refid="user_info_columns"></include>
         FROM
-            user_info RA
+        user_info RA
         <where>
             <include refid="whereColumns"></include>
         </where>
@@ -168,9 +166,9 @@
     <!-- 查询记录数 -->
     <select id="findEntityCount" parameterType="com.tt.association.module.ass.entity.UserInfoEntity" resultType="long">
         SELECT
-            count(1)
+        count(1)
         FROM
-            user_info RA
+        user_info RA
         <where>
             <include refid="whereColumns"></include>
         </where>
@@ -180,12 +178,42 @@
     <!-- 单表分页查询 -->
     <select id="findPageEntityList" parameterType="map" resultType="com.tt.association.module.ass.entity.UserInfoEntity">
         SELECT
-            <include refid="user_info_columns"></include>
+        <include refid="user_info_columns"></include>
         FROM
-            user_info RA
-        <if test="start!=null and pageSize !=null">
-            LIMIT #{start},#{pageSize}
-        </if>
+        user_info RA
+        <where>
+            <include refid="whereColumns"></include>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderColumn!=null">
+                RA.${orderColumn}
+            </when>
+            <otherwise>
+                RA.createTime
+            </otherwise>
+        </choose>
+        <choose>
+            <when test="sortColumn!=null">
+                ${sortColumn}
+            </when>
+            <otherwise>
+                DESC
+            </otherwise>
+        </choose>
+        LIMIT #{pageStart},#{pageSize}
+    </select>
+
+
+    <!-- 单表分页查询总计数量 -->
+    <select id="findPageEntityCount" parameterType="map" resultType="long">
+        SELECT
+        count(1)
+        FROM
+        user_info RA
+        <where>
+            <include refid="whereColumns"></include>
+        </where>
     </select>
 
 

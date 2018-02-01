@@ -4,28 +4,38 @@
         <p class="info">企业信息管理</p>
         <div class="inputLen add-product">
             <el-form ref="form" :model="form" label-width="80px">
+                <el-form-item label="店铺名称">
+                    <span v-text="form.nick"></span>
+                </el-form-item>
+                <el-form-item label="账户余额">
+                    <span v-text="form.companyPrice"></span>&nbsp;&nbsp;元
+                </el-form-item>
                 <el-form-item label="公司名称">
-                    <el-input v-model="form.name" v-if="hasInfo"></el-input>
-                    <span v-text="form.name" v-else></span>
+                    <el-input v-model="form.companyName" v-if="hasInfo"></el-input>
+                    <span v-text="form.companyName" v-else></span>
                 </el-form-item>
                 <el-form-item label="联系人">
-                    <el-input v-model="form.name" v-if="hasInfo"></el-input>
-                    <span v-text="form.name" v-else></span>
+                    <el-input v-model="form.linkName" v-if="hasInfo"></el-input>
+                    <span v-text="form.linkName" v-else></span>
                 </el-form-item>
                 <el-form-item label="联系地址">
-                    <el-input v-model="form.name" v-if="hasInfo"></el-input>
-                    <span v-text="form.name" v-else></span>
+                    <el-input v-model="form.companyAddress" v-if="hasInfo"></el-input>
+                    <span v-text="form.companyAddress" v-else></span>
+                </el-form-item>
+                <el-form-item label="企业邮箱">
+                    <el-input v-model="form.email" v-if="hasInfo"></el-input>
+                    <span v-text="form.email" v-else></span>
                 </el-form-item>
                 <el-form-item label="手机号">
-                    <el-input v-model="form.name" type="number" v-if="hasInfo"></el-input>
-                    <span v-text="form.name" v-else></span>
+                    <el-input v-model="form.phone" type="tel" :maxlength="11" v-if="hasInfo"></el-input>
+                    <span v-text="form.phone" v-else></span>
                 </el-form-item>
                 <el-form-item label="座机">
-                    <el-input v-model="form.name" v-if="hasInfo"></el-input>
-                    <span v-text="form.name" v-else></span>
+                    <el-input v-model="form.telPhone" v-if="hasInfo"></el-input>
+                    <span v-text="form.telPhone" v-else></span>
                 </el-form-item>
                 <el-form-item>
-                    <el-button style="margin-left:100px;margin-top:20px" type="primary" @click="onSubmit">{{hasInfo?"提交信息":"修改信息"}}</el-button>
+                    <el-button style="margin-left:100px;margin-top:20px" type="primary" @click="onSubmit" v-text="sureButn"></el-button>
                 </el-form-item>
             </el-form>
         </div>
@@ -38,32 +48,56 @@
     export default{
         data(){
             return {
-                hasInfo:false,
-                form: {
-                    name: '公司名称',
-                    region: '',
-                    date1: '',
-                    date2: '',
-                    delivery: false,
-                    type: [],
-                    resource: '',
-                    desc: ''
-                }
+                sureButn:'提交',
+                hasInfo:true,
+                form: {}
             }
         },
         methods: {
             onSubmit() {
 
-                if(this.hasInfo){
-                    //提交信息
+                if(this.sureButn=='提交'){
+                    if(this.form.companyName==null || this.form.companyAddress==null || this.form.linkName==null || this.form.telPhone==null)
+                        return this.$message.warning('请将信息填写完毕');
 
-
+                    this.$http.axios({
+                        url:'/userInfo/updateUserInfoEntity',
+                        method:'post',
+                        data:this.form,
+                        json:true,
+                    }).then(resolve=>{
+                        this.hasInfo = !this.hasInfo;
+                        this.$message.success('修改完毕');
+                        this.sureButn='修改';
+                    }).catch(err=>{
+                        console.log("失败了")
+                    })
+                }else{
+                    this.hasInfo = !this.hasInfo;
+                    this.sureButn='提交';
                 }
-                this.hasInfo = !this.hasInfo;
-            }
+            },
+            getUserInfo(){
+                this.$http.axios({
+                    url:'/userInfo/getUserInfoEntity',
+                    method:'get',
+                }).then(resolve=>{
+
+                    if(resolve.telPhone){
+                        this.hasInfo = !this.hasInfo;
+                        this.sureButn='修改';
+                    }
+                    this.form = resolve;
+                }).catch(err=>{
+                    console.log("失败了")
+                })
+            },
         },
         components:{
 
+        },
+        created(){
+            this.getUserInfo();
         }
     }
 </script>

@@ -78,5 +78,11 @@ public interface BaseDao<T> {
     List<T> findPageEntityList(Map<String, Object> map) throws Exception;
 
 
+    /**
+     * 单表分页查询总共数量
+     * @author by@Deng
+     * @date 2017/10/23 下午9:12
+     */
+    Long findPageEntityCount(Map<String, Object> map) throws Exception;
 
 }

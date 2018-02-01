@@ -10,6 +10,8 @@ import queryProduct from '@/computer/components/product/queryProduct'         //
 import orderList from '@/computer/components/product/orderList'         //首页
 import shopCar from '@/computer/components/product/shopCar'         //首页
 import company from '@/computer/components/login/company'         //首页
+import addPerson from '@/computer/components/company/addPerson'         //首页
+import person from '@/computer/components/login/person'         //首页
 import addProduct from '@/computer/components/company/addProduct'         //首页
 import queryCompany from '@/computer/components/company/queryCompany'         //首页
 
@@ -21,7 +23,7 @@ export default new Router({
     base:'/',
     //初始路由
     routes: [
-        {name: 'login',path: '/login',component: login},   //登录页
+        {name: 'login',path: '/login/:loginFlag',component: login},   //登录页
         {name: 'root',path: '/',redirect: '/index'},   //访问根实例,不加任何其他路由
         {
             name: 'index',
@@ -39,7 +41,7 @@ export default new Router({
                 },
                 {
                     name: 'detail',
-                    path: 'detail',
+                    path: 'detail/:id',
                     component: detail,
                 },
                 {
@@ -69,6 +71,18 @@ export default new Router({
                     name:'queryCompany',
                     path: 'queryCompany',
                     component: queryCompany,
+                },
+            ]
+        },
+        {
+            name: 'person',
+            path: '/person',
+            component: person,
+            children:[
+                {
+                    name:'addPerson',
+                    path: 'addPerson',
+                    component: addPerson,
                 },
             ]
         },

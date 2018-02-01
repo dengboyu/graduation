@@ -11,7 +11,7 @@
         RA.id,RA.comName,RA.linkPhone,RA.linkName,RA.fax,RA.email,RA.address,RA.createTime,RA.updateTime
     </sql>
 
-    
+
     <!-- company表的resultMap映射 -->
     <resultMap id="entityResultMap" type="com.tt.association.module.ass.entity.CompanyEntity">
         <id  property="id"  column="id"/>
@@ -63,7 +63,7 @@
             address,
         </trim>
         <foreach collection="list" index="index" item="item" separator=",">
-        (
+            (
             #{item.id},
             #{item.comName},
             #{item.linkPhone},
@@ -71,7 +71,7 @@
             #{item.fax},
             #{item.email},
             #{item.address}
-        )
+            )
         </foreach>
     </insert>
 
@@ -111,42 +111,40 @@
 
     <!-- 根据列条件查询实体类信息 -->
     <sql id="whereColumns">
-        <trim suffixOverrides=",">
-            <if test="id != null">
-                RA.id = #{id},
-            </if>
-            <if test="comName != null">
-                RA.comName = #{comName},
-            </if>
-            <if test="linkPhone != null">
-                RA.linkPhone = #{linkPhone},
-            </if>
-            <if test="linkName != null">
-                RA.linkName = #{linkName},
-            </if>
-            <if test="fax != null">
-                RA.fax = #{fax},
-            </if>
-            <if test="email != null">
-                RA.email = #{email},
-            </if>
-            <if test="address != null">
-                RA.address = #{address},
-            </if>
-            <if test="createTime != null">
-                RA.createTime = #{createTime},
-            </if>
-            <if test="updateTime != null">
-                RA.updateTime = #{updateTime},
-            </if>
-        </trim>
+        <if test="id != null">
+            AND RA.id = #{id}
+        </if>
+        <if test="comName != null">
+            AND RA.comName = #{comName}
+        </if>
+        <if test="linkPhone != null">
+            AND RA.linkPhone = #{linkPhone}
+        </if>
+        <if test="linkName != null">
+            AND RA.linkName = #{linkName}
+        </if>
+        <if test="fax != null">
+            AND RA.fax = #{fax}
+        </if>
+        <if test="email != null">
+            AND RA.email = #{email}
+        </if>
+        <if test="address != null">
+            AND RA.address = #{address}
+        </if>
+        <if test="createTime != null">
+            AND RA.createTime = #{createTime}
+        </if>
+        <if test="updateTime != null">
+            AND RA.updateTime = #{updateTime}
+        </if>
     </sql>
 
 
     <!-- 根据主键查找对应实体类 -->
     <select id="findEntityByMainId" resultType="com.tt.association.module.ass.entity.CompanyEntity">
         SELECT
-            <include refid="company_columns"></include>
+        <include refid="company_columns"></include>
         FROM company RA
         WHERE id = #{0}
     </select>
@@ -155,9 +153,9 @@
     <!-- 根据条件查出来是单条实体类 -->
     <select id="findEntityByOne" parameterType="com.tt.association.module.ass.entity.CompanyEntity" resultType="com.tt.association.module.ass.entity.CompanyEntity">
         SELECT
-            <include refid="company_columns"></include>
+        <include refid="company_columns"></include>
         FROM
-            company RA
+        company RA
         <where>
             <include refid="whereColumns"></include>
         </where>
@@ -167,9 +165,9 @@
     <!-- 根据列条件查找实体类集合 -->
     <select id="findEntityList" parameterType="com.tt.association.module.ass.entity.CompanyEntity" resultType="com.tt.association.module.ass.entity.CompanyEntity">
         SELECT
-            <include refid="company_columns"></include>
+        <include refid="company_columns"></include>
         FROM
-            company RA
+        company RA
         <where>
             <include refid="whereColumns"></include>
         </where>
@@ -179,9 +177,9 @@
     <!-- 查询记录数 -->
     <select id="findEntityCount" parameterType="com.tt.association.module.ass.entity.CompanyEntity" resultType="long">
         SELECT
-            count(1)
+        count(1)
         FROM
-            company RA
+        company RA
         <where>
             <include refid="whereColumns"></include>
         </where>
@@ -191,12 +189,42 @@
     <!-- 单表分页查询 -->
     <select id="findPageEntityList" parameterType="map" resultType="com.tt.association.module.ass.entity.CompanyEntity">
         SELECT
-            <include refid="company_columns"></include>
+        <include refid="company_columns"></include>
         FROM
-            company RA
-        <if test="start!=null and pageSize !=null">
-            LIMIT #{start},#{pageSize}
-        </if>
+        company RA
+        <where>
+            <include refid="whereColumns"></include>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderColumn!=null">
+                RA.${orderColumn}
+            </when>
+            <otherwise>
+                RA.createTime
+            </otherwise>
+        </choose>
+        <choose>
+            <when test="sortColumn!=null">
+                ${sortColumn}
+            </when>
+            <otherwise>
+                DESC
+            </otherwise>
+        </choose>
+        LIMIT #{pageStart},#{pageSize}
+    </select>
+
+
+    <!-- 单表分页查询总计数量 -->
+    <select id="findPageEntityCount" parameterType="map" resultType="long">
+        SELECT
+        count(1)
+        FROM
+        company RA
+        <where>
+            <include refid="whereColumns"></include>
+        </where>
     </select>
 
 

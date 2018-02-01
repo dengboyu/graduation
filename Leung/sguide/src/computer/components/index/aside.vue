@@ -64,6 +64,10 @@
                         className:"icon-tushu",
                         sortName:"图书"
                     },
+                    {
+                        className:"icon-chuweizhucai",
+                        sortName:"全部"
+                    },
                 ]
             }
         },

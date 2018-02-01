@@ -19,3 +19,12 @@ body{
 .el-button{
     border-radius: 0px;
 }
+.btnGoShop .el-form .el-form-item .el-form-item__content{
+    text-align: left;
+}
+.el-textarea__inner{
+    border-radius: 0px;
+}
+.el-radio{
+    font-weight: normal;
+}

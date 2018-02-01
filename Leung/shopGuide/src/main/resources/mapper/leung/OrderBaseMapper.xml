@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.leng.sguide.module.leung.dao.OrderBaseDao">
+
+    <!-- 以下代码片段中,order_base表的别名为RA -->
+
+    <!-- order_base表的字段 -->
+    <sql id ="order_base_columns">
+        RA.id,RA.orderId,RA.userId,RA.productId,RA.account,RA.totalMoney,RA.address,RA.linkName,RA.phone,RA.createTime,RA.updateTime
+    </sql>
+
+    
+    <!-- order_base表的resultMap映射 -->
+    <resultMap id="entityResultMap" type="com.leng.sguide.module.leung.entity.OrderBaseEntity">
+        <id  property="id"  column="id"/>
+        <result  property="orderId"  column="orderId"/>
+        <result  property="userId"  column="userId"/>
+        <result  property="productId"  column="productId"/>
+        <result  property="account"  column="account"/>
+        <result  property="totalMoney"  column="totalMoney"/>
+        <result  property="address"  column="address"/>
+        <result  property="linkName"  column="linkName"/>
+        <result  property="phone"  column="phone"/>
+        <result  property="createTime"  column="createTime"/>
+        <result  property="updateTime"  column="updateTime"/>
+    </resultMap>
+
+
+    <!-- 添加一条记录 -->
+    <insert id="insertEntity" parameterType="com.leng.sguide.module.leung.entity.OrderBaseEntity" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO order_base
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            id,
+            orderId,
+            userId,
+            productId,
+            account,
+            totalMoney,
+            address,
+            linkName,
+            phone,
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            #{id},
+            #{orderId},
+            #{userId},
+            #{productId},
+            #{account},
+            #{totalMoney},
+            #{address},
+            #{linkName},
+            #{phone},
+        </trim>
+    </insert>
+
+
+    <!-- 批量添加 -->
+    <insert id="insertEntityByBatch" parameterType="list" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO order_base
+        <trim prefix="(" suffix=") VALUES" suffixOverrides=",">
+            id,
+            orderId,
+            userId,
+            productId,
+            account,
+            totalMoney,
+            address,
+            linkName,
+            phone,
+        </trim>
+        <foreach collection="list" index="index" item="item" separator=",">
+        (
+            #{item.id},
+            #{item.orderId},
+            #{item.userId},
+            #{item.productId},
+            #{item.account},
+            #{item.totalMoney},
+            #{item.address},
+            #{item.linkName},
+            #{item.phone}
+        )
+        </foreach>
+    </insert>
+
+
+    <!-- 更新一条记录 -->
+    <update id="updateEntity" parameterType="com.leng.sguide.module.leung.entity.OrderBaseEntity">
+        UPDATE order_base
+        <trim prefix="set" suffixOverrides=",">
+            <if test="orderId != null">
+                orderId = #{orderId},
+            </if>
+            <if test="userId != null">
+                userId = #{userId},
+            </if>
+            <if test="productId != null">
+                productId = #{productId},
+            </if>
+            <if test="account != null">
+                account = #{account},
+            </if>
+            <if test="totalMoney != null">
+                totalMoney = #{totalMoney},
+            </if>
+            <if test="address != null">
+                address = #{address},
+            </if>
+            <if test="linkName != null">
+                linkName = #{linkName},
+            </if>
+            <if test="phone != null">
+                phone = #{phone},
+            </if>
+        </trim>
+        WHERE id = #{id}
+    </update>
+
+
+    <!-- 根据主键删除一条记录 -->
+    <delete id="deleteEntity">
+        DELETE FROM order_base WHERE id = #{0}
+    </delete>
+
+
+    <!-- 根据列条件查询实体类信息 -->
+    <sql id="whereColumns">
+        <if test="id != null">
+            AND RA.id = #{id}
+        </if>
+        <if test="orderId != null">
+            AND RA.orderId = #{orderId}
+        </if>
+        <if test="userId != null">
+            AND RA.userId = #{userId}
+        </if>
+        <if test="productId != null">
+            AND RA.productId = #{productId}
+        </if>
+        <if test="account != null">
+            AND RA.account = #{account}
+        </if>
+        <if test="totalMoney != null">
+            AND RA.totalMoney = #{totalMoney}
+        </if>
+        <if test="address != null">
+            AND RA.address = #{address}
+        </if>
+        <if test="linkName != null">
+            AND RA.linkName = #{linkName}
+        </if>
+        <if test="phone != null">
+            AND RA.phone = #{phone}
+        </if>
+        <if test="createTime != null">
+            AND RA.createTime = #{createTime}
+        </if>
+        <if test="updateTime != null">
+            AND RA.updateTime = #{updateTime}
+        </if>
+    </sql>
+
+
+    <!-- 根据主键查找对应实体类 -->
+    <select id="findEntityByMainId" resultType="com.leng.sguide.module.leung.entity.OrderBaseEntity">
+        SELECT
+            <include refid="order_base_columns"></include>
+        FROM order_base RA
+        WHERE id = #{0}
+    </select>
+
+
+    <!-- 根据条件查出来是单条实体类 -->
+    <select id="findEntityByOne" parameterType="com.leng.sguide.module.leung.entity.OrderBaseEntity" resultType="com.leng.sguide.module.leung.entity.OrderBaseEntity">
+        SELECT
+            <include refid="order_base_columns"></include>
+        FROM
+            order_base RA
+        <where>
+            <include refid="whereColumns"></include>
+        </where>
+    </select>
+
+
+    <!-- 根据列条件查找实体类集合 -->
+    <select id="findEntityList" parameterType="com.leng.sguide.module.leung.entity.OrderBaseEntity" resultType="com.leng.sguide.module.leung.entity.OrderBaseEntity">
+        SELECT
+            <include refid="order_base_columns"></include>
+        FROM
+            order_base RA
+        <where>
+            <include refid="whereColumns"></include>
+        </where>
+    </select>
+
+
+    <!-- 查询记录数 -->
+    <select id="findEntityCount" parameterType="com.leng.sguide.module.leung.entity.OrderBaseEntity" resultType="long">
+        SELECT
+            count(1)
+        FROM
+            order_base RA
+        <where>
+            <include refid="whereColumns"></include>
+        </where>
+    </select>
+
+
+    <!-- 单表分页查询 -->
+    <select id="findPageEntityList" parameterType="map" resultType="com.leng.sguide.module.leung.entity.OrderBaseEntity">
+        SELECT
+            <include refid="order_base_columns"></include>
+        FROM
+            order_base RA
+        <where>
+            <include refid="whereColumns"></include>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderColumn!=null">
+                RA.${orderColumn}
+            </when>
+            <otherwise>
+                RA.createTime
+            </otherwise>
+        </choose>
+        <choose>
+            <when test="sortColumn!=null">
+                ${sortColumn}
+            </when>
+            <otherwise>
+                DESC
+            </otherwise>
+        </choose>
+        LIMIT #{pageStart},#{pageSize}
+    </select>
+
+
+    <!-- 单表分页查询总计数量 -->
+    <select id="findPageEntityCount" parameterType="map" resultType="long">
+        SELECT
+            count(1)
+        FROM
+            order_base RA
+        <where>
+            <include refid="whereColumns"></include>
+        </where>
+    </select>
+
+
+</mapper>

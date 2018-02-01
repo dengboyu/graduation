@@ -2,12 +2,21 @@
 <template>
     <div class="tmpl">
         <p class="hasOrder">购物车:</p>
-        <div class="shop-detail" v-for="(item,index) in shopList">
-            <p>店铺: &nbsp;<span v-text="item.shopName"></span></p>
-            <p>商品名称: &nbsp;<span v-text="item.productName"></span></p>
-            <p>单价: &nbsp;￥<span v-text="item.cent"></span></p>
-            <p>标签: &nbsp;<span v-text="item.tag"></span></p>
-            <div class="buy"><el-button type="success">购买</el-button></div>
+        <p v-if="total>0?false:true" class="no-shop">购物车暂无产品</p>
+        <div v-else>
+            <div class="shop-detail" v-for="(item,index) in shopList">
+                <p>店铺: &nbsp;<span v-text="item.nick"></span></p>
+                <p>商品名称: &nbsp;<span v-text="item.productName"></span></p>
+                <p>单价: &nbsp;￥<span v-text="item.centPrice"></span></p>
+                <p>标签: &nbsp;<span v-text="item.tag"></span></p>
+                <div class="buy">
+                    <el-button type="info" @click="deleteShopEntity(item.id)">删除</el-button>
+                    <el-button type="success" @click="goSureShop(item.productId)">购买</el-button>
+                </div>
+            </div>
+            <p class="pagination" style="margin-left:400px">
+                <el-pagination background layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="pageSize" :total="total"></el-pagination>
+            </p>
         </div>
     </div>
 </template>
@@ -18,24 +27,51 @@
     export default{
         data(){
             return {
-                shopList:[
-                    {
-                        shopName:'淘宝小店',
-                        productName:'零售汽车店机油',
-                        cent:1,
-                        tag:'食品 / 酒 / 生鲜'
-                    },
-                    {
-                        shopName:'淘宝小店',
-                        productName:'零售汽车店机油',
-                        cent:1,
-                        tag:'食品 / 酒 / 生鲜'
-                    }
-                ]
+                total:0,
+                pageSize:4,
+                shopList:[],
+            }
+        },
+        methods:{
+            getShopCarList(pageStart,pageSize){
+
+                this.$http.axios({
+                    url:'/shop/getShopCarList',
+                    method:'get',
+                    params:{pageStart:pageStart,pageSize:pageSize},
+                }).then(resolve=>{
+                    this.shopList = resolve.mapList;
+                    this.total = resolve.totalAccount;
+                }).catch(err=>{
+                    console.log("失败了")
+                })
+            },
+            handleCurrentChange(val){
+                this.getShopCarList(val,this.pageSize);
+            },
+            deleteShopEntity(id){
+
+                this.$http.axios({
+                    url:'/shop/deleteShopEntity',
+                    method:'post',
+                    data:{id:id}
+                }).then(resolve=>{
+                    this.$message.success('删除成功');
+                    this.getShopCarList(1,this.pageSize);
+                }).catch(err=>{
+                    console.log("失败了")
+                })
+
+            },
+            goSureShop(id){
+                this.$router.push({name:'detail',params:{id:id}});
             }
         },
         components:{
 
+        },
+        created(){
+            this.getShopCarList(1,this.pageSize);
         }
     }
 </script>
@@ -55,7 +91,7 @@
         padding-left: 10px;
     }
     .shop-detail{
-        width:600px;
+        width:800px;
         border:1px solid #666;
         height: 110px;
         margin-bottom: 20px;
@@ -70,6 +106,16 @@
     .buy{
         position: relative;
         top: -65px;
-        left: 80%;
+        left: 78%;
+    }
+    .el-form span{
+        color:#000;
+    }
+    .no-shop{
+        width: 100%;
+        background-color: #e6e6e6;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
     }
 </style>

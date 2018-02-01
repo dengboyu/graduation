@@ -11,7 +11,7 @@
         RA.id,RA.proNum,RA.proName,RA.startTime,RA.collegeId,RA.statu,RA.createTime,RA.updateTime
     </sql>
 
-    
+
     <!-- profession表的resultMap映射 -->
     <resultMap id="entityResultMap" type="com.gz.evalution.module.eva.entity.ProfessionEntity">
         <id  property="id"  column="id"/>
@@ -26,7 +26,7 @@
 
 
     <!-- 添加一条记录 -->
-    <insert id="insertEntity" parameterType="com.gz.evalution.module.eva.entity.ProfessionEntity">
+    <insert id="insertEntity" parameterType="com.gz.evalution.module.eva.entity.ProfessionEntity" keyProperty="id" useGeneratedKeys="true">
         INSERT INTO profession
         <trim prefix="(" suffix=")" suffixOverrides=",">
             id,
@@ -48,7 +48,7 @@
 
 
     <!-- 批量添加 -->
-    <insert id="insertEntityByBatch" parameterType="list">
+    <insert id="insertEntityByBatch" parameterType="list" keyProperty="id" useGeneratedKeys="true">
         INSERT INTO profession
         <trim prefix="(" suffix=") VALUES" suffixOverrides=",">
             id,
@@ -59,14 +59,14 @@
             statu,
         </trim>
         <foreach collection="list" index="index" item="item" separator=",">
-        (
+            (
             #{item.id},
             #{item.proNum},
             #{item.proName},
             #{item.startTime},
             #{item.collegeId},
             #{item.statu}
-        )
+            )
         </foreach>
     </insert>
 
@@ -103,39 +103,37 @@
 
     <!-- 根据列条件查询实体类信息 -->
     <sql id="whereColumns">
-        <trim suffixOverrides=",">
-            <if test="id != null">
-                RA.id = #{id},
-            </if>
-            <if test="proNum != null">
-                RA.proNum = #{proNum},
-            </if>
-            <if test="proName != null">
-                RA.proName = #{proName},
-            </if>
-            <if test="startTime != null">
-                RA.startTime = #{startTime},
-            </if>
-            <if test="collegeId != null">
-                RA.collegeId = #{collegeId},
-            </if>
-            <if test="statu != null">
-                RA.statu = #{statu},
-            </if>
-            <if test="createTime != null">
-                RA.createTime = #{createTime},
-            </if>
-            <if test="updateTime != null">
-                RA.updateTime = #{updateTime},
-            </if>
-        </trim>
+        <if test="id != null">
+            AND RA.id = #{id}
+        </if>
+        <if test="proNum != null">
+            AND RA.proNum = #{proNum}
+        </if>
+        <if test="proName != null">
+            AND RA.proName = #{proName}
+        </if>
+        <if test="startTime != null">
+            AND RA.startTime = #{startTime}
+        </if>
+        <if test="collegeId != null">
+            AND RA.collegeId = #{collegeId}
+        </if>
+        <if test="statu != null">
+            AND RA.statu = #{statu}
+        </if>
+        <if test="createTime != null">
+            AND RA.createTime = #{createTime}
+        </if>
+        <if test="updateTime != null">
+            AND RA.updateTime = #{updateTime}
+        </if>
     </sql>
 
 
     <!-- 根据主键查找对应实体类 -->
     <select id="findEntityByMainId" resultType="com.gz.evalution.module.eva.entity.ProfessionEntity">
         SELECT
-            <include refid="profession_columns"></include>
+        <include refid="profession_columns"></include>
         FROM profession RA
         WHERE id = #{0}
     </select>
@@ -144,9 +142,9 @@
     <!-- 根据条件查出来是单条实体类 -->
     <select id="findEntityByOne" parameterType="com.gz.evalution.module.eva.entity.ProfessionEntity" resultType="com.gz.evalution.module.eva.entity.ProfessionEntity">
         SELECT
-            <include refid="profession_columns"></include>
+        <include refid="profession_columns"></include>
         FROM
-            profession RA
+        profession RA
         <where>
             <include refid="whereColumns"></include>
         </where>
@@ -156,9 +154,9 @@
     <!-- 根据列条件查找实体类集合 -->
     <select id="findEntityList" parameterType="com.gz.evalution.module.eva.entity.ProfessionEntity" resultType="com.gz.evalution.module.eva.entity.ProfessionEntity">
         SELECT
-            <include refid="profession_columns"></include>
+        <include refid="profession_columns"></include>
         FROM
-            profession RA
+        profession RA
         <where>
             <include refid="whereColumns"></include>
         </where>
@@ -168,9 +166,9 @@
     <!-- 查询记录数 -->
     <select id="findEntityCount" parameterType="com.gz.evalution.module.eva.entity.ProfessionEntity" resultType="long">
         SELECT
-            count(1)
+        count(1)
         FROM
-            profession RA
+        profession RA
         <where>
             <include refid="whereColumns"></include>
         </where>
@@ -180,12 +178,42 @@
     <!-- 单表分页查询 -->
     <select id="findPageEntityList" parameterType="map" resultType="com.gz.evalution.module.eva.entity.ProfessionEntity">
         SELECT
-            <include refid="profession_columns"></include>
+        <include refid="profession_columns"></include>
         FROM
-            profession RA
-        <if test="start!=null and pageSize !=null">
-            LIMIT #{start},#{pageSize}
-        </if>
+        profession RA
+        <where>
+            <include refid="whereColumns"></include>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderColumn!=null">
+                RA.${orderColumn}
+            </when>
+            <otherwise>
+                RA.createTime
+            </otherwise>
+        </choose>
+        <choose>
+            <when test="sortColumn!=null">
+                ${sortColumn}
+            </when>
+            <otherwise>
+                DESC
+            </otherwise>
+        </choose>
+        LIMIT #{pageStart},#{pageSize}
+    </select>
+
+
+    <!-- 单表分页查询总计数量 -->
+    <select id="findPageEntityCount" parameterType="map" resultType="long">
+        SELECT
+        count(1)
+        FROM
+        profession RA
+        <where>
+            <include refid="whereColumns"></include>
+        </where>
     </select>
 
 

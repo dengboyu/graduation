@@ -8,9 +8,9 @@
             <el-container>
                 <el-header>
                     <p>
-                        <router-link to="/login" v-if="userInfo.name===null?true:false" class="login">Hi,请 登录</router-link>
-                        <span v-else class="login" style="margin-right:10px">Hi,您好: <span v-text="userInfo.name"></span></span>
-                        <router-link to="/register" >注册</router-link>
+                        <router-link to="/login/0" v-if="username==''?true:false" class="login">Hi,请 登录</router-link>
+                        <span v-else class="login" style="margin-right:10px">Hi,您好: <span class="goPerInfo" @click="goPerInfo" v-text="username"></span></span>
+                        <router-link to="/login/1" >注册</router-link>
                         <router-link to="/index/orderList">
                             <i class="el-icon-tickets"></i>
                             <span>我的订单</span>
@@ -19,7 +19,7 @@
                             <i class="iconfont icon-qicheqianlian-"></i>
                             <span>购物车</span>
                         </router-link>
-                        <span v-if="userInfo.name===null?false:true" class="logout" @click="logout">【退出】</span>
+                        <span v-if="username==''?false:true" class="logout" @click="logout">【退出】</span>
                     </p>
                 </el-header>
                 <el-main>
@@ -38,7 +38,7 @@
     export default{
         data(){
             return {
-
+                username:''
             }
         },
         created(){
@@ -46,15 +46,45 @@
         },
         methods:{
             logout(){
-                this.$store.state.userModule.userInfo.name=null;
-                this.$router.push({path:'/index'});
+                this.$http.axios({
+                    url:'/userInfo/logout',
+                    method:'post',
+                }).then(resolve=>{
+
+                    this.username='';
+                    this.$router.push({path:'/index'});
+
+                }).catch(err=>{
+                    console.log("失败了")
+                })
+
             },
+            goPerInfo(){
+                this.$router.push({path:'/person'});
+            },
+            getUserInfo(){
+                this.$http.axios({
+                    url:'/userInfo/getUserInfoEntity',
+                    method:'get',
+                }).then(resolve=>{
+
+                    if(resolve!=null){
+                        this.username=resolve.nick;
+                    }
+
+                }).catch(err=>{
+                    console.log("失败了")
+                })
+            }
         },
         computed:{
             ...mapState('userModule',['userInfo'])
         },
         components:{
             asideVue,
+        },
+        created(){
+            this.getUserInfo();
         }
     }
 </script>
@@ -115,5 +145,8 @@
     }
     .logout{
         margin-left:-20px;
+    }
+    .goPerInfo:hover{
+        cursor: pointer;
     }
 </style>

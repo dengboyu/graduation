@@ -25,9 +25,15 @@ export default {
                 "Content-Type": "application/json; charset=UTF-8"
             };
             if (options.method.toLowerCase() != 'get') {
+
+                let content_type='application/x-www-form-urlencoded; charset=UTF-8';
+                if(options.isImg){
+                    content_type= 'multipart/form-data';
+                }
+
                 header = {
                     'X-Requested-With': 'XMLHttpRequest',
-                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                    'Content-Type':content_type,
                 }
 
                 //是否json请求
@@ -50,7 +56,7 @@ export default {
 
             //创建axios实例
             let instance = axios.create({
-                // baseURL: baseURL,
+                baseURL: baseURL,
                 url: options.url,
                 method: options.method,
                 timeout: TIMEOUT, //请求超时
