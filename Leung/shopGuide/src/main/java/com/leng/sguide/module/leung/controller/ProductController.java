@@ -184,6 +184,14 @@ public class ProductController{
      */
     @GetMapping("getProductList")
     public Object getProductList(@RequestParam Map<String,Object> map) throws Exception{
+        Integer userId=null;
+        Object object = SecurityUtils.getSubject().getSession().getAttribute("currentUser");
+        if(object!=null){
+            UserInfoEntity userInfoEntity = (UserInfoEntity) object;
+            userId = userInfoEntity.getId();
+        }
+        map.put("userId",userId);
+
         return productService.getProductList(map);
     }
 

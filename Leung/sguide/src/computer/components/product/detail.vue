@@ -7,6 +7,7 @@
                 <!-- 左右 -->
                 <img :src="product.img">
                 <p class="shopName">店铺:<span v-text="product.nick" style="margin-left:10px"></span></p>
+                <p class="shopName">产品标签:<span style="margin-top:5px;margin-left:10px;display:inline-block;" v-text="product.tag"></span></p>
             </div>
             <div class="detail-right">
                 <p class="detail-title" v-text="product.productName"></p>

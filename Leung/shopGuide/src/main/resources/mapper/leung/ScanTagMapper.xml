@@ -195,4 +195,17 @@
     </select>
 
 
+	<select id="getScanTagEntityOrder" resultType="java.util.Map">
+        SELECT
+            tag ,
+            amount,
+            (amount/(select sum(amount) from scan_tag where userId=#{id})) score
+        FROM
+            scan_tag ST
+        WHERE
+            ST.userId = #{id}
+        ORDER BY score DESC
+    </select>
+
+
 </mapper>

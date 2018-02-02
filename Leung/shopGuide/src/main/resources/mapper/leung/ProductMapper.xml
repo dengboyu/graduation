@@ -285,6 +285,17 @@
         <if test="tag != null">
             AND RA.tag = #{tag}
         </if>
+        <if test="tagList == 2">
+            AND RA.tag in (
+                    SELECT
+                      DISTINCT(tag)
+                    FROM
+                      shop S
+                    JOIN product P ON p.id = S.productId
+                    WHERE
+                    S.userId = #{userId}
+            )
+        </if>
         <if test="beginPrice != null and beginPrice != ''">
             AND RA.centPrice &gt;= #{beginPrice}
         </if>
@@ -319,23 +330,43 @@
     <select id="findPageEntityList" parameterType="map" resultType="com.leng.sguide.module.leung.entity.ProductEntity">
         SELECT
             <include refid="product_columns"></include>
-            ,(
-                score * 0.3 + scanAmount * 0.1 + saleAmount * 0.2 + advPrice * 0.4
-            ) finalSort
+            ,(score * 0.3 + scanAmount * 0.1 + saleAmount * 0.2 + advPrice * 0.4) finalSort
         FROM
             product RA
+        <if test="tagList == 1">
+            LEFT join (SELECT
+                        tag scanTag,
+                        (amount/(select sum(amount) from scan_tag where userId=#{userId})) scoreCiShu
+                        FROM
+                          scan_tag ST
+                        WHERE
+                        ST.userId = #{userId}) SCAN on SCAN.scanTag = RA.tag
+        </if>
         <where>
             <include refid="whereColumnsPage"></include>
         </where>
-        ORDER BY  finalSort
-        <choose>
-            <when test="sortColumn!=null">
-                ${sortColumn}
-            </when>
-            <otherwise>
-                DESC
-            </otherwise>
-        </choose>
+        ORDER BY
+        <if test="tagList == 1">
+            SCAN.scoreCiShu DESC,finalSort DESC
+        </if>
+        <if test="tagList != 1">
+            <choose>
+                <when test="orderColumn!=null">
+                    ${orderColumn}
+                </when>
+                <otherwise>
+                    finalSort
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="sortColumn!=null">
+                    ${sortColumn}
+                </when>
+                <otherwise>
+                    DESC
+                </otherwise>
+            </choose>
+        </if>
         LIMIT #{pageStart},#{pageSize}
     </select>
 
@@ -346,6 +377,15 @@
             count(1)
         FROM
             product RA
+        <if test="tagList == 1">
+            LEFT join (SELECT
+            tag scanTag,
+            (amount/(select sum(amount) from scan_tag where userId=#{userId})) scoreCiShu
+            FROM
+            scan_tag ST
+            WHERE
+            ST.userId = #{userId}) SCAN on SCAN.scanTag = RA.tag
+        </if>
         <where>
             <include refid="whereColumnsPage"></include>
         </where>
