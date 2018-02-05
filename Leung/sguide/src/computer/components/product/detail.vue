@@ -54,11 +54,11 @@
         <el-dialog  :visible.sync="dialogVisible" width="40%" class="btnGoShop">
             <p style="margin-left:-380px;">总价格:<span style="margin:0 20px;" v-text="orderBase.totalMoney"></span>元</p>
             <el-form ref="form" label-width="90px">
-                <el-form-item label="收获人:">
+                <el-form-item label="收货人:">
                     <el-input v-model="orderBase.linkName" v-if="shopInfo"></el-input>
                     <span v-text = "orderBase.linkName" v-else></span>
                 </el-form-item>
-                <el-form-item label="收获地址:">
+                <el-form-item label="收货地址:">
                     <el-input v-model="orderBase.address" v-if="shopInfo"></el-input>
                     <span v-text = "orderBase.address" v-else></span>
                 </el-form-item>

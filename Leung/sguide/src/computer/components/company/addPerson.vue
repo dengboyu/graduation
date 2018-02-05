@@ -15,11 +15,11 @@
                     <el-input v-model="form.phone" v-if="flag"></el-input>
                     <span v-text="form.phone" v-else></span>
                 </el-form-item>
-                <el-form-item label="收获人">
+                <el-form-item label="收货人">
                     <el-input v-model="form.harvestPeople" v-if="flag"></el-input>
                     <span v-text="form.harvestPeople" v-else></span>
                 </el-form-item>
-                <el-form-item label="收获地址">
+                <el-form-item label="收货地址">
                     <el-input v-model="form.harvestAddress" v-if="flag"></el-input>
                     <span v-text="form.harvestAddress" v-else></span>
                 </el-form-item>
