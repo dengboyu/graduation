@@ -1,0 +1,28 @@
+.el-button,.el-input__inner{
+    border-radius: 0px;
+}
+a{
+    color: #000;
+    font-size:14px;
+}
+.el-form-item__label{
+    font-size:15px;
+}
+.el-form-item{
+    margin-bottom: 10px;
+}
+.el-radio{
+    font-weight: normal;
+}
+.el-menu-item, .el-submenu__title,
+.el-submenu .el-menu-item{
+    height:45px;
+    line-height: 45px;
+}
+.el-submenu__title:hover,
+.el-menu-item:hover{
+    background-color:rgb(187, 215, 255)!important;
+}
+.el-submenu__title{
+    padding-left: 0px!important;
+}

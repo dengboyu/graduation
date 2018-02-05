@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!--mybatis全局设置-->
+
+	<settings>
+		<setting name="mapUnderscoreToCamelCase" value="true" /> <!--开启驼峰命名转换:create_time -> createTime -->
+		<setting name="lazyLoadingEnabled" value="true"/>	<!-- 开启懒加载 -->
+		<setting name="aggressiveLazyLoading" value="false"/>	<!-- 开启懒加载时,是否积极按需加载 -->
+		<setting name="cacheEnabled" value="true"/>	<!-- 二级缓存 -->
+		<setting name="defaultStatementTimeout" value="20"/>	<!-- 超时设置,20s -->
+	</settings>
+
+	<!--别名-->
+	<typeAliases></typeAliases>
+
+
+	
+
+
+
+
+</configuration>
