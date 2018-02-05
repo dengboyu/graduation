@@ -40,7 +40,7 @@ public class RemarkController{
      */
     @GetMapping("getRemarkEntityList")
     public Object getRemarkEntityList() throws Exception{
-        return remarkService.findPageEntityList(null);
+        return remarkService.findEntityList(null);
     }
 
 
