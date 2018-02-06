@@ -26,3 +26,39 @@ a{
 .el-submenu__title{
     padding-left: 0px!important;
 }
+.group-button .el-button{
+    padding:0px;
+    font-size:12px;
+}
+.el-dialog__body{
+    text-align: center;
+}
+.friend-dialog .el-dialog__body{
+    text-align: left!important;
+}
+.el-table th .cell,
+.el-table tr td{
+    text-align: center;
+}
+.el-table th,.el-table tr {
+    background-color: #e0dcdc;
+}
+.el-table th:hover,.el-table tr:hover {
+    background-color: #e0dcdc!important;
+}
+.el-table td, .el-table th{
+    padding:7px 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

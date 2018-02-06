@@ -11,6 +11,10 @@ import update from '@/computer/components/person/update'         //首页
 import query from '@/computer/components/person/query'         //首页
 import addFriend from '@/computer/components/friend/addFriend'         //首页
 import hasFriend from '@/computer/components/friend/hasFriend'         //首页
+import friendGroup from '@/computer/components/friend/friendGroup'         //首页
+import actList from '@/computer/components/act/actList'         //首页
+import shopList from '@/computer/components/act/shopList'         //首页
+import actDetail from '@/computer/components/act/actDetail'         //首页
 
 
 Vue.use(Router)
@@ -67,6 +71,26 @@ export default new Router({
                     name:'hasFriend',
                     path: 'hasFriend',
                     component: hasFriend
+                },
+                {
+                    name:'friendGroup',
+                    path: 'friendGroup',
+                    component: friendGroup
+                },
+                {
+                    name:'actList',
+                    path: 'actList',
+                    component: actList
+                },
+                {
+                    name:'actDetail',
+                    path: 'actDetail',
+                    component: actDetail
+                },
+                {
+                    name:'shopList',
+                    path: 'shopList',
+                    component: shopList
                 },
             ]
         },   //首页

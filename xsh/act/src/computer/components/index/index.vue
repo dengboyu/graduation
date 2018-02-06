@@ -16,8 +16,8 @@
                             <template slot="title">
                               <span>活动信息</span>
                             </template>
-                            <el-menu-item index="1-1" :route='{"path":""}'>活动列表</el-menu-item>
-                            <el-menu-item index="1-2" :route='{"path":""}'>活动收藏</el-menu-item>
+                            <el-menu-item index="1-1" :route='{"path":"/index/actList"}'>活动列表</el-menu-item>
+                            <el-menu-item index="1-2" :route='{"path":"/index/shopList"}'>活动收藏</el-menu-item>
                             </el-submenu>
                         </el-submenu>
                         <el-submenu index="2">
@@ -25,7 +25,8 @@
                               <span>好友管理</span>
                             </template>
                             <el-menu-item index="2-1" :route='{"path":"/index/hasFriend"}'>好友列表</el-menu-item>
-                            <el-menu-item index="2-2" :route='{"path":"/index/addFriend"}'>添加好友</el-menu-item>
+                            <el-menu-item index="2-2" :route='{"path":"/index/friendGroup"}'>分组管理</el-menu-item>
+                            <el-menu-item index="2-3" :route='{"path":"/index/addFriend"}'>添加好友</el-menu-item>
                             </el-submenu>
                         </el-submenu>
                         <el-submenu index="3">
@@ -93,7 +94,7 @@
         border-right: 1px solid #e8dddd;
     }
     .el-main {
-        background-color: #E9EEF3;
+        /*background-color: #E9EEF3;*/
         color: #333;
     }
     .index-hd{
