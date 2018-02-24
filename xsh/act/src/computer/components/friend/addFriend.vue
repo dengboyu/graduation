@@ -18,6 +18,12 @@
           <el-form-item label="姓名">
             <el-input v-model="form.name" class="input-width"></el-input>
           </el-form-item>
+          <el-form-item label="分组">
+            <el-select v-model="form.region" placeholder="请选择分组">
+              <el-option label="区域一" value="shanghai"></el-option>
+              <el-option label="区域二" value="beijing"></el-option>
+            </el-select>
+          </el-form-item>
           <el-form-item label="学院">
             <el-select v-model="form.region" placeholder="请选择学院">
               <el-option label="区域一" value="shanghai"></el-option>

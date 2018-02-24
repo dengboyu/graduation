@@ -14,28 +14,17 @@
                     <el-menu default-active="2" class="el-menu-vertical-demo" background-color="#dae7fa" active-text-color="gray" :unique-opened="true" :router="true">
                         <el-submenu index="1">
                             <template slot="title">
-                              <span>活动信息</span>
+                              <span>活动管理</span>
                             </template>
-                            <el-menu-item index="1-1" :route='{"path":"/index/actList"}'>活动列表</el-menu-item>
-                            <el-menu-item index="1-2" :route='{"path":"/index/shopList"}'>活动收藏</el-menu-item>
-                            <el-menu-item index="1-3" :route='{"path":"/index/actFriend"}'>好友推荐</el-menu-item>
+                            <el-menu-item index="1-1" :route='{"path":"/admin/addAct"}'>活动添加</el-menu-item>
+                            <el-menu-item index="1-2" :route='{"path":"/admin/adminAct"}'>活动列表</el-menu-item>
                             </el-submenu>
                         </el-submenu>
                         <el-submenu index="2">
                             <template slot="title">
-                              <span>好友管理</span>
+                              <span>社团管理</span>
                             </template>
-                            <el-menu-item index="2-1" :route='{"path":"/index/hasFriend"}'>好友列表</el-menu-item>
-                            <el-menu-item index="2-2" :route='{"path":"/index/friendGroup"}'>分组管理</el-menu-item>
-                            <el-menu-item index="2-3" :route='{"path":"/index/addFriend"}'>添加好友</el-menu-item>
-                            </el-submenu>
-                        </el-submenu>
-                        <el-submenu index="3">
-                            <template slot="title">
-                              <span>个人信息</span>
-                            </template>
-                            <el-menu-item index="3-1" :route='{"path":"/index/query"}'>查看信息</el-menu-item>
-                            <el-menu-item index="3-2" :route='{"path":"/index/update"}'>修改信息</el-menu-item>
+                            <el-menu-item index="2-1" :route='{"path":"/admin/shetuan"}'>社团信息</el-menu-item>
                             </el-submenu>
                         </el-submenu>
                     </el-menu>
@@ -95,7 +84,6 @@
         border-right: 1px solid #e8dddd;
     }
     .el-main {
-        /*background-color: #E9EEF3;*/
         color: #333;
     }
     .index-hd{

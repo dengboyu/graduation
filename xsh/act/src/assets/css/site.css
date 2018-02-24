@@ -32,6 +32,7 @@ a{
 }
 .el-dialog__body{
     text-align: center;
+    padding:10px 20px;
 }
 .friend-dialog .el-dialog__body{
     text-align: left!important;
@@ -49,8 +50,6 @@ a{
 .el-table td, .el-table th{
     padding:7px 0;
 }
-
-
 
 
 

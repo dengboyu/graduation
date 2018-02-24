@@ -29,9 +29,21 @@
                 <span>活动详情:</span><span class="act-text">活动详情</span>
             </p>
             <p class="act-det">
-                <el-button type="primary" class="recommand">推荐给好友</el-button>
+                <el-button type="primary" class="recommand" @click="pushFriend">推荐给好友</el-button>
             </p>
         </div>
+
+        <el-dialog title="推荐给好友" :visible.sync="dialogVisible" width="30%">
+            <div>
+                <p class="dialog-friend" v-for="(item,index) in friendList">
+                    <el-checkbox v-model="item.checked">{{item.friendName}}</el-checkbox>
+                </p>
+            </div>
+            <span slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+            </span>
+        </el-dialog>
+
     </div>
 </template>
 
@@ -48,6 +60,19 @@
                     sced:sced
                 },
                 isShop:true,
+                dialogVisible:false,
+                friendList:[
+                    {
+                        id:1,
+                        friendName:'小明',
+                        checked:true
+                    },
+                    {
+                        id:2,
+                        friendName:'小宏',
+                        checked:false
+                    }
+                ]
             }
         },
         methods:{
@@ -58,6 +83,9 @@
                     this.$message.success('取消收藏');
                 }
                 this.isShop=!this.isShop;
+            },
+            pushFriend(){
+                this.dialogVisible=!this.dialogVisible;
             }
         },
         computed:{
@@ -80,7 +108,6 @@
     .detail-tmpl{
         width:60%;
         margin:0 auto;
-        /*border:1px solid red;*/
     }
     .act-det{
         margin-top:15px;
@@ -104,5 +131,10 @@
     }
     .act-shop img:hover{
         cursor: pointer;
+    }
+    .dialog-friend{
+        text-align: left;
+        height:30px;
+        line-height:30px;
     }
 </style>
