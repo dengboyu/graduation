@@ -5,8 +5,8 @@
             <el-header>
                 <p class="index-hd">校园活动推荐系统</p>
                 <p class="index-lgout">
-                    用户名:<span style="margin-left:5px" v-text="username"></span>
-                    <span class="logout">[退出]</span>
+                    账号:<span style="margin-left:5px" v-text="number"></span>
+                    <span class="logout" @click="logout">[退出]</span>
                 </p>
             </el-header>
             <el-container>
@@ -27,6 +27,13 @@
                             <el-menu-item index="2-1" :route='{"path":"/admin/shetuan"}'>社团信息</el-menu-item>
                             </el-submenu>
                         </el-submenu>
+                        <el-submenu index="3">
+                            <template slot="title">
+                              <span>院系管理</span>
+                            </template>
+                            <el-menu-item index="3-1" :route='{"path":"/admin/college"}'>学院信息</el-menu-item>
+                            </el-submenu>
+                        </el-submenu>
                     </el-menu>
                 </el-aside>
                 <el-main>
@@ -45,13 +52,33 @@
     export default{
         data(){
             return {
-                username:'张雯',
+                number:'',
             }
         },
         created(){
-
+            this.getCurrentUser();
         },
         methods:{
+            logout(){
+                this.$http.axios({
+                    url:'/sysUser/logout',
+                    method:'post'
+                }).then(resolve=>{
+                    this.$router.push({path:'/loginTop'});
+                }).catch(err=>{
+                    console.log("失败了")
+                })
+            },
+            getCurrentUser(){
+                this.$http.axios({
+                    url:'/sysUser/getUserInfo',
+                    method:'get'
+                }).then(resolve=>{
+                    this.number = resolve.number;
+                }).catch(err=>{
+                    console.log("失败了")
+                })
+            }
 
         },
         components:{

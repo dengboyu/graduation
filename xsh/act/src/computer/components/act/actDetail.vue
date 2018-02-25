@@ -16,7 +16,7 @@
             </p>
             <p class="act-det">
                 <span>组织单位:</span><span class="act-text">校学生学会</span>
-                <span class="act-right"><span>是否已经参加:</span><span class="act-text">否</span></span>
+                <span class="act-right"><span>是否浏览过:</span><span class="act-text">否</span></span>
             </p>
             <p class="act-det">
                 <span>活动时间:</span><span class="act-text">2018-02-12</span>

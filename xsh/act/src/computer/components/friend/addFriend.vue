@@ -1,21 +1,15 @@
 <!-- 组件 -->
 <template>
     <div class="tmpl-update">
-        <p class="img-top"><img src="../../../assets/img/p1.png" height="50" width="50"><span>添加好友</span></p>
+        <p class="img-top"><img src="../../../assets/img/p1.png" height="50" width="50"><span>添加非系统好友</span></p>
         <el-form ref="form" :model="form" label-width="80px">
-          <el-form-item label="用户名">
-            <span v-text="form.name"></span>
-          </el-form-item>
-          <el-form-item label="密码">
-            <el-input v-model="form.name" type="password" class="input-width"></el-input>
-          </el-form-item>
-          <el-form-item label="邮箱">
-            <el-input v-model="form.name" class="input-width"></el-input>
-          </el-form-item>
           <el-form-item label="学号">
             <el-input v-model="form.name" class="input-width"></el-input>
           </el-form-item>
           <el-form-item label="姓名">
+            <el-input v-model="form.name" class="input-width"></el-input>
+          </el-form-item>
+          <el-form-item label="手机号">
             <el-input v-model="form.name" class="input-width"></el-input>
           </el-form-item>
           <el-form-item label="分组">

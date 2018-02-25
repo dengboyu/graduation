@@ -1,11 +1,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.evaluation</groupId>
-	<artifactId>evaluation</artifactId>
+	<groupId>com.activity</groupId>
+	<artifactId>activity</artifactId>
 	<packaging>war</packaging>
 	<version>1.0-SNAPSHOT</version>
-	<name>evaluation Maven Webapp</name>
+	<name>activity Maven Webapp</name>
 	<url>http://maven.apache.org</url>
 	<!-- 用来设置版本号 -->
 	<properties>
@@ -362,7 +362,7 @@
 
 	</dependencies>
 	<build>
-		<finalName>evaluation</finalName>
+		<finalName>activity</finalName>
 
 		<defaultGoal>compile</defaultGoal>
 		<pluginManagement>

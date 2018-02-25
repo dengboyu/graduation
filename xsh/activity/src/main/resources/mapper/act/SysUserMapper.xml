@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xsh.activity.module.act.dao.SysUserDao">
+
+    <!-- 以下代码片段中,sys_user表的别名为RA -->
+
+    <!-- sys_user表的字段 -->
+    <sql id ="sys_user_columns">
+        RA.id,RA.number,RA.password,RA.email,RA.name,RA.phone,RA.sex,RA.collegeId,RA.professionId,RA.createTime,RA.updateTime
+    </sql>
+
+    
+    <!-- sys_user表的resultMap映射 -->
+    <resultMap id="entityResultMap" type="com.xsh.activity.module.act.entity.SysUserEntity">
+        <id  property="id"  column="id"/>
+        <result  property="number"  column="number"/>
+        <result  property="password"  column="password"/>
+        <result  property="email"  column="email"/>
+        <result  property="name"  column="name"/>
+        <result  property="phone"  column="phone"/>
+        <result  property="sex"  column="sex"/>
+        <result  property="collegeId"  column="collegeId"/>
+        <result  property="professionId"  column="professionId"/>
+        <result  property="createTime"  column="createTime"/>
+        <result  property="updateTime"  column="updateTime"/>
+    </resultMap>
+
+
+    <!-- 添加一条记录 -->
+    <insert id="insertEntity" parameterType="com.xsh.activity.module.act.entity.SysUserEntity" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO sys_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            id,
+            number,
+            password,
+            email,
+            name,
+            phone,
+            sex,
+            collegeId,
+            professionId,
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            #{id},
+            #{number},
+            #{password},
+            #{email},
+            #{name},
+            #{phone},
+            #{sex},
+            #{collegeId},
+            #{professionId},
+        </trim>
+    </insert>
+
+
+    <!-- 批量添加 -->
+    <insert id="insertEntityByBatch" parameterType="list" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO sys_user
+        <trim prefix="(" suffix=") VALUES" suffixOverrides=",">
+            id,
+            number,
+            password,
+            email,
+            name,
+            phone,
+            sex,
+            collegeId,
+            professionId,
+        </trim>
+        <foreach collection="list" index="index" item="item" separator=",">
+        (
+            #{item.id},
+            #{item.number},
+            #{item.password},
+            #{item.email},
+            #{item.name},
+            #{item.phone},
+            #{item.sex},
+            #{item.collegeId},
+            #{item.professionId}
+        )
+        </foreach>
+    </insert>
+
+
+    <!-- 更新一条记录 -->
+    <update id="updateEntity" parameterType="com.xsh.activity.module.act.entity.SysUserEntity">
+        UPDATE sys_user
+        <trim prefix="set" suffixOverrides=",">
+            <if test="number != null">
+                number = #{number},
+            </if>
+            <if test="password != null">
+                password = #{password},
+            </if>
+            <if test="email != null">
+                email = #{email},
+            </if>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="phone != null">
+                phone = #{phone},
+            </if>
+            <if test="sex != null">
+                sex = #{sex},
+            </if>
+            <if test="collegeId != null">
+                collegeId = #{collegeId},
+            </if>
+            <if test="professionId != null">
+                professionId = #{professionId},
+            </if>
+        </trim>
+        WHERE id = #{id}
+    </update>
+
+
+    <!-- 根据主键删除一条记录 -->
+    <delete id="deleteEntity">
+        DELETE FROM sys_user WHERE id = #{0}
+    </delete>
+
+
+    <!-- 根据列条件查询实体类信息 -->
+    <sql id="whereColumns">
+        <if test="id != null">
+            AND RA.id = #{id}
+        </if>
+        <if test="number != null">
+            AND RA.number = #{number}
+        </if>
+        <if test="password != null">
+            AND RA.password = #{password}
+        </if>
+        <if test="email != null">
+            AND RA.email = #{email}
+        </if>
+        <if test="name != null">
+            AND RA.name = #{name}
+        </if>
+        <if test="phone != null">
+            AND RA.phone = #{phone}
+        </if>
+        <if test="sex != null">
+            AND RA.sex = #{sex}
+        </if>
+        <if test="collegeId != null">
+            AND RA.collegeId = #{collegeId}
+        </if>
+        <if test="professionId != null">
+            AND RA.professionId = #{professionId}
+        </if>
+        <if test="createTime != null">
+            AND RA.createTime = #{createTime}
+        </if>
+        <if test="updateTime != null">
+            AND RA.updateTime = #{updateTime}
+        </if>
+    </sql>
+
+
+    <!-- 根据主键查找对应实体类 -->
+    <select id="findEntityByMainId" resultType="com.xsh.activity.module.act.entity.SysUserEntity">
+        SELECT
+            <include refid="sys_user_columns"></include>
+        FROM sys_user RA
+        WHERE id = #{0}
+    </select>
+
+
+    <!-- 根据条件查出来是单条实体类 -->
+    <select id="findEntityByOne" parameterType="com.xsh.activity.module.act.entity.SysUserEntity" resultType="com.xsh.activity.module.act.entity.SysUserEntity">
+        SELECT
+            <include refid="sys_user_columns"></include>
+        FROM
+            sys_user RA
+        <where>
+            <include refid="whereColumns"></include>
+        </where>
+    </select>
+
+
+    <!-- 根据列条件查找实体类集合 -->
+    <select id="findEntityList" parameterType="com.xsh.activity.module.act.entity.SysUserEntity" resultType="com.xsh.activity.module.act.entity.SysUserEntity">
+        SELECT
+            <include refid="sys_user_columns"></include>
+        FROM
+            sys_user RA
+        <where>
+            <include refid="whereColumns"></include>
+        </where>
+    </select>
+
+
+    <!-- 查询记录数 -->
+    <select id="findEntityCount" parameterType="com.xsh.activity.module.act.entity.SysUserEntity" resultType="long">
+        SELECT
+            count(1)
+        FROM
+            sys_user RA
+        <where>
+            <include refid="whereColumns"></include>
+        </where>
+    </select>
+
+
+    <!-- 单表分页查询 -->
+    <select id="findPageEntityList" parameterType="map" resultType="com.xsh.activity.module.act.entity.SysUserEntity">
+        SELECT
+            <include refid="sys_user_columns"></include>
+        FROM
+            sys_user RA
+        <where>
+            <include refid="whereColumns"></include>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderColumn!=null">
+                RA.${orderColumn}
+            </when>
+            <otherwise>
+                RA.createTime
+            </otherwise>
+        </choose>
+        <choose>
+            <when test="sortColumn!=null">
+                ${sortColumn}
+            </when>
+            <otherwise>
+                DESC
+            </otherwise>
+        </choose>
+        LIMIT #{pageStart},#{pageSize}
+    </select>
+
+
+    <!-- 单表分页查询总计数量 -->
+    <select id="findPageEntityCount" parameterType="map" resultType="long">
+        SELECT
+            count(1)
+        FROM
+            sys_user RA
+        <where>
+            <include refid="whereColumns"></include>
+        </where>
+    </select>
+
+
+</mapper>

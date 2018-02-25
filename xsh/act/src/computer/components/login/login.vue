@@ -13,8 +13,8 @@
             </div>
             <div class="login-main">
                 <p class="img-top"><img src="../../../assets/img/p1.png" height="50" width="50"><span>用户登陆</span></p>
-                <p class="username-login"><input type="text" placeholder="用户名"></p>
-                <p class="password-login"><input type="password" placeholder="密码"></p>
+                <p class="username-login"><input v-model='sysUser.number' placeholder="请输入学号"></p>
+                <p class="password-login"><input v-model='sysUser.password' type="password" placeholder="密码"></p>
                 <p class="login"><el-button type="primary" @click="login">登 陆</el-button></p>
                 <p class="register">
                     <router-link to="/loginTop/register" class="register-one">注 册</router-link>
@@ -41,13 +41,39 @@
             return {
                 imgList:[
                     slide1,slide2,slide3,slide4,slide5,slide6,slide7,slide8,
-                ]
+                ],
+                sysUser:{
+                    number:'',
+                    password:''
+                }
             }
         },
         methods:{
             login(){
-                this.$router.push({path:'/index'});
-            }
+
+                if(this.sysUser.number=='' ||  this.sysUser.password==''){
+                    return this.$message.warning('请输入学号或密码登录');
+                }
+
+                this.$http.axios({
+                    url:'/user/userLogin',
+                    method:'post',
+                    data:this.sysUser
+                }).then(resolve=>{
+
+                    if(this.sysUser.number==='admin'){
+                        this.$router.push({path:'/admin'});
+                    }else{
+                        this.$router.push({path:'/index'});
+                    }
+
+                }).catch(err=>{
+                    console.log("失败了")
+                })
+
+
+            },
+
         },
         created(){
 

@@ -3,16 +3,16 @@
     <div class="tmpl-update">
         <p class="img-top"><img src="../../../assets/img/p1.png" height="50" width="50"><span>查看个人信息</span></p>
         <el-form ref="form" :model="form" label-width="80px">
-          <el-form-item label="用户名:">
+          <el-form-item label="学号:">
+            <span v-text="form.name"></span>
+          </el-form-item>
+          <el-form-item label="姓名:">
             <span v-text="form.name"></span>
           </el-form-item>
           <el-form-item label="邮箱:">
             <span v-text="form.name"></span>
           </el-form-item>
-          <el-form-item label="学号:">
-            <span v-text="form.name"></span>
-          </el-form-item>
-          <el-form-item label="姓名:">
+          <el-form-item label="手机号:">
             <span v-text="form.name"></span>
           </el-form-item>
           <el-form-item label="学院:">
