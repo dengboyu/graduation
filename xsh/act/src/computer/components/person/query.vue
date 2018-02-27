@@ -2,27 +2,27 @@
 <template>
     <div class="tmpl-update">
         <p class="img-top"><img src="../../../assets/img/p1.png" height="50" width="50"><span>查看个人信息</span></p>
-        <el-form ref="form" :model="form" label-width="80px">
+        <el-form ref="form" :model="sysUser" label-width="80px">
           <el-form-item label="学号:">
-            <span v-text="form.name"></span>
+            <span v-text="sysUser.number"></span>
           </el-form-item>
           <el-form-item label="姓名:">
-            <span v-text="form.name"></span>
+            <span v-text="sysUser.name"></span>
           </el-form-item>
           <el-form-item label="邮箱:">
-            <span v-text="form.name"></span>
+            <span v-text="sysUser.email"></span>
           </el-form-item>
           <el-form-item label="手机号:">
-            <span v-text="form.name"></span>
+            <span v-text="sysUser.phone"></span>
           </el-form-item>
           <el-form-item label="学院:">
-            <span v-text="form.name"></span>
+            <span v-text="sysUser.collegeName"></span>
           </el-form-item>
           <el-form-item label="专业:">
-            <span v-text="form.name"></span>
+            <span v-text="sysUser.professionName"></span>
           </el-form-item>
           <el-form-item label="性别:">
-            <span v-text="form.name"></span>
+            <span v-text="sysUser.sex"></span>
           </el-form-item>
         </el-form>
     </div>
@@ -34,26 +34,29 @@
     export default{
         data(){
             return {
-                form: {
-                    name: '姓名',
-                    region: '',
-                    date1: '',
-                    date2: '',
-                    delivery: false,
-                    type: [],
-                    resource: '',
-                    desc: ''
-                }
+                sysUser: {}
             }
         },
         methods:{
+            getUserInfo(){
+                this.$http.axios({
+                    url:'/sysUser/getSysUserInfo',
+                    method:'get',
+                }).then(resolve=>{
+
+                    this.sysUser = resolve;
+
+                }).catch(err=>{
+                    console.log("失败了")
+                })
+            }
 
         },
         computed:{
 
         },
         created(){
-
+            this.getUserInfo();
         },
         mounted(){
 

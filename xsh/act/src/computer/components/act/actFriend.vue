@@ -7,14 +7,14 @@
         </p>
         <el-table :data="tableData" border style="width: 100%">
             <el-table-column prop="actName" label="活动名称"></el-table-column>
-            <el-table-column prop="date" label="活动时间" width="120"></el-table-column>
-            <el-table-column prop="actOrigin" label="活动来源" width="180"></el-table-column>
-            <el-table-column label="详情" width="120">
+            <el-table-column prop="actTime" label="活动时间" width="180"></el-table-column>
+            <el-table-column prop="communityName" label="活动来源" width="180"></el-table-column>
+            <el-table-column label="详情" width="80">
                 <template slot-scope="scope">
-                    <el-button type="text" size="small" @click="goDetail()">查看详情</el-button>
+                    <el-button type="text" size="small" @click="goDetail(scope.row.id)">查看详情</el-button>
                 </template>
             </el-table-column>
-            <el-table-column prop="friendName" label="推荐来自" width="100"></el-table-column>
+            <el-table-column prop="recommandName" label="推荐来自" width="90"></el-table-column>
         </el-table>
     </div>
 </template>
@@ -31,34 +31,31 @@
                     scing:scing,
                     sced:sced
                 },
-                tableData: [
-                    {
-                        actName: '校园十大歌手',
-                        date: '2017-07-19',
-                        isCollection:1,
-                        actOrigin:'校学生学会',
-                        friendName:'夏海'
-                    },
-                    {
-                        actName: '校园十大歌手',
-                        date: '2017-07-19',
-                        isCollection:0,
-                        actOrigin:'校学生学会',
-                        friendName:'宏命亮'
-                    },
-                ]
+                tableData: []
             }
         },
         methods:{
-            goDetail(){
-                this.$router.push({path:'/index/actDetail'});
+            goDetail(id){
+                this.$router.push({name:'actDetail',params:{id:id}});
+            },
+            getRecommandList(){
+
+                this.$http.axios({
+                    url:'/recommandAct/getRecommandList',
+                    method:'get',
+                }).then(resolve=>{
+                    this.tableData = resolve;
+
+                }).catch(err=>{
+                    console.log("失败了")
+                })
             }
         },
         computed:{
 
         },
         created(){
-
+            this.getRecommandList();
         },
         mounted(){
 

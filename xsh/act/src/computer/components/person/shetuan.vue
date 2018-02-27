@@ -4,13 +4,13 @@
         <p>
             <img src="../../../assets/img/friend.png" height="50" width="80">
             <span class="has-span">社团管理</span>
-            <span class="addGroup"><el-button type="text" @click.stop="addGroup" class="">添加社团</el-button></span>
+            <span class="addGroup"><el-button type="text" @click.stop="addGroupVisible=true">添加社团</el-button></span>
         </p>
         <div>
             <div class="group-friend" v-for="(item,index) in groupList" :key="index">
                 <p class="group-name">
-                    <span v-text="item.groupName"></span>
-                    <span class="delGroup"><el-button type="text" @click.stop="delGroup" class="">删除</el-button></span>
+                    <span v-text="item.communityName"></span>
+                    <!-- <span class="delGroup"><el-button type="text" @click.stop="delGroup" class="">删除</el-button></span> -->
                 </p>
             </div>
         </div>
@@ -18,13 +18,12 @@
 
 
         <!-- 添加分组dialog -->
-        <el-dialog title="添加分组" :visible.sync="addGroupVisible" width="30%">
+        <el-dialog title="添加社团" :visible.sync="addGroupVisible" width="30%">
             <p>
-                <el-input v-model="input" placeholder="请输入社团名称"></el-input>
+                <el-input v-model="community.communityName" placeholder="请输入社团名称"></el-input>
             </p>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="addGroupVisible = false">取 消</el-button>
-                <el-button type="primary" @click="addGroupVisible = false">确 定</el-button>
+                <el-button type="primary" @click="addCommunity">确 定</el-button>
             </span>
         </el-dialog>
 
@@ -45,59 +44,59 @@
     export default{
         data(){
             return {
-                input:'',
                 addGroupVisible: false,
                 delGroupVisible: false,
-                groupList:[
-                    {
-                        groupName:'自定义社团',
-                        id:1,
-                        friendList:[
-                            {
-                                username:'社团一',
-                            },
-                            {
-                                username:'张雯',
-                            }
-                        ],
-                        boolean:false,
-                    },
-                    {
-                        groupName:'社团一',
-                        id:2,
-                        friendList:[
-                            {
-                                username:'朋友二',
-                            }
-                        ],
-                        boolean:false,
-                    },
-                    {
-                        groupName:'社团二',
-                        id:3,
-                        friendList:[
-                            {
-                                username:'朋友三',
-                            }
-                        ],
-                        boolean:false,
-                    }
-                ]
+                community:{
+                    communityName:'',
+                },
+                groupList:[]
             }
         },
         methods:{
-            addGroup(){
-                this.addGroupVisible = !this.addGroupVisible;
+            addCommunity(){
+
+                this.$http.axios({
+                    url:'/community/addCommunity',
+                    method:'post',
+                    data:this.community,
+                    json:true
+                }).then(resolve=>{
+
+                    this.getCommunityList();
+
+                    this.addGroupVisible = !this.addGroupVisible;
+                    this.community.communityName = '';
+
+                    this.$message.success('添加社团成功');
+                }).catch(err=>{
+                    console.log("失败了")
+                })
+
+
             },
             delGroup(){
                 this.delGroupVisible = !this.delGroupVisible;
+            },
+            getCommunityList(){
+
+                this.$http.axios({
+                    url:'/community/getCommunityList',
+                    method:'get',
+                }).then(resolve=>{
+
+                   this.groupList=resolve;
+
+                }).catch(err=>{
+                    console.log("失败了")
+                })
+
             }
         },
         computed:{
 
         },
         created(){
-
+            this.getCommunityList();
         },
         mounted(){
 

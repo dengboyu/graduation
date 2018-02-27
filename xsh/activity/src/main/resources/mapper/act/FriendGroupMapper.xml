@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xsh.activity.module.act.dao.FriendGroupDao">
+
+    <!-- 以下代码片段中,friendGroup表的别名为RA -->
+
+    <!-- friendGroup表的字段 -->
+    <sql id ="friendGroup_columns">
+        RA.id,RA.groupName,RA.userId,RA.createTime,RA.updateTime
+    </sql>
+
+    
+    <!-- friendGroup表的resultMap映射 -->
+    <resultMap id="entityResultMap" type="com.xsh.activity.module.act.entity.FriendGroupEntity">
+        <id  property="id"  column="id"/>
+        <result  property="groupName"  column="groupName"/>
+        <result  property="userId"  column="userId"/>
+        <result  property="createTime"  column="createTime"/>
+        <result  property="updateTime"  column="updateTime"/>
+    </resultMap>
+
+
+    <!-- 添加一条记录 -->
+    <insert id="insertEntity" parameterType="com.xsh.activity.module.act.entity.FriendGroupEntity" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO friendGroup
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            id,
+            groupName,
+            userId,
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            #{id},
+            #{groupName},
+            #{userId},
+        </trim>
+    </insert>
+
+
+    <!-- 批量添加 -->
+    <insert id="insertEntityByBatch" parameterType="list" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO friendGroup
+        <trim prefix="(" suffix=") VALUES" suffixOverrides=",">
+            id,
+            groupName,
+            userId,
+        </trim>
+        <foreach collection="list" index="index" item="item" separator=",">
+        (
+            #{item.id},
+            #{item.groupName},
+            #{item.userId}
+        )
+        </foreach>
+    </insert>
+
+
+    <!-- 更新一条记录 -->
+    <update id="updateEntity" parameterType="com.xsh.activity.module.act.entity.FriendGroupEntity">
+        UPDATE friendGroup
+        <trim prefix="set" suffixOverrides=",">
+            <if test="groupName != null">
+                groupName = #{groupName},
+            </if>
+            <if test="userId != null">
+                userId = #{userId},
+            </if>
+        </trim>
+        WHERE id = #{id}
+    </update>
+
+
+    <!-- 根据主键删除一条记录 -->
+    <delete id="deleteEntity">
+        DELETE FROM friendGroup WHERE id = #{0}
+    </delete>
+
+
+    <!-- 根据列条件查询实体类信息 -->
+    <sql id="whereColumns">
+        <if test="id != null">
+            AND RA.id = #{id}
+        </if>
+        <if test="groupName != null">
+            AND RA.groupName = #{groupName}
+        </if>
+        <if test="userId != null">
+            AND RA.userId = #{userId}
+        </if>
+        <if test="createTime != null">
+            AND RA.createTime = #{createTime}
+        </if>
+        <if test="updateTime != null">
+            AND RA.updateTime = #{updateTime}
+        </if>
+    </sql>
+
+
+    <!-- 根据主键查找对应实体类 -->
+    <select id="findEntityByMainId" resultType="com.xsh.activity.module.act.entity.FriendGroupEntity">
+        SELECT
+            <include refid="friendGroup_columns"></include>
+        FROM friendGroup RA
+        WHERE id = #{0}
+    </select>
+
+
+    <!-- 根据条件查出来是单条实体类 -->
+    <select id="findEntityByOne" parameterType="com.xsh.activity.module.act.entity.FriendGroupEntity" resultType="com.xsh.activity.module.act.entity.FriendGroupEntity">
+        SELECT
+            <include refid="friendGroup_columns"></include>
+        FROM
+            friendGroup RA
+        <where>
+            <include refid="whereColumns"></include>
+        </where>
+    </select>
+
+
+    <!-- 根据列条件查找实体类集合 -->
+    <select id="findEntityList" parameterType="com.xsh.activity.module.act.entity.FriendGroupEntity" resultType="com.xsh.activity.module.act.entity.FriendGroupEntity">
+        SELECT
+            <include refid="friendGroup_columns"></include>
+        FROM
+            friendGroup RA
+        <where>
+            <include refid="whereColumns"></include>
+        </where>
+    </select>
+
+
+    <!-- 查询记录数 -->
+    <select id="findEntityCount" parameterType="com.xsh.activity.module.act.entity.FriendGroupEntity" resultType="long">
+        SELECT
+            count(1)
+        FROM
+            friendGroup RA
+        <where>
+            <include refid="whereColumns"></include>
+        </where>
+    </select>
+
+
+    <!-- 单表分页查询 -->
+    <select id="findPageEntityList" parameterType="map" resultType="com.xsh.activity.module.act.entity.FriendGroupEntity">
+        SELECT
+            <include refid="friendGroup_columns"></include>
+        FROM
+            friendGroup RA
+        <where>
+            <include refid="whereColumns"></include>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderColumn!=null">
+                RA.${orderColumn}
+            </when>
+            <otherwise>
+                RA.createTime
+            </otherwise>
+        </choose>
+        <choose>
+            <when test="sortColumn!=null">
+                ${sortColumn}
+            </when>
+            <otherwise>
+                DESC
+            </otherwise>
+        </choose>
+        LIMIT #{pageStart},#{pageSize}
+    </select>
+
+
+    <!-- 单表分页查询总计数量 -->
+    <select id="findPageEntityCount" parameterType="map" resultType="long">
+        SELECT
+            count(1)
+        FROM
+            friendGroup RA
+        <where>
+            <include refid="whereColumns"></include>
+        </where>
+    </select>
+
+
+</mapper>

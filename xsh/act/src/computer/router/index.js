@@ -22,6 +22,7 @@ import actDetail from '@/computer/components/act/actDetail'         //首页
 import actFriend from '@/computer/components/act/actFriend'         //首页
 import adminAct from '@/computer/components/act/adminAct'         //首页
 import addAct from '@/computer/components/act/addAct'         //首页
+import adminActDetail from '@/computer/components/act/adminActDetail'         //首页
 
 
 Vue.use(Router)
@@ -96,7 +97,7 @@ export default new Router({
                 },
                 {
                     name:'actDetail',
-                    path: 'actDetail',
+                    path: 'actDetail/:id',
                     component: actDetail
                 },
                 {
@@ -135,6 +136,11 @@ export default new Router({
                     name:'college',
                     path: 'college',
                     component: college
+                },
+                {
+                    name:'adminActDetail',
+                    path: 'adminActDetail/:id',
+                    component: adminActDetail
                 },
             ]
         },

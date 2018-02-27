@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xsh.activity.module.act.dao.CollegeDao">
+
+    <!-- 以下代码片段中,college表的别名为RA -->
+
+    <!-- college表的字段 -->
+    <sql id ="college_columns">
+        RA.id,RA.collegeName,RA.createTime,RA.updateTime
+    </sql>
+
+    
+    <!-- college表的resultMap映射 -->
+    <resultMap id="entityResultMap" type="com.xsh.activity.module.act.entity.CollegeEntity">
+        <id  property="id"  column="id"/>
+        <result  property="collegeName"  column="collegeName"/>
+        <result  property="createTime"  column="createTime"/>
+        <result  property="updateTime"  column="updateTime"/>
+    </resultMap>
+
+
+    <!-- 添加一条记录 -->
+    <insert id="insertEntity" parameterType="com.xsh.activity.module.act.entity.CollegeEntity" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO college
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            id,
+            collegeName,
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            #{id},
+            #{collegeName},
+        </trim>
+    </insert>
+
+
+    <!-- 批量添加 -->
+    <insert id="insertEntityByBatch" parameterType="list" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO college
+        <trim prefix="(" suffix=") VALUES" suffixOverrides=",">
+            id,
+            collegeName,
+        </trim>
+        <foreach collection="list" index="index" item="item" separator=",">
+        (
+            #{item.id},
+            #{item.collegeName}
+        )
+        </foreach>
+    </insert>
+
+
+    <!-- 更新一条记录 -->
+    <update id="updateEntity" parameterType="com.xsh.activity.module.act.entity.CollegeEntity">
+        UPDATE college
+        <trim prefix="set" suffixOverrides=",">
+            <if test="collegeName != null">
+                collegeName = #{collegeName},
+            </if>
+        </trim>
+        WHERE id = #{id}
+    </update>
+
+
+    <!-- 根据主键删除一条记录 -->
+    <delete id="deleteEntity">
+        DELETE FROM college WHERE id = #{0}
+    </delete>
+
+
+    <!-- 根据列条件查询实体类信息 -->
+    <sql id="whereColumns">
+        <if test="id != null">
+            AND RA.id = #{id}
+        </if>
+        <if test="collegeName != null">
+            AND RA.collegeName = #{collegeName}
+        </if>
+        <if test="createTime != null">
+            AND RA.createTime = #{createTime}
+        </if>
+        <if test="updateTime != null">
+            AND RA.updateTime = #{updateTime}
+        </if>
+    </sql>
+
+
+    <!-- 根据主键查找对应实体类 -->
+    <select id="findEntityByMainId" resultType="com.xsh.activity.module.act.entity.CollegeEntity">
+        SELECT
+            <include refid="college_columns"></include>
+        FROM college RA
+        WHERE id = #{0}
+    </select>
+
+
+    <!-- 根据条件查出来是单条实体类 -->
+    <select id="findEntityByOne" parameterType="com.xsh.activity.module.act.entity.CollegeEntity" resultType="com.xsh.activity.module.act.entity.CollegeEntity">
+        SELECT
+            <include refid="college_columns"></include>
+        FROM
+            college RA
+        <where>
+            <include refid="whereColumns"></include>
+        </where>
+    </select>
+
+
+    <!-- 根据列条件查找实体类集合 -->
+    <select id="findEntityList" parameterType="com.xsh.activity.module.act.entity.CollegeEntity" resultType="com.xsh.activity.module.act.entity.CollegeEntity">
+        SELECT
+            <include refid="college_columns"></include>
+        FROM
+            college RA
+        <where>
+            <include refid="whereColumns"></include>
+        </where>
+    </select>
+
+
+    <!-- 查询记录数 -->
+    <select id="findEntityCount" parameterType="com.xsh.activity.module.act.entity.CollegeEntity" resultType="long">
+        SELECT
+            count(1)
+        FROM
+            college RA
+        <where>
+            <include refid="whereColumns"></include>
+        </where>
+    </select>
+
+
+    <!-- 单表分页查询 -->
+    <select id="findPageEntityList" parameterType="map" resultType="com.xsh.activity.module.act.entity.CollegeEntity">
+        SELECT
+            <include refid="college_columns"></include>
+        FROM
+            college RA
+        <where>
+            <include refid="whereColumns"></include>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderColumn!=null">
+                RA.${orderColumn}
+            </when>
+            <otherwise>
+                RA.createTime
+            </otherwise>
+        </choose>
+        <choose>
+            <when test="sortColumn!=null">
+                ${sortColumn}
+            </when>
+            <otherwise>
+                DESC
+            </otherwise>
+        </choose>
+        LIMIT #{pageStart},#{pageSize}
+    </select>
+
+
+    <!-- 单表分页查询总计数量 -->
+    <select id="findPageEntityCount" parameterType="map" resultType="long">
+        SELECT
+            count(1)
+        FROM
+            college RA
+        <where>
+            <include refid="whereColumns"></include>
+        </where>
+    </select>
+
+
+</mapper>

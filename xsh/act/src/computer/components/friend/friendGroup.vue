@@ -4,27 +4,25 @@
         <p>
             <img src="../../../assets/img/friend.png" height="50" width="80">
             <span class="has-span">分组管理</span>
-            <span class="addGroup"><el-button type="text" @click.stop="addGroup" class="">添加分组</el-button></span>
+            <span class="addGroup"><el-button type="text" @click.stop="addGroupVisible=true">添加分组</el-button></span>
         </p>
         <div>
             <div class="group-friend" v-for="(item,index) in groupList" :key="index">
                 <p class="group-name">
                     <span v-text="item.groupName"></span>
-                    <span class="delGroup"><el-button type="text" @click.stop="delGroup" class="">删除</el-button></span>
+                    <span class="delGroup"><el-button type="text" @click.stop="delGroupId(item.id)">删除</el-button></span>
                 </p>
             </div>
         </div>
 
 
-
         <!-- 添加分组dialog -->
         <el-dialog title="添加分组" :visible.sync="addGroupVisible" width="30%">
             <p>
-                <el-input v-model="input" placeholder="请输入分组名称"></el-input>
+                <el-input v-model="group.groupName" placeholder="请输入分组名称"></el-input>
             </p>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="addGroupVisible = false">取 消</el-button>
-                <el-button type="primary" @click="addGroupVisible = false">确 定</el-button>
+                <el-button type="primary" @click="addGroup">确 定</el-button>
             </span>
         </el-dialog>
 
@@ -32,8 +30,7 @@
         <el-dialog :visible.sync="delGroupVisible" width="30%">
             <span>确认删除该分组吗?</span>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="delGroupVisible = false">取 消</el-button>
-                <el-button type="primary" @click="delGroupVisible = false">确 定</el-button>
+                <el-button type="primary" @click="delGroup()">确 定</el-button>
             </span>
         </el-dialog>
 
@@ -46,59 +43,80 @@
     export default{
         data(){
             return {
-                input:'',
                 addGroupVisible: false,
                 delGroupVisible: false,
-                groupList:[
-                    {
-                        groupName:'自定义分组',
-                        id:1,
-                        friendList:[
-                            {
-                                username:'朋友一',
-                            },
-                            {
-                                username:'张雯',
-                            }
-                        ],
-                        boolean:false,
-                    },
-                    {
-                        groupName:'分组一',
-                        id:2,
-                        friendList:[
-                            {
-                                username:'朋友二',
-                            }
-                        ],
-                        boolean:false,
-                    },
-                    {
-                        groupName:'分组二',
-                        id:3,
-                        friendList:[
-                            {
-                                username:'朋友三',
-                            }
-                        ],
-                        boolean:false,
-                    }
-                ]
+                delId:'',
+                group:{
+                    groupName:""
+                },
+                groupList:[]
             }
         },
         methods:{
             addGroup(){
-                this.addGroupVisible = !this.addGroupVisible;
+
+                this.$http.axios({
+                    url:'/friendGroup/addGroupByUserId',
+                    method:'post',
+                    data:this.group,
+                    json:true
+                }).then(resolve=>{
+                    this.getGroupList();
+
+                    this.addGroupVisible = !this.addGroupVisible;
+                    this.$message.success("添加分组成功");
+                    this.group.groupName='';
+
+
+                }).catch(err=>{
+                    console.log("失败了")
+                })
+
             },
             delGroup(){
+                //删除分组
+
+                this.$http.axios({
+                    url:'/friendGroup/delFriendGroup',
+                    method:'post',
+                    data:{id:this.delId},
+                }).then(resolve=>{
+                    this.getGroupList();
+
+                    this.delGroupVisible = !this.delGroupVisible;
+                    this.$message.success("删除成功");
+
+                }).catch(err=>{
+                    console.log("失败了")
+                })
+
+            },
+            getGroupList(){
+                //获取分组
+
+                this.$http.axios({
+                    url:'/friendGroup/getGroupFriendList',
+                    method:'get',
+                }).then(resolve=>{
+
+                    this.groupList = resolve;
+
+
+                }).catch(err=>{
+                    console.log("失败了")
+                })
+
+            },
+            delGroupId(id){
                 this.delGroupVisible = !this.delGroupVisible;
+                this.delId = id;
             }
         },
         computed:{
 
         },
         created(){
-
+            this.getGroupList();
         },
         mounted(){
 

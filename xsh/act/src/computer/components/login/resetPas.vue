@@ -4,16 +4,16 @@
         <p class="img-top"><img src="../../../assets/img/p1.png" height="50" width="50"><span>密码重置</span></p>
         <el-form ref="form" :model="form" label-width="80px">
           <el-form-item label="学号">
-            <el-input v-model="form.name" class="input-width" placeholder="请输入学号"></el-input>
+            <el-input v-model="form.number" class="input-width" placeholder="请输入学号"></el-input>
           </el-form-item>
           <el-form-item label="密码">
             <el-input v-model="form.password" type="password" class="input-width" placeholder='请输入密码'></el-input>
           </el-form-item>
           <el-form-item label="密码确认">
-            <el-input v-model="form.password" type="password" class="input-width" placeholder="再次输入密码"></el-input>
+            <el-input v-model="passwordAgain" type="password" class="input-width" placeholder="再次输入密码"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="">提 交</el-button>
+            <el-button type="primary" @click="updatePassword">提 交</el-button>
           </el-form-item>
         </el-form>
     </div>
@@ -26,20 +26,37 @@
         data(){
             return {
                 form: {
-                    name: '',
-                    password:'',
-                    region: '',
-                    date1: '',
-                    date2: '',
-                    delivery: false,
-                    type: [],
-                    resource: '',
-                    desc: ''
-                }
+                    number: '',
+                    password:''
+                },
+                passwordAgain:''
             }
         },
         methods:{
+            updatePassword(){
+                if(this.$fn.hasObjectNull(this.form) || this.passwordAgain==''){
+                    return this.$message.warning("请将信息补充完整");
+                }
 
+                if(this.form.password!==this.passwordAgain){
+                    return this.$message.warning("两次输入密码不一致");
+                }
+
+
+                this.$http.axios({
+                    url:'/sysUser/updateUserInfo',
+                    method:'post',
+                    data:this.form,
+                    json:true
+                }).then(resolve=>{
+
+                    this.$message.success("密码修改成功");
+                    this.$router.push({path:'/loginTop'});
+
+                }).catch(err=>{
+                    console.log("失败了")
+                })
+            }
         },
         computed:{
 

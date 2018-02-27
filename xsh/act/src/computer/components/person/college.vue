@@ -4,18 +4,18 @@
         <p>
             <img src="../../../assets/img/friend.png" height="50" width="80">
             <span class="has-span">院系列表</span>
-            <span class="addGroup"><el-button type="text" @click.stop="addCollege" >添加学院</el-button></span>
+            <span class="addGroup"><el-button type="text" @click.stop="addGroupVisible=true" >添加学院</el-button></span>
         </p>
         <div>
             <div class="group-friend" v-for="(item,index) in groupList" :key="index">
                 <p class="group-name"  @click="zhedie(item.id)">
-                    {{item.groupName}}
-                    <span class="addProfession"><el-button type="text" @click.stop="" >添加专业</el-button></span>
+                    {{item.collegeName}}
+                    <span class="addProfession"><el-button type="text" @click.stop="addProfession(item.id)" >添加专业</el-button></span>
                 </p>
 
-                <ul class="group" v-for="(friend,index1) in item.friendList" :key="index1" v-show="item.boolean">
+                <ul class="group" v-for="(friend,index1) in item.professionEntityList" :key="index1" v-show="item.boolean">
                     <li>
-                        <span v-text="friend.username"></span>
+                        <span v-text="friend.professionName"></span>
                         <span class="group-right">
                             <!-- <span class="group-button group-del"><el-button type="text" @click.stop="delFriend">删除</el-button></span> -->
                         </span>
@@ -25,13 +25,23 @@
         </div>
 
 
-         <!-- 添加学院dialog -->
+        <!-- 添加学院dialog -->
         <el-dialog title="添加学院" :visible.sync="addGroupVisible" width="30%">
             <p>
-                <el-input v-model="input" placeholder="请输入学院名称"></el-input>
+                <el-input v-model="college.collegeName" placeholder="请输入学院名称"></el-input>
             </p>
             <span slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="addGroupVisible = false">确 定</el-button>
+                <el-button type="primary" @click="addCollegeSure">确 定</el-button>
+            </span>
+        </el-dialog>
+
+        <!-- 添加专业dialog -->
+        <el-dialog title="添加专业" :visible.sync="addProfessionVisible" width="30%">
+            <p>
+                <el-input v-model="profession.professionName" placeholder="请输入专业名称"></el-input>
+            </p>
+            <span slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="addProfessionSure">确 定</el-button>
             </span>
         </el-dialog>
 
@@ -45,60 +55,15 @@
         data(){
             return {
                 addGroupVisible:false,
-                form:{
-                    name: '姓名',
-                    region: '',
-                    date1: '',
-                    date2: '',
-                    delivery: false,
-                    type: [],
-                    resource: '',
-                    desc: ''
+                addProfessionVisible:false,
+                college:{
+                    collegeName:'',
                 },
-                commonFriend:[
-                    {
-                        username:"李飞",
-                    },
-                    {
-                        username:"赵四",
-                    }
-                ],
-                input:'',
-                groupList:[
-                    {
-                        groupName:'自定义分组',
-                        id:1,
-                        friendList:[
-                            {
-                                username:'朋友一',
-                            },
-                            {
-                                username:'张雯',
-                            }
-                        ],
-                        boolean:false,
-                    },
-                    {
-                        groupName:'分组一',
-                        id:2,
-                        friendList:[
-                            {
-                                username:'朋友二',
-                            }
-                        ],
-                        boolean:false,
-                    },
-                    {
-                        groupName:'分组二',
-                        id:3,
-                        friendList:[
-                            {
-                                username:'朋友三',
-                            }
-                        ],
-                        boolean:false,
-                    }
-                ]
+                profession:{
+                    collegeId:'',
+                    professionName:'',
+                },
+                groupList:[]
             }
         },
         methods:{
@@ -113,27 +78,74 @@
                     }
                 }
             },
-            findFriendDetail(){
-                this.detailFriendVisible=!this.detailFriendVisible;
+            addCollegeSure(){
+
+                this.$http.axios({
+                    url:'/college/addCollege',
+                    method:'post',
+                    data:this.college,
+                    json:true
+                }).then(resolve=>{
+
+                    this.getCollegeProfession();
+
+                    this.addGroupVisible = !this.addGroupVisible;
+                    this.college.collegeName = '';
+
+                    this.$message.success('添加学院成功');
+                }).catch(err=>{
+                    console.log("失败了")
+                })
             },
-            moveGroup(){
-                this.moveFriendVisible=!this.moveFriendVisible;
+            addProfessionSure(){
+
+                this.$http.axios({
+                    url:'/profession/addProfession',
+                    method:'post',
+                    data:this.profession,
+                    json:true
+                }).then(resolve=>{
+
+                    this.getCollegeProfession();
+
+                    this.addProfessionVisible = !this.addProfessionVisible;
+                    this.profession.professionName = '';
+
+                    this.$message.success('添加专业成功');
+                }).catch(err=>{
+                    console.log("失败了")
+                })
+
             },
-            delFriend(){
-                this.delFriendVisible = !this.delFriendVisible;
+            addProfession(id){
+                this.profession.collegeId =id;
+                this.addProfessionVisible = !this.addProfessionVisible;
             },
-            relativeFriend(){
-                this.commonFriendVisible = !this.commonFriendVisible;
+            getCollegeProfession(){
+                //获取学院和专业信息
+                this.$http.axios({
+                    url:'/college/getCollegeProfession',
+                    method:'get',
+                }).then(resolve=>{
+
+                    if(resolve.length>0){
+
+                        for(let i in resolve){
+                            resolve[i].boolean = false;
+                        }
+
+                        this.groupList = resolve;
+                    }
+                }).catch(err=>{
+                    console.log("失败了")
+                })
             },
-            addCollege(){
-                this.addGroupVisible = !this.addGroupVisible;
-            }
         },
         computed:{
 
         },
         created(){
-
+            this.getCollegeProfession();
         },
         mounted(){
 
