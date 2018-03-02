@@ -7,14 +7,15 @@ import java.util.Date;
 * recommandAct表对应实体类
 *
 * @author by@Deng
-* @create 2018-02-26 02:56:00
+* @create 2018-03-02 09:56:49
 */
 public class RecommandActEntity {
 
     private Integer id;    //主键
     private String actId;    //活动id
     private Integer userId;    //用户id
-    private Integer recommandUser;    //推荐人id
+    private Integer friendId;    //关联friendId
+    private Integer recommandUser;    //推荐给好友系统的id
     private Date createTime;    //插入数据当前时间
     private Date updateTime;    //更新记录时间
 
@@ -59,6 +60,20 @@ public class RecommandActEntity {
      */
     public Integer getUserId() {
         return this.userId;
+    }
+
+    /**  
+     * 设置:friendId
+     */
+    public void setFriendId(Integer friendId) {
+        this.friendId = friendId;
+    }
+
+    /** 
+     * 获取:friendId
+     */
+    public Integer getFriendId() {
+        return this.friendId;
     }
 
     /**  
@@ -109,6 +124,7 @@ public class RecommandActEntity {
                 "id=" + id +
                 ", actId='" + actId + '\'' +
                 ", userId=" + userId +
+                ", friendId=" + friendId +
                 ", recommandUser=" + recommandUser +
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +

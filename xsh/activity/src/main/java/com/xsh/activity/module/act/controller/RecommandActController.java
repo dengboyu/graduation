@@ -47,6 +47,12 @@ public class RecommandActController{
 
         SysUserEntity sysUserEntity1 = (SysUserEntity) SecurityUtils.getSubject().getSession().getAttribute("currentUser");
         for(RecommandActEntity recommandActEntity:recommandActEntityList){
+
+            FriendEntity friendEntity = friendService.findEntityByMainId(recommandActEntity);
+            if(friendEntity.getFriendId()!=null){
+                recommandActEntity.setRecommandUser(friendEntity.getFriendId());
+            }
+
             recommandActEntity.setUserId(sysUserEntity1.getId());
         }
 

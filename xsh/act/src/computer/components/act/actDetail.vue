@@ -127,7 +127,7 @@
                     if(this.friendList[i].checked){
                         let recommandActEntity = {};
                         recommandActEntity.actId = this.actDetail.id;
-                        recommandActEntity.recommandUser = this.friendList[i].id;
+                        recommandActEntity.friendId = this.friendList[i].id;
 
                         recommandList.push(recommandActEntity);
                     }

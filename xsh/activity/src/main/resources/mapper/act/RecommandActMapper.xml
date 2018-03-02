@@ -8,7 +8,7 @@
 
     <!-- recommandAct表的字段 -->
     <sql id ="recommandAct_columns">
-        RA.id,RA.actId,RA.userId,RA.recommandUser,RA.createTime,RA.updateTime
+        RA.id,RA.actId,RA.userId,RA.friendId,RA.recommandUser,RA.createTime,RA.updateTime
     </sql>
 
     
@@ -17,6 +17,7 @@
         <id  property="id"  column="id"/>
         <result  property="actId"  column="actId"/>
         <result  property="userId"  column="userId"/>
+        <result  property="friendId"  column="friendId"/>
         <result  property="recommandUser"  column="recommandUser"/>
         <result  property="createTime"  column="createTime"/>
         <result  property="updateTime"  column="updateTime"/>
@@ -30,12 +31,14 @@
             id,
             actId,
             userId,
+            friendId,
             recommandUser,
         </trim>
         <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
             #{id},
             #{actId},
             #{userId},
+            #{friendId},
             #{recommandUser},
         </trim>
     </insert>
@@ -48,6 +51,7 @@
             id,
             actId,
             userId,
+            friendId,
             recommandUser,
         </trim>
         <foreach collection="list" index="index" item="item" separator=",">
@@ -55,6 +59,7 @@
             #{item.id},
             #{item.actId},
             #{item.userId},
+            #{item.friendId},
             #{item.recommandUser}
         )
         </foreach>
@@ -70,6 +75,9 @@
             </if>
             <if test="userId != null">
                 userId = #{userId},
+            </if>
+            <if test="friendId != null">
+                friendId = #{friendId},
             </if>
             <if test="recommandUser != null">
                 recommandUser = #{recommandUser},
@@ -95,6 +103,9 @@
         </if>
         <if test="userId != null">
             AND RA.userId = #{userId}
+        </if>
+        <if test="friendId != null">
+            AND RA.friendId = #{friendId}
         </if>
         <if test="recommandUser != null">
             AND RA.recommandUser = #{recommandUser}
