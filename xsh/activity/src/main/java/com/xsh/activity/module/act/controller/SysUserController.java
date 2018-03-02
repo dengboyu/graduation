@@ -3,16 +3,14 @@ package com.xsh.activity.module.act.controller;
 import com.xsh.activity.common.annotation.Result;
 import com.xsh.activity.common.exception.ByException;
 import com.xsh.activity.module.act.entity.FriendEntity;
+import com.xsh.activity.module.act.entity.RecommandActEntity;
 import com.xsh.activity.module.act.entity.SysUserEntity;
-import com.xsh.activity.module.act.service.CollegeService;
-import com.xsh.activity.module.act.service.FriendService;
-import com.xsh.activity.module.act.service.ProfessionService;
+import com.xsh.activity.module.act.service.*;
 import com.xsh.activity.utils.ResultDataUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
-import com.xsh.activity.module.act.service.SysUserService;
 
 import java.util.HashMap;
 import java.util.List;
@@ -38,6 +36,8 @@ public class SysUserController{
     private ProfessionService professionService;
     @Resource
     private FriendService friendService;
+    @Resource
+    private RecommandActService recommandActService;
 
 
     /**
@@ -91,7 +91,21 @@ public class SysUserController{
             friendEntity1.setFriendId(sysUserEntity.getId());
 
             friendService.updateEntity(friendEntity1);
+
+            //判断是否被推荐过
+            RecommandActEntity recommandActEntity = new RecommandActEntity();
+            recommandActEntity.setFriendId(friendEntity1.getId());
+            List<RecommandActEntity> recommandActEntityList = recommandActService.findEntityList(recommandActEntity);
+            for(RecommandActEntity recommandActEntity1:recommandActEntityList){
+                //更新id进去
+                recommandActEntity1.setUserId(sysUserEntity.getId());
+                recommandActService.updateEntity(recommandActEntity1);
+            }
         }
+
+
+
+
 
         return 1;
     }
