@@ -83,6 +83,7 @@ public class RecommandActController{
             map.put("actTime", DateFormatUtils.format(actEntity.getActTime(),"yyyy-MM-dd HH:mm:ss"));
             map.put("communityName",communityService.findEntityByMainId(actEntity.getCommunityId()).getCommunityName());
 
+            
             FriendEntity friendEntity = friendService.findEntityByMainId(recommandActEntity1.getRecommandUser());
             if(friendEntity.getFriendId()==null){
                 map.put("recommandName",friendEntity.getName());
