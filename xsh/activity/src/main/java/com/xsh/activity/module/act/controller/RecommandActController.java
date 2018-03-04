@@ -84,7 +84,7 @@ public class RecommandActController{
             map.put("communityName",communityService.findEntityByMainId(actEntity.getCommunityId()).getCommunityName());
 
 
-            if(recommandActEntity1.getRecommandUser()!=null){
+            if(recommandActEntity1.getRecommandUser()==null){
                 FriendEntity friendEntity = friendService.findEntityByMainId(recommandActEntity1.getFriendId());
                 map.put("recommandName",friendEntity.getName());
             }else{
