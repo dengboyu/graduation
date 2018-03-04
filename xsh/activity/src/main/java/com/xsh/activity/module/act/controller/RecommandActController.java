@@ -48,7 +48,7 @@ public class RecommandActController{
         SysUserEntity sysUserEntity1 = (SysUserEntity) SecurityUtils.getSubject().getSession().getAttribute("currentUser");
         for(RecommandActEntity recommandActEntity:recommandActEntityList){
 
-            FriendEntity friendEntity = friendService.findEntityByMainId(recommandActEntity);
+            FriendEntity friendEntity = friendService.findEntityByMainId(recommandActEntity.getFriendId());
             if(friendEntity.getFriendId()!=null){
                 recommandActEntity.setRecommandUser(friendEntity.getFriendId());
             }
@@ -83,12 +83,12 @@ public class RecommandActController{
             map.put("actTime", DateFormatUtils.format(actEntity.getActTime(),"yyyy-MM-dd HH:mm:ss"));
             map.put("communityName",communityService.findEntityByMainId(actEntity.getCommunityId()).getCommunityName());
 
-
-            FriendEntity friendEntity = friendService.findEntityByMainId(recommandActEntity1.getRecommandUser());
-            if(friendEntity.getFriendId()==null){
+            
+            if(recommandActEntity1.getRecommandUser()!=null){
+                FriendEntity friendEntity = friendService.findEntityByMainId(recommandActEntity1.getFriendId());
                 map.put("recommandName",friendEntity.getName());
             }else{
-                map.put("recommandName",sysUserService.findEntityByMainId(friendEntity.getFriendId()).getName());
+                map.put("recommandName",sysUserService.findEntityByMainId(recommandActEntity1.getRecommandUser());
             }
 
             mapList.add(map);
