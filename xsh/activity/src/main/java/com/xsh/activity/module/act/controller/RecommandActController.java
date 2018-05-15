@@ -30,6 +30,8 @@ public class RecommandActController{
     @Resource
     private ActService actService;
     @Resource
+    private FriendGroupService friendGroupService;
+    @Resource
     private CommunityService communityService;
     @Resource
     private FriendService friendService;
@@ -60,6 +62,54 @@ public class RecommandActController{
    }
 
 
+
+    /**
+     * 向分组好友推荐活动
+     * @author by@Deng
+     * @date 2018/2/27 下午4:28
+     */
+    @PostMapping("recommandGroupAct")
+    public Object recommandGroupAct(@RequestBody List<GroupActEntity> groupActEntityList) throws Exception{
+
+        SysUserEntity sysUserEntity1 = (SysUserEntity) SecurityUtils.getSubject().getSession().getAttribute("currentUser");
+
+        List<RecommandActEntity> recommandActEntityList = new ArrayList<>();
+
+        for(GroupActEntity groupActEntity:groupActEntityList){
+
+
+            //查找分组中的所有好友
+            FriendEntity friendEntity = new FriendEntity();
+            friendEntity.setGroupId(groupActEntity.getId());
+            List<FriendEntity> friendEntityList = friendService.findEntityList(friendEntity);
+
+            for(FriendEntity friendEntity1:friendEntityList){
+                RecommandActEntity recommandActEntity = new RecommandActEntity();
+                recommandActEntity.setActId(groupActEntity.getActId().toString());
+                recommandActEntity.setFriendId(friendEntity1.getId());
+
+                recommandActEntityList.add(recommandActEntity);
+            }
+
+        }
+
+        for(RecommandActEntity recommandActEntity:recommandActEntityList){
+
+            //查找分组中的所有好友
+            FriendEntity friendEntity = friendService.findEntityByMainId(recommandActEntity.getFriendId());
+            if(friendEntity.getFriendId()!=null){
+                recommandActEntity.setRecommandUser(friendEntity.getFriendId());
+            }
+
+            recommandActEntity.setUserId(sysUserEntity1.getId());
+        }
+
+        return recommandActService.insertEntityByBatch(recommandActEntityList);
+    }
+
+
+
+
     /**
      * 获取所有好友推荐活动
      * @author by@Deng
@@ -83,13 +133,7 @@ public class RecommandActController{
             map.put("actTime", DateFormatUtils.format(actEntity.getActTime(),"yyyy-MM-dd HH:mm:ss"));
             map.put("communityName",communityService.findEntityByMainId(actEntity.getCommunityId()).getCommunityName());
 
-
-            if(recommandActEntity1.getRecommandUser()==null){
-                FriendEntity friendEntity = friendService.findEntityByMainId(recommandActEntity1.getFriendId());
-                map.put("recommandName",friendEntity.getName());
-            }else{
-                map.put("recommandName",sysUserService.findEntityByMainId(recommandActEntity1.getRecommandUser()));
-            }
+            map.put("recommandName",sysUserService.findEntityByMainId(recommandActEntity1.getUserId()).getName());
 
             mapList.add(map);
         }

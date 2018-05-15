@@ -98,7 +98,7 @@ public class SysUserController{
             List<RecommandActEntity> recommandActEntityList = recommandActService.findEntityList(recommandActEntity);
             for(RecommandActEntity recommandActEntity1:recommandActEntityList){
                 //更新id进去
-                recommandActEntity1.setUserId(sysUserEntity.getId());
+                recommandActEntity1.setRecommandUser(sysUserEntity.getId());
                 recommandActService.updateEntity(recommandActEntity1);
             }
         }
