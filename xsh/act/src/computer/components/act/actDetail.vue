@@ -31,9 +31,21 @@
                 <span class="act-text" v-text="actDetail.actDetail"></span>
             </p>
             <p class="act-det">
+                <el-button type="primary" class="recommand" @click="pushGroupFriend">推荐给分组</el-button>
                 <el-button type="primary" class="recommand" @click="pushFriend">推荐给好友</el-button>
             </p>
         </div>
+
+        <el-dialog title="推荐给分组好友" :visible.sync="dialogGroupVisible" width="30%">
+            <div>
+                <p class="dialog-friend" v-for="(item,index) in groupFriendList">
+                    <el-checkbox v-model="item.checked">{{item.groupName}}</el-checkbox>
+                </p>
+            </div>
+            <span slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="recommandGroupSure">确 定</el-button>
+            </span>
+        </el-dialog>
 
         <el-dialog title="推荐给好友" :visible.sync="dialogVisible" width="30%">
             <div>
@@ -62,8 +74,10 @@
                     sced:sced
                 },
                 dialogVisible:false,
+                dialogGroupVisible:false,
                 actDetail:{},
                 friendList:[],
+                groupFriendList:[],
             }
         },
         methods:{
@@ -119,6 +133,24 @@
                 })
 
             },
+            pushGroupFriend(){
+                //推荐给分组
+                this.$http.axios({
+                    url:'/friendGroup/getGroupFriendList',
+                    method:'get',
+                }).then(resolve=>{
+                    this.dialogGroupVisible=!this.dialogGroupVisible;
+
+                    for(let i in resolve){
+                        resolve[i].checked = false;
+                    }
+                    this.groupFriendList = resolve;
+
+                }).catch(err=>{
+                    console.log("失败了")
+                })
+
+            },
             recommandSure(){
                 //推荐好友
                 let recommandList = [];
@@ -144,6 +176,39 @@
                         json:true,
                     }).then(resolve=>{
                         this.dialogVisible=!this.dialogVisible;
+                        this.$message.success("推荐成功");
+
+                    }).catch(err=>{
+                        console.log("失败了")
+                    })
+
+                }
+            },
+            recommandGroupSure(){
+                //推荐给分组好友
+                let recommandList = [];
+
+                for(let i in this.groupFriendList){
+                    if(this.groupFriendList[i].checked){
+                        let recommandActEntity = {};
+                        recommandActEntity.actId = this.actDetail.id;
+                        recommandActEntity.id = this.groupFriendList[i].id;
+
+                        recommandList.push(recommandActEntity);
+                    }
+                }
+
+                if(recommandList.length<1){
+                    this.$message.warning("请选择分组好友");
+                }else{
+
+                    this.$http.axios({
+                        url:'/recommandAct/recommandGroupAct',
+                        method:'post',
+                        data:recommandList,
+                        json:true,
+                    }).then(resolve=>{
+                        this.dialogGroupVisible=!this.dialogGroupVisible;
                         this.$message.success("推荐成功");
 
                     }).catch(err=>{
@@ -200,8 +265,11 @@
     }
     .recommand{
         width:20%;
-        margin: 0 40%;
+        margin: 0 5%;
         margin-top:20px;
+    }
+    .recommand:nth-child(1){
+        margin-left:25%;
     }
     .act-span{
         position: relative;
