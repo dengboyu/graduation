@@ -56,7 +56,7 @@ public class UserInfoController{
 
 
     /**
-     * 获取域里信息
+     * 退出登录
      * @author by@Deng
      * @date 2018/1/29 下午5:36
      */

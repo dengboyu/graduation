@@ -7,8 +7,8 @@ import java.sql.Timestamp;
 /**
 * user_info表对应实体类
 *
-* @author by@Deng
-* @create 2018-01-29 06:04:34
+* @author byDeng
+* @create 2018-05-20 08:21:01
 */
 public class UserInfoEntity {
 
@@ -16,6 +16,7 @@ public class UserInfoEntity {
     private String nick;    //用户名、昵称
     private String password;    //密码
     private String phone;    //手机号
+    private String defaultAttr;    //用户属性
     private String email;    //邮箱
     private String type;    //用户类型(0-普通客户，1-商户)
     private BigDecimal companyPrice;    //公司营业额
@@ -83,6 +84,20 @@ public class UserInfoEntity {
      */
     public String getPhone() {
         return this.phone;
+    }
+
+    /**  
+     * 设置:defaultAttr
+     */
+    public void setDefaultAttr(String defaultAttr) {
+        this.defaultAttr = defaultAttr;
+    }
+
+    /** 
+     * 获取:defaultAttr
+     */
+    public String getDefaultAttr() {
+        return this.defaultAttr;
     }
 
     /**  
@@ -246,6 +261,7 @@ public class UserInfoEntity {
                 ", nick='" + nick + '\'' +
                 ", password='" + password + '\'' +
                 ", phone='" + phone + '\'' +
+                ", defaultAttr='" + defaultAttr + '\'' +
                 ", email='" + email + '\'' +
                 ", type='" + type + '\'' +
                 ", companyPrice=" + companyPrice +
