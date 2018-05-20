@@ -23,11 +23,28 @@
                     <el-input v-model="form.harvestAddress" v-if="flag"></el-input>
                     <span v-text="form.harvestAddress" v-else></span>
                 </el-form-item>
+                <el-form-item label="用户分组">
+                    <el-input readonly v-model="form.defaultAttr" @focus="addUserGroup" v-if="flag"></el-input>
+                    <span v-text="form.defaultAttr" v-else></span>
+                </el-form-item>
                 <el-form-item>
                     <el-button style="margin-left:100px;margin-top:30px;" type="primary" @click="onSubmit" v-text="sureButn"></el-button>
                 </el-form-item>
             </el-form>
         </div>
+
+
+        <el-dialog title="感兴趣分类" :visible.sync="dialogGroupVisible" width="30%">
+            <div class="userGroup">
+                <p v-for="(item,index) in groupFriendList">
+                    <el-checkbox v-model="item.checked"><span style="margin-left:20px;">{{item.groupName}}</span></el-checkbox>
+                </p>
+            </div>
+            <span slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="recommandGroupSure">确 定</el-button>
+            </span>
+        </el-dialog>
+
     </div>
 </template>
 
@@ -39,7 +56,55 @@
             return {
                 flag:true,
                 form: {},
-                sureButn:'提交信息'
+                sureButn:'提交信息',
+                dialogGroupVisible:false,
+                groupFriendList:[
+                    {
+                        "groupName":"食品/生鲜",
+                        "checked":false
+                    },
+                    {
+                        "groupName":"婴幼儿产品",
+                        "checked":false
+                    },
+                    {
+                        "groupName":"家用清洁类",
+                        "checked":false
+                    },
+                    {
+                        "groupName":"家居类",
+                        "checked":false
+                    },
+                    {
+                        "groupName":"个人装饰保健",
+                        "checked":false
+                    },
+                    {
+                        "groupName":"衣服珠宝",
+                        "checked":false
+                    },
+                    {
+                        "groupName":"鞋包",
+                        "checked":false
+                    },
+                    {
+                        "groupName":"电子产品",
+                        "checked":false
+                    },
+                    {
+                        "groupName":"家用电器",
+                        "checked":false
+                    },
+                    {
+                        "groupName":"医药",
+                        "checked":false
+                    },
+                    {
+                        "groupName":"图书",
+                        "checked":false
+                    }
+
+                ]
             }
         },
         methods: {
@@ -54,7 +119,7 @@
                         json:true,
                     }).then(resolve=>{
                         this.flag = !this.flag;
-                        this.$message.suceess('修改完毕');
+                        this.$message.success('修改完毕');
                         this.sureButn='修改';
                     }).catch(err=>{
                         console.log("失败了")
@@ -80,6 +145,34 @@
                     console.log("失败了")
                 })
             },
+            recommandGroupSure(){
+                let tempAttr = '';
+                for(let i in this.groupFriendList){
+                    if(this.groupFriendList[i].checked){
+                        tempAttr += ','+this.groupFriendList[i].groupName;
+                    }
+                }
+                if(tempAttr !=''){
+                    this.form.defaultAttr = tempAttr.substring(1,tempAttr.length);
+                }
+                this.dialogGroupVisible = !this.dialogGroupVisible;
+            },
+            addUserGroup(){
+                this.dialogGroupVisible = !this.dialogGroupVisible;
+
+                if(this.form.defaultAttr!=null){
+
+                    let tempAttr = this.form.defaultAttr.split(',');
+                    for(let i in this.groupFriendList){
+                        for(let j in tempAttr){
+                            if(this.groupFriendList[i].groupName == tempAttr[j]){
+                                this.groupFriendList[i].checked = true;
+                            }
+                        }
+                    }
+
+                }
+            }
         },
         components:{
 
@@ -117,5 +210,8 @@
     .tmpl .add-product .el-form .el-select{
         width:362px;
     }
-
+    .userGroup{
+        text-align: left;
+        margin-left:20%;
+    }
 </style>
