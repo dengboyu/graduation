@@ -17,6 +17,11 @@
                     <el-radio v-model="item.score" label="2">E</el-radio>
                 </p>
             </div>
+            <br>
+            <div>
+                <span>请您给点建议:</span>
+                <el-input type="textarea" v-model="evalution.suggestion" placeholder="请给出您的宝贵建议:"></el-input>
+            </div>
             <el-button type="primary" style="width:12%;margin-top: 30px;margin-left: 43%;" @click="login">提交</el-button>
         </div>
     </div>
@@ -33,6 +38,7 @@
                     answer:'',
                     totalCore:0,//总分
                     couseId:'',//课程id
+                    suggestion:''
                 }
             }
         },

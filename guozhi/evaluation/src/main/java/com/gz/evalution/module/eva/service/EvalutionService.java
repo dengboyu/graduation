@@ -21,7 +21,7 @@ public interface EvalutionService extends BaseService<EvalutionEntity> {
      * @author by@Deng
      * @date 2018/1/24 下午5:00
      */
-    Map<String,Object> getCourseStudentList(String courseId) throws Exception;
+    Map<String,Object> getCourseStudentList(Map<String,String> map) throws Exception;
 
 
 
@@ -39,6 +39,6 @@ public interface EvalutionService extends BaseService<EvalutionEntity> {
      * @author by@Deng
      * @date 2018/1/24 下午6:56
      */
-    List<Map<String,Object>> getCourseListByStudent(String evalutionId) throws Exception;
+    Map<String,Object>  getCourseListByStudent(String evalutionId) throws Exception;
 
 }

@@ -4,6 +4,7 @@ import com.gz.evalution.module.eva.entity.CourseEntity;
 import com.gz.evalution.module.eva.entity.QuestionEntity;
 import com.gz.evalution.module.eva.service.CourseService;
 import com.gz.evalution.module.eva.service.QuestionService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import com.gz.evalution.module.eva.entity.EvalutionEntity;
 import com.gz.evalution.module.eva.service.EvalutionService;
@@ -39,11 +40,18 @@ public class EvalutionServiceImpl extends BaseServiceAbstract<EvalutionDao,Evalu
      * @date 2018/1/24 下午5:00
      */
     @Override
-    public Map<String, Object> getCourseStudentList(String courseId) throws Exception {
+    public Map<String, Object> getCourseStudentList(Map<String,String> map) throws Exception {
 
         Map<String,Object> retMap = new HashMap<>();
-        retMap.put("studentCourse",dao.getCourseStudentList(courseId));
-        retMap.put("avg",dao.getCourseStudentAvg(courseId));
+
+        if(!StringUtils.isEmpty(map.get("score"))){
+            String[] scoreArr = map.get("score").split("-");
+            map.put("minScore",scoreArr[0]);
+            map.put("maxScore",scoreArr[1]);
+        }
+
+        retMap.put("studentCourse",dao.getCourseStudentList(map));
+        retMap.put("avg",dao.getCourseStudentAvg(map));
 
 
         return retMap;
@@ -67,7 +75,8 @@ public class EvalutionServiceImpl extends BaseServiceAbstract<EvalutionDao,Evalu
      * @date 2018/1/24 下午6:57
      */
     @Override
-    public List<Map<String, Object>> getCourseListByStudent(String evalutionId) throws Exception {
+    public Map<String,Object>  getCourseListByStudent(String evalutionId) throws Exception {
+        Map<String,Object> retMap = new HashMap<>();
         List<Map<String,Object>> list = new ArrayList<>();
 
 
@@ -85,6 +94,9 @@ public class EvalutionServiceImpl extends BaseServiceAbstract<EvalutionDao,Evalu
             list.add(map);
         }
 
-        return list;
+        retMap.put("answer",list);
+        retMap.put("suggestion",evalutionEntity.getSuggestion());
+
+        return retMap;
     }
 }

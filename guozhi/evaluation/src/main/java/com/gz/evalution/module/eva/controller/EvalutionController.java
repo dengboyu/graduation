@@ -58,8 +58,8 @@ public class EvalutionController{
      * @date 2018/1/24 下午4:53
      */
     @GetMapping("getEvalutionList")
-    public Object getEvalutionList(@RequestParam String courseId) throws Exception{
-        return evalutionService.getCourseStudentList(courseId);
+    public Object getEvalutionList(@RequestParam Map<String,String> map) throws Exception{
+        return evalutionService.getCourseStudentList(map);
     }
 
 
@@ -87,6 +87,17 @@ public class EvalutionController{
     @GetMapping("getCourseListByStudent")
     public Object getCourseListByStudent(@RequestParam String evalutionId) throws Exception{
         return evalutionService.getCourseListByStudent(evalutionId);
+    }
+
+
+    /**
+     * 删除学生回答
+     * @author by@Deng
+     * @date 2018/1/24 下午6:56
+     */
+    @GetMapping("deleteAnswer")
+    public Object deleteAnswer(@RequestParam String evalutionId) throws Exception{
+        return evalutionService.deleteEntity(evalutionId);
     }
 
 }

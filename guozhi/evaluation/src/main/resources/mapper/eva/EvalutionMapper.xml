@@ -8,7 +8,7 @@
 
     <!-- evalution表的字段 -->
     <sql id ="evalution_columns">
-        RA.id,RA.answer,RA.totalCore,RA.studentId,RA.teacherId,RA.couseId,RA.statu,RA.createTime,RA.updateTime
+        RA.id,RA.answer,RA.totalCore,RA.suggestion,RA.studentId,RA.teacherId,RA.couseId,RA.statu,RA.createTime,RA.updateTime
     </sql>
 
 
@@ -17,6 +17,7 @@
         <id  property="id"  column="id"/>
         <result  property="answer"  column="answer"/>
         <result  property="totalCore"  column="totalCore"/>
+        <result  property="suggestion"  column="suggestion"/>
         <result  property="studentId"  column="studentId"/>
         <result  property="teacherId"  column="teacherId"/>
         <result  property="couseId"  column="couseId"/>
@@ -33,6 +34,7 @@
             id,
             answer,
             totalCore,
+            suggestion,
             studentId,
             teacherId,
             couseId,
@@ -42,6 +44,7 @@
             #{id},
             #{answer},
             #{totalCore},
+            #{suggestion},
             #{studentId},
             #{teacherId},
             #{couseId},
@@ -57,6 +60,7 @@
             id,
             answer,
             totalCore,
+            suggestion,
             studentId,
             teacherId,
             couseId,
@@ -67,6 +71,7 @@
             #{item.id},
             #{item.answer},
             #{item.totalCore},
+            #{item.suggestion},
             #{item.studentId},
             #{item.teacherId},
             #{item.couseId},
@@ -85,6 +90,9 @@
             </if>
             <if test="totalCore != null">
                 totalCore = #{totalCore},
+            </if>
+            <if test="suggestion != null">
+                suggestion = #{suggestion},
             </if>
             <if test="studentId != null">
                 studentId = #{studentId},
@@ -119,6 +127,9 @@
         </if>
         <if test="totalCore != null">
             AND RA.totalCore = #{totalCore}
+        </if>
+        <if test="suggestion != null">
+            AND RA.suggestion = #{suggestion}
         </if>
         <if test="studentId != null">
             AND RA.studentId = #{studentId}
@@ -228,7 +239,7 @@
     </select>
 
 
-	<select id="getCourseStudentList" resultType="java.util.Map" parameterType="string">
+	<select id="getCourseStudentList" resultType="java.util.Map" parameterType="map">
         SELECT
             username ,
             number ,
@@ -239,16 +250,22 @@
         JOIN user_info UI ON E.studentId = UI.id
         WHERE
             E.couseId = #{courseId} and E.statu='1'
+            <if test="minScore!=null">
+               and E.totalCore &gt; #{minScore} and E.totalCore &lt;= #{maxScore}
+            </if>
     </select>
 
 
-    <select id="getCourseStudentAvg" resultType="java.lang.String" parameterType="string">
+    <select id="getCourseStudentAvg" resultType="java.lang.String" parameterType="map">
         SELECT
             cast(AVG(totalCore)as DECIMAL(10,2))
         FROM
             evalution E
         WHERE
             E.couseId = #{courseId} and E.statu='1'
+            <if test="minScore!=null">
+                and E.totalCore &gt; #{minScore} and E.totalCore &lt;= #{maxScore}
+            </if>
     </select>
 
 

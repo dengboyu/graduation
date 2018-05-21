@@ -24,7 +24,7 @@ public interface EvalutionDao extends BaseDao<EvalutionEntity> {
      * @author by@Deng
      * @date 2018/1/24 下午5:00
      */
-    List<Map<String,Object>> getCourseStudentList(String courseId) throws Exception;
+    List<Map<String,Object>> getCourseStudentList(Map<String,String> map) throws Exception;
 
 
     /**
@@ -32,7 +32,7 @@ public interface EvalutionDao extends BaseDao<EvalutionEntity> {
      * @author by@Deng
      * @date 2018/1/24 下午5:11
      */
-    String getCourseStudentAvg(String courseId) throws Exception;
+    String getCourseStudentAvg(Map<String,String> map) throws Exception;
 
 
     /**

@@ -3,8 +3,18 @@
     <div class="tmpl">
         <div class="table">
             <table>
-                <caption>
+                <caption style="margin-bottom: 15px;">
                     任课教师: <span>黄换然</span>  课程名称: <span>市场营销</span>
+                    <span>按照分数筛选
+                        <el-select v-model="queryScore" placeholder="选择分数">
+                            <el-option label="全部" value=""></el-option>
+                            <el-option label="40-80" value="40-80"></el-option>
+                            <el-option label="80-120" value="80-120"></el-option>
+                            <el-option label="120-160" value="120-160"></el-option>
+                            <el-option label="160-200" value="160-200"></el-option>
+                        </el-select>
+                        <el-button type="text" size="big" @click="getCourseStudentList()">查询</el-button>
+                    </span>
                 </caption>
                 <thead>
                     <tr>
@@ -13,6 +23,7 @@
                         <th>姓名</th>
                         <th>详情</th>
                         <th>最终评分</th>
+                        <th>恶性剔除</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -24,12 +35,15 @@
                             <el-button type="text" size="small" @click="getDetail(item.id)">查 看</el-button>
                         </td>
                         <td v-text="item.totalCore"></td>
+                        <td>
+                            <el-button type="text" size="small" @click="deleteAnswer(item.id)">删 除</el-button>
+                        </td>
                     </tr>
                 </tbody>
                 <tfoot>
                     <tr>
                         <td colspan="2">平均分</td>
-                        <td colspan="3" v-text="avgScore"></td>
+                        <td colspan="4" v-text="avgScore"></td>
                     </tr>
                 </tfoot>
             </table>
@@ -37,6 +51,7 @@
 
         <el-dialog title="评教详情" :visible.sync="dialogVisible" width="50%">
             <p v-for="(item,index) in answerList">{{index+1}}. {{item.question}}<span style="margin-left:40px;">{{item.score}}</span>分</p>
+            <p><span>学生建议:</span><span v-text="suggestion"></span></p>
         </el-dialog>
     </div>
 </template>
@@ -51,18 +66,27 @@
                 avgScore:0,
                 dialogVisible:false,
                 answerList:[],
+                suggestion:'',
+                queryScore:'',
+                courseId :''
             }
         },
         components:{
 
         },
         created(){
-            this.getCourseStudentList(this.$route.params.courseId);
+            this.courseId = this.$route.params.courseId;
+            this.getCourseStudentList();
         },
         methods:{
-            getCourseStudentList(courseId){
+            getCourseStudentList(){
+                var param = '?courseId='+this.courseId;
+                if(this.queryScore!=''){
+                    param+='&score='+this.queryScore;
+                }
+
                 this.$http.axios({
-                    url:'/evalution/getEvalutionList?courseId='+courseId,
+                    url:'/evalution/getEvalutionList'+param,
                     method:'get',
                 }).then(resolve=>{
                     this.tableList = resolve.studentCourse;
@@ -77,7 +101,18 @@
                     url:'/evalution/getCourseListByStudent?evalutionId='+courseId,
                     method:'get',
                 }).then(resolve=>{
-                    this.answerList=resolve;
+                    this.answerList=resolve.answer;
+                    this.suggestion = resolve.suggestion;
+                }).catch(err=>{
+                    console.log("失败了"+err)
+                })
+            },
+            deleteAnswer(id){
+                this.$http.axios({
+                    url:'/evalution/deleteAnswer?evalutionId='+id,
+                    method:'get',
+                }).then(resolve=>{
+                    getCourseStudentList();
                 }).catch(err=>{
                     console.log("失败了"+err)
                 })

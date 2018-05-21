@@ -7,13 +7,14 @@ import java.util.Date;
 * evalution表对应实体类
 *
 * @author by@Deng
-* @create 2018-01-19 11:26:57
+* @create 2018-05-20 11:26:29
 */
 public class EvalutionEntity {
 
     private Integer id;    
     private String answer;    //答题分数
     private Integer totalCore;    //总分
+    private String suggestion;    //建议
     private String studentId;    //关联学生外键
     private String teacherId;    //关联教师外键
     private String couseId;    //课程id
@@ -62,6 +63,20 @@ public class EvalutionEntity {
      */
     public Integer getTotalCore() {
         return this.totalCore;
+    }
+
+    /**  
+     * 设置:suggestion
+     */
+    public void setSuggestion(String suggestion) {
+        this.suggestion = suggestion;
+    }
+
+    /** 
+     * 获取:suggestion
+     */
+    public String getSuggestion() {
+        return this.suggestion;
     }
 
     /**  
@@ -154,6 +169,7 @@ public class EvalutionEntity {
                 "id=" + id +
                 ", answer='" + answer + '\'' +
                 ", totalCore=" + totalCore +
+                ", suggestion='" + suggestion + '\'' +
                 ", studentId='" + studentId + '\'' +
                 ", teacherId='" + teacherId + '\'' +
                 ", couseId='" + couseId + '\'' +

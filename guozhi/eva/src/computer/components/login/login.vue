@@ -4,7 +4,7 @@
         <el-row>
             <el-col>
                 <div class="grid-content bg-purple">
-                    <p class="pingjiao">评教系统</p>
+                    <p class="pingjiao">高校学生评教系统</p>
                     <el-form class="login" label-position="right" label-width="80px" :model="formLabelAlign">
                         <el-form-item label="用户名">
                             <el-input v-model="formLabelAlign.number" placeholder="请输入用户名"></el-input>
