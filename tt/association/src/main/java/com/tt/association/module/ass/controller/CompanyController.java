@@ -46,6 +46,25 @@ public class CompanyController{
 
 
 
+    /**
+     * 查询已添加的公司
+     * @author by@Deng
+     * @date 2018/1/25 上午9:01
+     */
+    @GetMapping("getCompanyById")
+    public Object getCompanyById(@RequestParam String id) throws Exception{
+        return companyService.findEntityByMainId(id);
+    }
 
+
+    /**
+     * 更新公司
+     * @author by@Deng
+     * @date 2018/1/25 上午9:01
+     */
+    @PostMapping("updateCompany")
+    public Object updateCompany(@RequestBody CompanyEntity companyEntity) throws Exception{
+        return companyService.updateEntity(companyEntity);
+    }
 
 }

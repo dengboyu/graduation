@@ -16,7 +16,7 @@
 
 <style>
     #app{
-        background:#EEF0EF;
+        background:#eae7ec;
         position: absolute;
         top:0px;
         bottom: 0px;

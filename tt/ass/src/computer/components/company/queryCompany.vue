@@ -2,7 +2,7 @@
 <template>
     <div class="tmpl">
         <p class="result">已合作公司</p>
-        <el-table ref="multipleTable" border :data="companylist" tooltip-effect="dark" style="margin-left:15%;width: 70%" @selection-change="handleSelectionChange">
+        <el-table ref="multipleTable" border :data="companylist" tooltip-effect="dark" style="margin-left:10%;width: 80%" @selection-change="handleSelectionChange">
             <el-table-column type="selection" width="55"></el-table-column>
             <el-table-column label="公司名称" width="120">
                 <template slot-scope="scope">{{ scope.row.comName }}</template>
@@ -12,6 +12,12 @@
             <el-table-column prop="fax" label="传真号码" ></el-table-column>
             <el-table-column prop="email" label="企业邮箱" ></el-table-column>
             <el-table-column prop="address" label="联系地址"></el-table-column>
+            <el-table-column label="修改" width="120">
+                <template slot-scope="scope">
+                    <el-button @click="handleClick(scope.row)" type="text" size="small" width="60">修改</el-button>
+                    <!-- <el-button @click="handleClick(scope.row)" type="text" size="small" width="60">删除</el-button> -->
+                </template>
+            </el-table-column>
           </el-table>
     </div>
 </template>
@@ -52,6 +58,9 @@
 
                 })
 
+            },
+            handleClick(row){
+                this.$router.push({name:'updateCompany',params:{id:row.id}});
             }
         },
         components:{

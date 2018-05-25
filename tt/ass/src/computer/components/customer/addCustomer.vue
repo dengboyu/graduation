@@ -16,7 +16,6 @@
             <el-table-column label="修改" width="120">
                 <template slot-scope="scope">
                     <el-button @click="handleClick(scope.row)" type="text" size="small" width="60">修改</el-button>
-                    <!-- <el-button @click="handleClick(scope.row)" type="text" size="small" width="60">删除</el-button> -->
                 </template>
             </el-table-column>
           </el-table>
